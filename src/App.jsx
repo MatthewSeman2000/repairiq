@@ -1,4 +1,11 @@
 import { useState, useMemo } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+// ─── SUPABASE ─────────────────────────────────────────────────────────────────
+const supabase = createClient(
+  "https://bgulreqwhlsqlglivrbb.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJndWxyZXF3aGxzcWxnbGl2cmJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDIyNDYsImV4cCI6MjA5MTIxODI0Nn0.LVmTb7YpjF1GlT2uPipzB4g6aqPzTLIxwbqqbkjZPfM"
+);
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -1394,7 +1401,37 @@ export default function RepairIQ() {
   const [shops, setShops]                 = useState([]);
   const [loadingShops, setLoadingShops]   = useState(false);
   const [submitted, setSubmitted]         = useState(false);
+  const [submitting, setSubmitting]       = useState(false);
+  const [submitError, setSubmitError]     = useState(null);
   const [votes, setVotes]                 = useState({}); // { "Oil Change": "up" | "down" }
+
+  // Community submission form state
+  const [formRepair, setFormRepair]       = useState("");
+  const [formVehicle, setFormVehicle]     = useState("");
+  const [formAmount, setFormAmount]       = useState("");
+  const [formZip, setFormZip]             = useState("");
+
+  const handleSubmission = async () => {
+    if (!formRepair || !formAmount) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    // Parse vehicle string into make + year (best effort)
+    const yearMatch = formVehicle.match(/\b(19|20)\d{2}\b/);
+    const vehicleYear = yearMatch ? parseInt(yearMatch[0]) : null;
+    const vehicleMake = formVehicle.replace(/\b(19|20)\d{2}\b/, "").trim() || null;
+    const { error } = await supabase.from("submissions").insert({
+      repair_name:  formRepair,
+      vehicle_make: vehicleMake,
+      vehicle_year: vehicleYear,
+      zip_code:     formZip || zip || null,
+      amount_paid:  parseFloat(formAmount),
+      shop_type:    null,
+      notes:        null,
+    });
+    setSubmitting(false);
+    if (error) { setSubmitError("Something went wrong. Please try again."); return; }
+    setSubmitted(true);
+  };
 
   const region    = getRegion(zip);
   const makeMult  = makeMultipliers[make] || 1;
@@ -1611,12 +1648,42 @@ export default function RepairIQ() {
           <p style={{ color:"#444", fontSize:"13px", margin:"0 0 20px", fontStyle:"italic" }}>Real submissions keep our data accurate. All entries are anonymized.</p>
           {!submitted ? (
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px" }}>
-              <input placeholder="Repair type" style={IS} />
-              <input placeholder="Your vehicle (e.g. 2020 Subaru Outback)" style={IS} />
-              <input placeholder="Total paid ($)" type="number" style={IS} />
-              <input placeholder="ZIP code" style={IS} defaultValue={zip} />
-              <button onClick={() => setSubmitted(true)} style={{ gridColumn:"1/-1", background:"transparent", border:"1px solid #c9a84c", color:"#c9a84c", borderRadius:"6px", padding:"11px", fontSize:"12px", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}>
-                Submit My Data →
+              <input
+                placeholder="Repair type (e.g. Brake Pads)"
+                style={IS}
+                value={formRepair}
+                onChange={e => setFormRepair(e.target.value)}
+              />
+              <input
+                placeholder="Your vehicle (e.g. 2020 Subaru Outback)"
+                style={IS}
+                value={formVehicle}
+                onChange={e => setFormVehicle(e.target.value)}
+              />
+              <input
+                placeholder="Total paid ($)"
+                type="number"
+                style={IS}
+                value={formAmount}
+                onChange={e => setFormAmount(e.target.value)}
+              />
+              <input
+                placeholder="ZIP code"
+                style={IS}
+                value={formZip || zip}
+                onChange={e => setFormZip(e.target.value)}
+              />
+              {submitError && (
+                <div style={{ gridColumn:"1/-1", color:"#ef4444", fontSize:"12px", textAlign:"center" }}>
+                  {submitError}
+                </div>
+              )}
+              <button
+                onClick={handleSubmission}
+                disabled={submitting || !formRepair || !formAmount}
+                style={{ gridColumn:"1/-1", background:"transparent", border:"1px solid #c9a84c", color: (submitting || !formRepair || !formAmount) ? "#555" : "#c9a84c", borderRadius:"6px", padding:"11px", fontSize:"12px", fontFamily:"inherit", cursor: (submitting || !formRepair || !formAmount) ? "not-allowed" : "pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}
+              >
+                {submitting ? "Saving..." : "Submit My Data →"}
               </button>
             </div>
           ) : (
