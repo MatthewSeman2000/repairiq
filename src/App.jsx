@@ -8,18 +8,18 @@ const repairData = {
   "Oil Change": {
     icon: "🛢️", category: "Maintenance",
     costs: {
-      "Conventional": { low: 35, high: 75 },
-      "Synthetic Blend": { low: 55, high: 95 },
-      "Full Synthetic": { low: 65, high: 125 },
+      "Conventional": { low: 50, high: 100 },
+      "Synthetic Blend": { low: 75, high: 130 },
+      "Full Synthetic": { low: 100, high: 175 },
     },
     labor: "0.5–1 hr",
-    notes: "Varies by oil type and drain plug accessibility. DIY-friendly.",
+    notes: "Prices have risen significantly since 2022. Full synthetic is now standard on most modern engines.",
   },
   "Tire Rotation": {
     icon: "⚙️", category: "Maintenance",
     costs: {
-      "Standard": { low: 20, high: 50 },
-      "With Balance": { low: 60, high: 100 },
+      "Standard": { low: 25, high: 60 },
+      "With Balance": { low: 80, high: 150 },
     },
     labor: "0.5 hr",
     notes: "Often free or discounted with tire purchase. Recommended every 5–7k miles.",
@@ -42,8 +42,8 @@ const repairData = {
   "Wiper Blades": {
     icon: "🌧️", category: "Maintenance",
     costs: {
-      "Economy (pair)": { low: 20, high: 40 },
-      "Premium Beam (pair)": { low: 40, high: 80 },
+      "Economy (pair)": { low: 30, high: 60 },
+      "Premium Beam (pair)": { low: 60, high: 110 },
     },
     labor: "0.25 hr",
     notes: "Easy DIY. Most auto parts stores will install for free with purchase.",
@@ -69,28 +69,28 @@ const repairData = {
   },
   "Multi-Point Inspection": {
     icon: "🔍", category: "Maintenance",
-    costs: { "Standard": { low: 0, high: 50 } },
+    costs: { "Standard": { low: 0, high: 75 } },
     labor: "0.5–1 hr",
-    notes: "Often free or low-cost at dealerships. Good baseline before any major service.",
+    notes: "Often free at dealerships with any service. Standalone inspections average $50–$75 in 2026.",
   },
 
   // ── BRAKES ───────────────────────────────────────────────────────────────
   "Brake Pads (Front)": {
     icon: "🔧", category: "Brakes",
     costs: {
-      "Economy": { low: 100, high: 180 },
-      "OEM": { low: 150, high: 280 },
-      "Performance": { low: 200, high: 400 },
+      "Economy": { low: 150, high: 250 },
+      "OEM": { low: 220, high: 380 },
+      "Performance": { low: 300, high: 500 },
     },
     labor: "1–2 hrs",
-    notes: "Rear brakes typically cost slightly less. Rotors may add $100–$200.",
+    notes: "Prices are per axle including labor. Rotors may add $150–$300 more if worn.",
   },
   "Brake Pads (Rear)": {
     icon: "🔧", category: "Brakes",
     costs: {
-      "Economy": { low: 90, high: 160 },
-      "OEM": { low: 130, high: 250 },
-      "Performance": { low: 180, high: 360 },
+      "Economy": { low: 130, high: 220 },
+      "OEM": { low: 200, high: 350 },
+      "Performance": { low: 280, high: 460 },
     },
     labor: "1–2 hrs",
     notes: "Electric parking brakes require a special tool to retract the caliper — adds labor cost.",
@@ -200,17 +200,17 @@ const repairData = {
   "Battery Replacement": {
     icon: "🔋", category: "Electrical",
     costs: {
-      "Standard": { low: 120, high: 200 },
-      "AGM/Premium": { low: 180, high: 320 },
+      "Standard": { low: 200, high: 350 },
+      "AGM/Premium": { low: 300, high: 500 },
     },
     labor: "0.5 hr",
-    notes: "Some vehicles require computer reset after replacement. DIY-friendly on most cars.",
+    notes: "Battery prices have risen sharply. Some vehicles require computer reset after replacement.",
   },
   "Alternator": {
     icon: "⚡", category: "Electrical",
     costs: {
-      "Remanufactured": { low: 300, high: 500 },
-      "OEM New": { low: 450, high: 800 },
+      "Remanufactured": { low: 400, high: 650 },
+      "OEM New": { low: 600, high: 1000 },
     },
     labor: "2–4 hrs",
     notes: "Labor varies by vehicle. Some require engine removal — add $200–$400.",
@@ -259,8 +259,8 @@ const repairData = {
   "Wheel Alignment": {
     icon: "🎯", category: "Suspension",
     costs: {
-      "2-Wheel": { low: 60, high: 100 },
-      "4-Wheel": { low: 100, high: 175 },
+      "2-Wheel": { low: 100, high: 150 },
+      "4-Wheel": { low: 175, high: 275 },
     },
     labor: "1 hr",
     notes: "Recommended after new tires, hitting a curb, or if car pulls to one side.",
