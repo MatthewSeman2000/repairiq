@@ -1,7 +1,7 @@
 // api/shops.js — Vercel serverless function
 // Proxies Google Places API so the key stays server-side
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORS headers so the frontend can call this
   res.setHeader("Access-Control-Allow-Origin", "https://repairiqhq.com");
   res.setHeader("Access-Control-Allow-Methods", "GET");
