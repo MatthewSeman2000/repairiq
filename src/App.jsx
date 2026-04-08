@@ -1444,13 +1444,23 @@ export default function RepairIQ() {
     if (/^\d{5}$/.test(zipInput)) { setZip(zipInput); setShops([]); setSelectedRepair(null); }
   };
 
-  const handleCard = name => {
+  const handleCard = async name => {
     if (selectedRepair === name) { setSelectedRepair(null); setShops([]); return; }
     setSelectedRepair(name);
     if (zip.length === 5) {
       setLoadingShops(true);
-      // Swap this setTimeout for a real fetch() once you have a backend
-      setTimeout(() => { setShops(getMockShops(zip, name)); setLoadingShops(false); }, 800);
+      try {
+        const res = await fetch(`/api/shops?zip=${zip}&repair=${encodeURIComponent(name)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setShops(data.length > 0 ? data : getMockShops(zip, name));
+        } else {
+          setShops(getMockShops(zip, name));
+        }
+      } catch {
+        setShops(getMockShops(zip, name));
+      }
+      setLoadingShops(false);
     }
   };
 
