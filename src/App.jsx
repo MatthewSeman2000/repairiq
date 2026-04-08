@@ -393,29 +393,184 @@ const repairData = {
 
 // Regional labor cost index by ZIP prefix
 const regionData = {
-  "100": { name: "New York City, NY", multiplier: 1.42, label: "High Cost" },
-  "101": { name: "New York City, NY", multiplier: 1.42, label: "High Cost" },
-  "902": { name: "Los Angeles, CA",   multiplier: 1.38, label: "High Cost" },
-  "900": { name: "Los Angeles, CA",   multiplier: 1.38, label: "High Cost" },
-  "941": { name: "San Francisco, CA", multiplier: 1.55, label: "Very High Cost" },
-  "940": { name: "San Francisco, CA", multiplier: 1.55, label: "Very High Cost" },
-  "606": { name: "Chicago, IL",       multiplier: 1.18, label: "Above Average" },
-  "770": { name: "Houston, TX",       multiplier: 0.92, label: "Below Average" },
-  "733": { name: "Dallas, TX",        multiplier: 0.95, label: "Below Average" },
-  "852": { name: "Phoenix, AZ",       multiplier: 0.97, label: "Average" },
-  "980": { name: "Seattle, WA",       multiplier: 1.28, label: "Above Average" },
-  "303": { name: "Denver, CO",        multiplier: 1.08, label: "Average" },
-  "021": { name: "Boston, MA",        multiplier: 1.35, label: "High Cost" },
-  "191": { name: "Philadelphia, PA",  multiplier: 1.15, label: "Above Average" },
-  "192": { name: "Philadelphia, PA",  multiplier: 1.15, label: "Above Average" },
-  "193": { name: "Chester County, PA",multiplier: 1.12, label: "Above Average" },
-  "198": { name: "Wilmington, DE",    multiplier: 1.05, label: "Average" },
-  "197": { name: "Newark, DE",        multiplier: 1.03, label: "Average" },
-  "300": { name: "Atlanta, GA",       multiplier: 0.98, label: "Average" },
-  "331": { name: "Miami, FL",         multiplier: 1.12, label: "Above Average" },
-  "481": { name: "Detroit, MI",       multiplier: 1.02, label: "Average" },
-  "972": { name: "Portland, OR",      multiplier: 1.20, label: "Above Average" },
-  "891": { name: "Las Vegas, NV",     multiplier: 1.00, label: "Average" },
+  // New York
+  "100": { name: "New York City, NY",    multiplier: 1.42, label: "High Cost" },
+  "101": { name: "New York City, NY",    multiplier: 1.42, label: "High Cost" },
+  "102": { name: "New York City, NY",    multiplier: 1.42, label: "High Cost" },
+  "104": { name: "Bronx, NY",            multiplier: 1.38, label: "High Cost" },
+  "110": { name: "Queens, NY",           multiplier: 1.38, label: "High Cost" },
+  "112": { name: "Brooklyn, NY",         multiplier: 1.38, label: "High Cost" },
+  "117": { name: "Long Island, NY",      multiplier: 1.30, label: "High Cost" },
+  "114": { name: "Long Island, NY",      multiplier: 1.30, label: "High Cost" },
+  "106": { name: "Westchester, NY",      multiplier: 1.32, label: "High Cost" },
+  // New Jersey
+  "070": { name: "Newark, NJ",           multiplier: 1.25, label: "Above Average" },
+  "071": { name: "Newark, NJ",           multiplier: 1.25, label: "Above Average" },
+  "074": { name: "Paterson, NJ",         multiplier: 1.20, label: "Above Average" },
+  "077": { name: "Jersey Shore, NJ",     multiplier: 1.18, label: "Above Average" },
+  "080": { name: "South Jersey, NJ",     multiplier: 1.10, label: "Above Average" },
+  "088": { name: "New Brunswick, NJ",    multiplier: 1.18, label: "Above Average" },
+  // Pennsylvania
+  "191": { name: "Philadelphia, PA",     multiplier: 1.15, label: "Above Average" },
+  "192": { name: "Philadelphia, PA",     multiplier: 1.15, label: "Above Average" },
+  "193": { name: "Chester County, PA",   multiplier: 1.12, label: "Above Average" },
+  "194": { name: "Montgomery County, PA",multiplier: 1.12, label: "Above Average" },
+  "195": { name: "Reading, PA",          multiplier: 1.02, label: "Average" },
+  "152": { name: "Pittsburgh, PA",       multiplier: 1.08, label: "Average" },
+  "150": { name: "Pittsburgh, PA",       multiplier: 1.08, label: "Average" },
+  // Delaware
+  "198": { name: "Wilmington, DE",       multiplier: 1.05, label: "Average" },
+  "197": { name: "Newark, DE",           multiplier: 1.03, label: "Average" },
+  "199": { name: "Dover, DE",            multiplier: 1.00, label: "Average" },
+  // Maryland
+  "212": { name: "Baltimore, MD",        multiplier: 1.12, label: "Above Average" },
+  "210": { name: "Baltimore, MD",        multiplier: 1.12, label: "Above Average" },
+  "208": { name: "Bethesda, MD",         multiplier: 1.28, label: "Above Average" },
+  "207": { name: "College Park, MD",     multiplier: 1.20, label: "Above Average" },
+  // Washington DC / Virginia
+  "200": { name: "Washington, DC",       multiplier: 1.35, label: "High Cost" },
+  "201": { name: "Washington, DC",       multiplier: 1.35, label: "High Cost" },
+  "220": { name: "Northern Virginia",    multiplier: 1.28, label: "Above Average" },
+  "221": { name: "Northern Virginia",    multiplier: 1.28, label: "Above Average" },
+  "232": { name: "Richmond, VA",         multiplier: 1.02, label: "Average" },
+  // Massachusetts
+  "021": { name: "Boston, MA",           multiplier: 1.35, label: "High Cost" },
+  "022": { name: "Boston, MA",           multiplier: 1.35, label: "High Cost" },
+  "024": { name: "Boston Suburbs, MA",   multiplier: 1.28, label: "Above Average" },
+  "010": { name: "Springfield, MA",      multiplier: 1.10, label: "Above Average" },
+  // Connecticut
+  "060": { name: "Hartford, CT",         multiplier: 1.18, label: "Above Average" },
+  "065": { name: "New Haven, CT",        multiplier: 1.20, label: "Above Average" },
+  "068": { name: "Stamford, CT",         multiplier: 1.35, label: "High Cost" },
+  // Florida
+  "331": { name: "Miami, FL",            multiplier: 1.12, label: "Above Average" },
+  "330": { name: "Miami, FL",            multiplier: 1.12, label: "Above Average" },
+  "332": { name: "Miami, FL",            multiplier: 1.12, label: "Above Average" },
+  "337": { name: "Tampa, FL",            multiplier: 1.02, label: "Average" },
+  "338": { name: "Tampa, FL",            multiplier: 1.02, label: "Average" },
+  "322": { name: "Jacksonville, FL",     multiplier: 0.98, label: "Average" },
+  "328": { name: "Orlando, FL",          multiplier: 1.05, label: "Average" },
+  "327": { name: "Orlando, FL",          multiplier: 1.05, label: "Average" },
+  "334": { name: "Fort Lauderdale, FL",  multiplier: 1.08, label: "Average" },
+  // Georgia
+  "300": { name: "Atlanta, GA",          multiplier: 0.98, label: "Average" },
+  "301": { name: "Atlanta, GA",          multiplier: 0.98, label: "Average" },
+  "302": { name: "Atlanta, GA",          multiplier: 0.98, label: "Average" },
+  "303": { name: "Atlanta, GA",          multiplier: 0.98, label: "Average" },
+  // North Carolina
+  "272": { name: "Raleigh, NC",          multiplier: 0.97, label: "Average" },
+  "277": { name: "Durham, NC",           multiplier: 0.97, label: "Average" },
+  "282": { name: "Charlotte, NC",        multiplier: 1.00, label: "Average" },
+  // Tennessee
+  "372": { name: "Nashville, TN",        multiplier: 0.95, label: "Below Average" },
+  "381": { name: "Memphis, TN",          multiplier: 0.90, label: "Below Average" },
+  // Ohio
+  "432": { name: "Columbus, OH",         multiplier: 0.97, label: "Average" },
+  "441": { name: "Cleveland, OH",        multiplier: 1.00, label: "Average" },
+  "452": { name: "Cincinnati, OH",       multiplier: 0.98, label: "Average" },
+  // Michigan
+  "481": { name: "Detroit, MI",          multiplier: 1.02, label: "Average" },
+  "480": { name: "Detroit, MI",          multiplier: 1.02, label: "Average" },
+  "482": { name: "Detroit, MI",          multiplier: 1.02, label: "Average" },
+  "495": { name: "Grand Rapids, MI",     multiplier: 0.97, label: "Average" },
+  // Illinois
+  "606": { name: "Chicago, IL",          multiplier: 1.18, label: "Above Average" },
+  "605": { name: "Chicago, IL",          multiplier: 1.18, label: "Above Average" },
+  "604": { name: "Chicago, IL",          multiplier: 1.18, label: "Above Average" },
+  "600": { name: "Chicago Suburbs, IL",  multiplier: 1.12, label: "Above Average" },
+  // Indiana
+  "462": { name: "Indianapolis, IN",     multiplier: 0.93, label: "Below Average" },
+  "460": { name: "Indianapolis, IN",     multiplier: 0.93, label: "Below Average" },
+  // Wisconsin
+  "532": { name: "Milwaukee, WI",        multiplier: 0.98, label: "Average" },
+  "537": { name: "Madison, WI",          multiplier: 1.00, label: "Average" },
+  // Minnesota
+  "554": { name: "Minneapolis, MN",      multiplier: 1.05, label: "Average" },
+  "551": { name: "St. Paul, MN",         multiplier: 1.05, label: "Average" },
+  // Missouri
+  "631": { name: "St. Louis, MO",        multiplier: 0.95, label: "Below Average" },
+  "641": { name: "Kansas City, MO",      multiplier: 0.93, label: "Below Average" },
+  // Texas
+  "770": { name: "Houston, TX",          multiplier: 0.92, label: "Below Average" },
+  "771": { name: "Houston, TX",          multiplier: 0.92, label: "Below Average" },
+  "733": { name: "Dallas, TX",           multiplier: 0.95, label: "Below Average" },
+  "752": { name: "Dallas, TX",           multiplier: 0.95, label: "Below Average" },
+  "787": { name: "Austin, TX",           multiplier: 1.00, label: "Average" },
+  "782": { name: "San Antonio, TX",      multiplier: 0.90, label: "Below Average" },
+  "799": { name: "El Paso, TX",          multiplier: 0.88, label: "Below Average" },
+  // Colorado
+  "802": { name: "Denver, CO",           multiplier: 1.08, label: "Average" },
+  "803": { name: "Denver, CO",           multiplier: 1.08, label: "Average" },
+  "800": { name: "Denver, CO",           multiplier: 1.08, label: "Average" },
+  "805": { name: "Boulder, CO",          multiplier: 1.15, label: "Above Average" },
+  // Arizona
+  "852": { name: "Phoenix, AZ",          multiplier: 0.97, label: "Average" },
+  "850": { name: "Phoenix, AZ",          multiplier: 0.97, label: "Average" },
+  "857": { name: "Tucson, AZ",           multiplier: 0.93, label: "Below Average" },
+  // Nevada
+  "891": { name: "Las Vegas, NV",        multiplier: 1.00, label: "Average" },
+  "890": { name: "Las Vegas, NV",        multiplier: 1.00, label: "Average" },
+  "895": { name: "Reno, NV",             multiplier: 1.05, label: "Average" },
+  // California
+  "900": { name: "Los Angeles, CA",      multiplier: 1.38, label: "High Cost" },
+  "902": { name: "Los Angeles, CA",      multiplier: 1.38, label: "High Cost" },
+  "904": { name: "Santa Monica, CA",     multiplier: 1.42, label: "High Cost" },
+  "906": { name: "Compton, CA",          multiplier: 1.28, label: "Above Average" },
+  "913": { name: "San Fernando, CA",     multiplier: 1.30, label: "High Cost" },
+  "920": { name: "San Diego, CA",        multiplier: 1.28, label: "Above Average" },
+  "921": { name: "San Diego, CA",        multiplier: 1.28, label: "Above Average" },
+  "922": { name: "San Diego, CA",        multiplier: 1.28, label: "Above Average" },
+  "925": { name: "Riverside, CA",        multiplier: 1.15, label: "Above Average" },
+  "926": { name: "Orange County, CA",    multiplier: 1.32, label: "High Cost" },
+  "927": { name: "Orange County, CA",    multiplier: 1.32, label: "High Cost" },
+  "932": { name: "Fresno, CA",           multiplier: 1.05, label: "Average" },
+  "936": { name: "Fresno, CA",           multiplier: 1.05, label: "Average" },
+  "940": { name: "San Francisco, CA",    multiplier: 1.55, label: "Very High Cost" },
+  "941": { name: "San Francisco, CA",    multiplier: 1.55, label: "Very High Cost" },
+  "943": { name: "Palo Alto, CA",        multiplier: 1.55, label: "Very High Cost" },
+  "944": { name: "San Jose, CA",         multiplier: 1.48, label: "Very High Cost" },
+  "945": { name: "Oakland, CA",          multiplier: 1.42, label: "High Cost" },
+  "946": { name: "Oakland, CA",          multiplier: 1.42, label: "High Cost" },
+  "958": { name: "Sacramento, CA",       multiplier: 1.18, label: "Above Average" },
+  "956": { name: "Sacramento, CA",       multiplier: 1.18, label: "Above Average" },
+  // Oregon
+  "972": { name: "Portland, OR",         multiplier: 1.20, label: "Above Average" },
+  "970": { name: "Portland, OR",         multiplier: 1.20, label: "Above Average" },
+  "974": { name: "Salem, OR",            multiplier: 1.05, label: "Average" },
+  // Washington
+  "980": { name: "Seattle, WA",          multiplier: 1.28, label: "Above Average" },
+  "981": { name: "Seattle, WA",          multiplier: 1.28, label: "Above Average" },
+  "982": { name: "Seattle, WA",          multiplier: 1.28, label: "Above Average" },
+  "985": { name: "Tacoma, WA",           multiplier: 1.12, label: "Above Average" },
+  "992": { name: "Spokane, WA",          multiplier: 1.00, label: "Average" },
+  // Utah
+  "841": { name: "Salt Lake City, UT",   multiplier: 1.00, label: "Average" },
+  "840": { name: "Salt Lake City, UT",   multiplier: 1.00, label: "Average" },
+  // New Mexico
+  "871": { name: "Albuquerque, NM",      multiplier: 0.90, label: "Below Average" },
+  "870": { name: "Albuquerque, NM",      multiplier: 0.90, label: "Below Average" },
+  // Louisiana
+  "701": { name: "New Orleans, LA",      multiplier: 0.93, label: "Below Average" },
+  "700": { name: "New Orleans, LA",      multiplier: 0.93, label: "Below Average" },
+  // Oklahoma
+  "731": { name: "Oklahoma City, OK",    multiplier: 0.88, label: "Below Average" },
+  "730": { name: "Oklahoma City, OK",    multiplier: 0.88, label: "Below Average" },
+  "741": { name: "Tulsa, OK",            multiplier: 0.88, label: "Below Average" },
+  // Kansas
+  "662": { name: "Wichita, KS",          multiplier: 0.87, label: "Below Average" },
+  "660": { name: "Kansas City, KS",      multiplier: 0.90, label: "Below Average" },
+  // Nebraska
+  "681": { name: "Omaha, NE",            multiplier: 0.90, label: "Below Average" },
+  "680": { name: "Omaha, NE",            multiplier: 0.90, label: "Below Average" },
+  // Iowa
+  "503": { name: "Des Moines, IA",       multiplier: 0.88, label: "Below Average" },
+  "502": { name: "Des Moines, IA",       multiplier: 0.88, label: "Below Average" },
+  // Hawaii
+  "968": { name: "Honolulu, HI",         multiplier: 1.65, label: "Very High Cost" },
+  "967": { name: "Honolulu, HI",         multiplier: 1.65, label: "Very High Cost" },
+  // Alaska
+  "995": { name: "Anchorage, AK",        multiplier: 1.55, label: "Very High Cost" },
+  "994": { name: "Fairbanks, AK",        multiplier: 1.60, label: "Very High Cost" },
 };
 
 const getRegion = (zip) => {
@@ -465,6 +620,7 @@ export default function RepairIQ() {
   const [shops, setShops]                 = useState([]);
   const [loadingShops, setLoadingShops]   = useState(false);
   const [submitted, setSubmitted]         = useState(false);
+  const [votes, setVotes]                 = useState({}); // { "Oil Change": "up" | "down" }
 
   const region    = getRegion(zip);
   const makeMult  = makeMultipliers[make] || 1;
@@ -646,6 +802,17 @@ export default function RepairIQ() {
                     )}
                   </div>
 
+                  {/* Helpful vote */}
+                  <div style={{ marginTop:"16px", display:"flex", alignItems:"center", gap:"10px" }}>
+                    <span style={{ fontSize:"12px", color:"#555" }}>Were these prices helpful?</span>
+                    <button onClick={e => { e.stopPropagation(); setVotes(v => ({ ...v, [name]: "up" })); }} style={{ background: votes[name]==="up" ? "#22c55e22" : "transparent", border:`1px solid ${votes[name]==="up" ? "#22c55e" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="up" ? "#22c55e" : "#555", cursor:"pointer", fontFamily:"inherit" }}>
+                      👍 {votes[name]==="up" ? "Thanks!" : "Yes"}
+                    </button>
+                    <button onClick={e => { e.stopPropagation(); setVotes(v => ({ ...v, [name]: "down" })); }} style={{ background: votes[name]==="down" ? "#ef444422" : "transparent", border:`1px solid ${votes[name]==="down" ? "#ef4444" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="down" ? "#ef4444" : "#555", cursor:"pointer", fontFamily:"inherit" }}>
+                      👎 {votes[name]==="down" ? "Got it" : "No"}
+                    </button>
+                  </div>
+
                   <button style={{ marginTop:"14px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"6px", padding:"10px", fontSize:"12px", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
                     Get Free Quotes →
                   </button>
@@ -686,8 +853,16 @@ export default function RepairIQ() {
         </div>
       </div>
 
-      <footer style={{ borderTop:"1px solid #1a1a1a", padding:"24px", textAlign:"center", fontSize:"11px", color:"#222", letterSpacing:"0.05em" }}>
-        RepairIQ · Prototype v0.2 · Data is illustrative · Not affiliated with any repair facility
+      <footer style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", textAlign:"center" }}>
+        <div style={{ fontSize:"16px", fontWeight:"400", color:"#f0ede6", letterSpacing:"-0.01em", marginBottom:"8px" }}>
+          Repair<span style={{ color:"#c9a84c", fontStyle:"italic" }}>IQ</span>
+        </div>
+        <div style={{ fontSize:"12px", color:"#444", marginBottom:"6px" }}>
+          Cost estimates are based on researched national averages and are updated periodically — not real-time data.
+        </div>
+        <div style={{ fontSize:"11px", color:"#2a2a2a" }}>
+          Not affiliated with any repair facility · Always get multiple quotes · © 2026 RepairIQ
+        </div>
       </footer>
 
       <style>{`select option { background: #1a1a1a; }`}</style>
