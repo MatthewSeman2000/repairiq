@@ -1405,6 +1405,17 @@ export default function RepairIQ() {
   const [submitError, setSubmitError]     = useState(null);
   const [votes, setVotes]                 = useState({}); // { "Oil Change": "up" | "down" }
 
+  const handleVote = async (e, repairName, direction) => {
+    e.stopPropagation();
+    if (votes[repairName]) return; // already voted
+    setVotes(v => ({ ...v, [repairName]: direction }));
+    await supabase.from("votes").insert({
+      repair_name: repairName,
+      vote:        direction,
+      zip_code:    zip || null,
+    });
+  };
+
   // Community submission form state
   const [formRepair, setFormRepair]       = useState("");
   const [formVehicle, setFormVehicle]     = useState("");
@@ -1626,10 +1637,10 @@ export default function RepairIQ() {
                   {/* Helpful vote */}
                   <div style={{ marginTop:"16px", display:"flex", alignItems:"center", gap:"10px" }}>
                     <span style={{ fontSize:"12px", color:"#555" }}>Were these prices helpful?</span>
-                    <button onClick={e => { e.stopPropagation(); setVotes(v => ({ ...v, [name]: "up" })); }} style={{ background: votes[name]==="up" ? "#22c55e22" : "transparent", border:`1px solid ${votes[name]==="up" ? "#22c55e" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="up" ? "#22c55e" : "#555", cursor:"pointer", fontFamily:"inherit" }}>
+                    <button onClick={e => handleVote(e, name, "up")} style={{ background: votes[name]==="up" ? "#22c55e22" : "transparent", border:`1px solid ${votes[name]==="up" ? "#22c55e" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="up" ? "#22c55e" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
                       👍 {votes[name]==="up" ? "Thanks!" : "Yes"}
                     </button>
-                    <button onClick={e => { e.stopPropagation(); setVotes(v => ({ ...v, [name]: "down" })); }} style={{ background: votes[name]==="down" ? "#ef444422" : "transparent", border:`1px solid ${votes[name]==="down" ? "#ef4444" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="down" ? "#ef4444" : "#555", cursor:"pointer", fontFamily:"inherit" }}>
+                    <button onClick={e => handleVote(e, name, "down")} style={{ background: votes[name]==="down" ? "#ef444422" : "transparent", border:`1px solid ${votes[name]==="down" ? "#ef4444" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="down" ? "#ef4444" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
                       👎 {votes[name]==="down" ? "Got it" : "No"}
                     </button>
                   </div>
