@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
     const geoData = await geoRes.json();
 
     if (!geoData.results || geoData.results.length === 0) {
-      return res.status(404).json({ error: "ZIP not found" });
+      return res.status(404).json({ error: "ZIP not found", status: geoData.status, details: geoData.error_message || null });
     }
 
     const { lat, lng } = geoData.results[0].geometry.location;
