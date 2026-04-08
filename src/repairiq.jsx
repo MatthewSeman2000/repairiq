@@ -496,10 +496,7 @@ export default function RepairIQ() {
   return (
     <div style={{ fontFamily:"'Georgia','Times New Roman',serif", background:"#0f0f0f", minHeight:"100vh", color:"#f0ede6" }}>
 
-      {/* Ad banner */}
-      <div style={{ background:"#1a1a1a", borderBottom:"1px solid #222", padding:"8px 0", textAlign:"center", fontSize:"11px", color:"#444", letterSpacing:"0.1em", textTransform:"uppercase" }}>
-        Advertisement · <span style={{ color:"#c9a84c" }}>Get 3 Free Quotes from Local Shops →</span>
-      </div>
+
 
       {/* Header */}
       <header style={{ maxWidth:"900px", margin:"0 auto", padding:"40px 24px 28px", borderBottom:"1px solid #1a1a1a" }}>
