@@ -1902,6 +1902,81 @@ const modelTiers = {
 };
 const categories = ["All", ...new Set(Object.values(repairData).map(r => r.category))];
 
+// Year multipliers based on real data:
+// CCC: 2021 ADAS vehicles cost 15-19% more than 2015 non-ADAS
+// BLS: repair costs up 43.6% from 2019-2025 (complexity-driven)
+// Parts availability: pre-2005 parts getting harder to source
+// Sweet spot: 2005-2014 — plentiful parts, no ADAS complexity
+const yearRanges = [
+  { label: "Any Year",  min: 0,    max: 9999, multiplier: 1.00 },
+  { label: "1990",      min: 1990, max: 1990, multiplier: 1.10 },
+  { label: "1991",      min: 1991, max: 1991, multiplier: 1.10 },
+  { label: "1992",      min: 1992, max: 1992, multiplier: 1.10 },
+  { label: "1993",      min: 1993, max: 1993, multiplier: 1.09 },
+  { label: "1994",      min: 1994, max: 1994, multiplier: 1.09 },
+  { label: "1995",      min: 1995, max: 1995, multiplier: 1.08 },
+  { label: "1996",      min: 1996, max: 1996, multiplier: 1.06 },
+  { label: "1997",      min: 1997, max: 1997, multiplier: 1.06 },
+  { label: "1998",      min: 1998, max: 1998, multiplier: 1.05 },
+  { label: "1999",      min: 1999, max: 1999, multiplier: 1.05 },
+  { label: "2000",      min: 2000, max: 2000, multiplier: 1.04 },
+  { label: "2001",      min: 2001, max: 2001, multiplier: 1.04 },
+  { label: "2002",      min: 2002, max: 2002, multiplier: 1.03 },
+  { label: "2003",      min: 2003, max: 2003, multiplier: 1.03 },
+  { label: "2004",      min: 2004, max: 2004, multiplier: 1.02 },
+  { label: "2005",      min: 2005, max: 2005, multiplier: 1.00 },
+  { label: "2006",      min: 2006, max: 2006, multiplier: 1.00 },
+  { label: "2007",      min: 2007, max: 2007, multiplier: 1.00 },
+  { label: "2008",      min: 2008, max: 2008, multiplier: 1.00 },
+  { label: "2009",      min: 2009, max: 2009, multiplier: 1.00 },
+  { label: "2010",      min: 2010, max: 2010, multiplier: 1.00 },
+  { label: "2011",      min: 2011, max: 2011, multiplier: 1.00 },
+  { label: "2012",      min: 2012, max: 2012, multiplier: 1.00 },
+  { label: "2013",      min: 2013, max: 2013, multiplier: 1.00 },
+  { label: "2014",      min: 2014, max: 2014, multiplier: 1.00 },
+  { label: "2015",      min: 2015, max: 2015, multiplier: 1.04 },
+  { label: "2016",      min: 2016, max: 2016, multiplier: 1.05 },
+  { label: "2017",      min: 2017, max: 2017, multiplier: 1.06 },
+  { label: "2018",      min: 2018, max: 2018, multiplier: 1.07 },
+  { label: "2019",      min: 2019, max: 2019, multiplier: 1.10 },
+  { label: "2020",      min: 2020, max: 2020, multiplier: 1.11 },
+  { label: "2021",      min: 2021, max: 2021, multiplier: 1.12 },
+  { label: "2022",      min: 2022, max: 2022, multiplier: 1.13 },
+  { label: "2023",      min: 2023, max: 2023, multiplier: 1.15 },
+  { label: "2024",      min: 2024, max: 2024, multiplier: 1.15 },
+  { label: "2025",      min: 2025, max: 2025, multiplier: 1.15 },
+  { label: "2026",      min: 2026, max: 2026, multiplier: 1.15 },
+];
+
+const getYearMult = (year) => {
+  if (!year || year === "Any Year") return 1.00;
+  const entry = yearRanges.find(r => r.label === year);
+  return entry ? entry.multiplier : 1.00;
+};
+
+// Repairs where model year affects cost (ADAS recalibration, electrical complexity)
+// Based on CCC/AAA data — NOT applied to commodity services
+const yearSensitiveRepairs = new Set([
+  "Wheel Alignment",
+  "Shock Absorbers (pair)",
+  "Strut Assembly (pair)",
+  "Ball Joint",
+  "Tie Rod End",
+  "Alternator",
+  "Starter Motor",
+  "Battery Replacement",
+  "Oxygen Sensor",
+  "Mass Air Flow Sensor",
+  "Ignition Coil",
+  "AC Compressor",
+  "Spark Plugs",
+  "Timing Belt",
+  "Timing Chain",
+  "Head Gasket",
+  "Valve Cover Gasket",
+  "CV Axle/Halfshaft",
+]);
+
 // Trim multipliers per model — stacks on top of make × model multiplier
 // Format: { "Make": { "Model": [["Trim", multiplier], ...] } }
 const trimData = {
@@ -2417,6 +2492,7 @@ export default function RepairIQ() {
   const [make, setMake]                   = useState("Any Make");
   const [model, setModel]                 = useState("Any Model");
   const [trim, setTrim]                   = useState("Any Trim");
+  const [year, setYear]                   = useState("Any Year");
   const [zipInput, setZipInput]           = useState("");
   const [zip, setZip]                     = useState("");
   const [selectedRepair, setSelectedRepair] = useState(null);
@@ -2472,11 +2548,17 @@ export default function RepairIQ() {
   const modelMult  = (modelTierList.find(([m]) => m === model) || [null, 1])[1];
   const trimList   = (trimData[make] && trimData[make][model]) || [];
   const trimMult   = (trimList.find(([t]) => t === trim) || [null, 1])[1];
+  const yearMult   = getYearMult(year);
   const regMult    = region ? region.multiplier : 1;
-  const baseMult   = makeMult * modelMult * regMult; // without trim
-  const totalMult  = makeMult * modelMult * trimMult * regMult; // with trim
+  const baseMult   = makeMult * modelMult * regMult;
+  const totalMult  = makeMult * modelMult * trimMult * regMult;
   // adj applies trim multiplier only for trim-sensitive repairs
-  const adj = (v, data) => Math.round(v * (data?.trimSensitive ? totalMult : baseMult));
+  // adj applies year multiplier only for year-sensitive repairs
+  const adj = (v, data, repairName) => {
+    let mult = data?.trimSensitive ? totalMult : baseMult;
+    if (repairName && yearSensitiveRepairs.has(repairName)) mult *= yearMult;
+    return Math.round(v * mult);
+  };
 
   const handleZip = e => {
     e.preventDefault();
@@ -2559,8 +2641,8 @@ export default function RepairIQ() {
           </div>
         )}
 
-        {/* Search + Make + Model + Trim + Category */}
-        <div style={{ display:"grid", gridTemplateColumns:"1fr auto auto auto auto", gap:"10px" }}>
+        {/* Search + Make + Model + Trim + Year + Category */}
+        <div style={{ display:"grid", gridTemplateColumns:"1fr auto auto auto auto auto", gap:"10px" }}>
           <input placeholder="Search repairs…" value={search} onChange={e => setSearch(e.target.value)} style={IS} />
           <select value={make} onChange={e => { setMake(e.target.value); setModel("Any Model"); setTrim("Any Trim"); }} style={IS}>
             {makes.map(m => <option key={m}>{m}</option>)}
@@ -2575,15 +2657,18 @@ export default function RepairIQ() {
               {trimData[make][model].map(([t]) => <option key={t}>{t}</option>)}
             </select>
           )}
+          <select value={year} onChange={e => setYear(e.target.value)} style={IS}>
+            {yearRanges.map(r => <option key={r.label}>{r.label}</option>)}
+          </select>
           <select value={category} onChange={e => setCategory(e.target.value)} style={IS}>
             {categories.map(c => <option key={c}>{c}</option>)}
           </select>
         </div>
 
         {/* Combined modifier callout */}
-        {(make !== "Any Make" || zip) && (
+        {(make !== "Any Make" || zip || year !== "Any Year") && (
           <div style={{ marginTop:"10px", background:"#1a1a0a", border:"1px solid #3a3010", borderRadius:"6px", padding:"9px 14px", fontSize:"12px", color:"#c9a84c" }}>
-            📊 Estimates adjusted for{make !== "Any Make" ? ` ${make}${model !== "Any Model" ? ` ${model}` : ""}${trim !== "Any Trim" ? ` ${trim}` : ""}` : ""}{zip && region ? ` + ${region.name.split(",")[0]} labor rates` : ""} — total modifier: {totalMult>1?"+":""}{Math.round((totalMult-1)*100)}%
+            📊 Estimates adjusted for{make !== "Any Make" ? ` ${make}${model !== "Any Model" ? ` ${model}` : ""}${trim !== "Any Trim" ? ` ${trim}` : ""}` : ""}${year !== "Any Year" ? ` ${year}` : ""}{zip && region ? ` + ${region.name.split(",")[0]} labor rates` : ""} — base modifier: {totalMult>1?"+":""}{Math.round((totalMult-1)*100)}%{year !== "Any Year" && yearMult !== 1 ? `, year: +${Math.round((yearMult-1)*100)}% on applicable repairs` : ""}
           </div>
         )}
       </div>
@@ -2592,8 +2677,8 @@ export default function RepairIQ() {
       <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
-          const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data);
-          const hiHigh    = adj(Math.max(...tiers.map(([,v]) => v.high)), data);
+          const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
+          const hiHigh    = adj(Math.max(...tiers.map(([,v]) => v.high)), data, name);
           const cc        = catColor(data.category);
           const isSel     = selectedRepair === name;
 
@@ -2622,7 +2707,7 @@ export default function RepairIQ() {
                   {tiers.map(([tier, vals]) => (
                     <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"5px 0", borderBottom:"1px solid #1a1a1a", fontSize:"13px" }}>
                       <span style={{ color:"#888" }}>{tier}</span>
-                      <span style={{ color:"#c9a84c" }}>${adj(vals.low, data).toLocaleString()} – ${adj(vals.high, data).toLocaleString()}</span>
+                      <span style={{ color:"#c9a84c" }}>${adj(vals.low, data, name).toLocaleString()} – ${adj(vals.high, data, name).toLocaleString()}</span>
                     </div>
                   ))}
 
