@@ -1377,6 +1377,37 @@ const getMockShops = (zip, repairName) => {
 
 const makes = ["Any Make","Acura","Audi","BMW","Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC","Honda","Hyundai","Infiniti","Jeep","Kia","Lexus","Lincoln","Mazda","Mercedes-Benz","Mitsubishi","Nissan","RAM","Subaru","Tesla","Toyota","Volkswagen","Volvo"];
 const makeMultipliers = {"Any Make":1,"Acura":1.15,"Audi":1.35,"BMW":1.45,"Buick":1.05,"Cadillac":1.2,"Chevrolet":0.95,"Chrysler":0.95,"Dodge":0.95,"Ford":0.95,"GMC":0.95,"Honda":1,"Hyundai":0.95,"Infiniti":1.2,"Jeep":1,"Kia":0.9,"Lexus":1.2,"Lincoln":1.15,"Mazda":1,"Mercedes-Benz":1.55,"Mitsubishi":0.95,"Nissan":1,"RAM":0.95,"Subaru":1.05,"Tesla":1.5,"Toyota":1.05,"Volkswagen":1.2,"Volvo":1.3};
+
+// Model tiers per make — multiplier stacks on top of make multiplier
+const modelTiers = {
+  "Acura":         [["Any Model",1],["ILX / Integra",0.95],["TLX / TL",1.0],["MDX / RDX",1.05],["NSX",1.35]],
+  "Audi":          [["Any Model",1],["A3 / A4",0.95],["A5 / A6",1.0],["A7 / A8",1.1],["Q3 / Q5",1.0],["Q7 / Q8",1.1],["S / RS Models",1.25],["e-tron",1.2]],
+  "BMW":           [["Any Model",1],["1 / 2 Series",0.95],["3 / 4 Series",1.0],["5 / 6 Series",1.1],["7 Series",1.2],["X1 / X3",1.0],["X5 / X6 / X7",1.15],["M Models",1.3],["i Models (EV)",1.2]],
+  "Buick":         [["Any Model",1],["Encore / Envision",0.95],["Enclave",1.0],["LaCrosse / Regal",0.95]],
+  "Cadillac":      [["Any Model",1],["CT4 / CT5",1.0],["Escalade",1.2],["XT4 / XT5",1.0],["XT6",1.05],["Lyriq (EV)",1.15]],
+  "Chevrolet":     [["Any Model",1],["Spark / Sonic / Trax",0.88],["Malibu / Equinox",0.95],["Silverado / Colorado",1.0],["Tahoe / Suburban",1.05],["Corvette",1.25],["Camaro ZL1",1.2]],
+  "Chrysler":      [["Any Model",1],["300",1.0],["Pacifica",0.95],["Voyager",0.9]],
+  "Dodge":         [["Any Model",1],["Dart / Neon",0.88],["Charger / Challenger",1.0],["Durango",1.05],["Hellcat Models",1.3],["Demon / SRT",1.4]],
+  "Ford":          [["Any Model",1],["Fiesta / Focus",0.88],["Fusion / Escape",0.95],["F-150",1.0],["Explorer / Edge",1.0],["Expedition",1.05],["Mustang GT",1.1],["Mustang Shelby",1.25],["Maverick / Bronco Sport",0.95],["F-250 / Super Duty",1.1]],
+  "GMC":           [["Any Model",1],["Terrain / Envoy",0.95],["Sierra / Canyon",1.0],["Yukon / Acadia",1.05],["Denali Trim",1.15]],
+  "Honda":         [["Any Model",1],["Fit / HR-V",0.88],["Civic / Accord",0.95],["CR-V / Pilot",1.0],["Ridgeline",1.05],["Odyssey",1.0],["Type R",1.15]],
+  "Hyundai":       [["Any Model",1],["Accent / Venue",0.88],["Elantra / Tucson",0.95],["Santa Fe / Sonata",1.0],["Palisade",1.05],["Ioniq (EV/Hybrid)",1.1]],
+  "Infiniti":      [["Any Model",1],["Q50 / Q60",1.0],["QX50 / QX60",1.05],["QX80",1.15]],
+  "Jeep":          [["Any Model",1],["Renegade / Compass",0.9],["Cherokee",0.95],["Wrangler",1.05],["Grand Cherokee",1.05],["Grand Wagoneer",1.2],["Trackhawk",1.3]],
+  "Kia":           [["Any Model",1],["Rio / Soul",0.88],["Forte / Seltos",0.9],["Sportage / Sorento",0.95],["Telluride",1.0],["Stinger",1.1],["EV6",1.1]],
+  "Lexus":         [["Any Model",1],["IS / ES",1.0],["GS / LS",1.1],["NX / UX",1.0],["RX / GX",1.1],["LX",1.2],["RC / LC",1.15],["F Sport / F Models",1.2]],
+  "Lincoln":       [["Any Model",1],["Corsair / Nautilus",1.0],["Aviator",1.1],["Navigator",1.2],["Continental",1.1]],
+  "Mazda":         [["Any Model",1],["Mazda3 / CX-3",0.9],["Mazda6 / CX-5",0.95],["CX-9 / CX-50",1.0],["MX-5 Miata",1.0]],
+  "Mercedes-Benz": [["Any Model",1],["A / B / CLA Class",0.95],["C / E Class",1.0],["S Class",1.15],["GLA / GLB / GLC",1.0],["GLE / GLS",1.1],["G-Class",1.25],["AMG Models",1.3],["EQ (EV)",1.2]],
+  "Mitsubishi":    [["Any Model",1],["Mirage",0.85],["Eclipse Cross / Outlander Sport",0.92],["Outlander",0.95],["Eclipse Cross PHEV",1.05]],
+  "Nissan":        [["Any Model",1],["Versa / Kicks",0.88],["Sentra / Rogue Sport",0.92],["Altima / Rogue",0.95],["Murano / Pathfinder",1.0],["Armada",1.05],["370Z / GT-R",1.2],["Leaf (EV)",1.05]],
+  "RAM":           [["Any Model",1],["1500",1.0],["2500 / 3500",1.1],["ProMaster",0.95],["TRX",1.3]],
+  "Subaru":        [["Any Model",1],["Impreza / Crosstrek",0.95],["Forester / Outback",1.0],["Ascent / Legacy",1.05],["WRX",1.1],["WRX STI",1.2],["BRZ",1.05]],
+  "Tesla":         [["Any Model",1],["Model 3",0.95],["Model Y",1.0],["Model S",1.1],["Model X",1.15],["Cybertruck",1.2]],
+  "Toyota":        [["Any Model",1],["Yaris / Corolla",0.9],["Camry / RAV4",0.95],["Highlander / Venza",1.0],["4Runner / Tacoma",1.05],["Tundra / Sequoia",1.1],["Land Cruiser",1.2],["GR86 / GR Corolla",1.1],["Supra",1.2],["Prius / Hybrid",1.05]],
+  "Volkswagen":    [["Any Model",1],["Jetta / Golf",0.95],["Passat / Tiguan",1.0],["Atlas",1.05],["GTI / Golf R",1.1],["ID.4 (EV)",1.1]],
+  "Volvo":         [["Any Model",1],["S60 / V60",1.0],["S90 / V90",1.1],["XC40 / XC60",1.05],["XC90",1.15],["Polestar",1.2]],
+};
 const categories = ["All", ...new Set(Object.values(repairData).map(r => r.category))];
 const catColor = c => ({"Maintenance":"#22c55e","Brakes":"#ef4444","Electrical":"#f59e0b","Drivetrain":"#8b5cf6","Engine":"#f97316","HVAC":"#06b6d4","Suspension":"#3b82f6"}[c] || "#6b7280");
 const labelColor = l => ({"Very High Cost":"#ef4444","High Cost":"#f97316","Above Average":"#f59e0b","Average":"#22c55e","Below Average":"#06b6d4"}[l] || "#888");
@@ -1395,6 +1426,7 @@ export default function RepairIQ() {
   const [search, setSearch]               = useState("");
   const [category, setCategory]           = useState("All");
   const [make, setMake]                   = useState("Any Make");
+  const [model, setModel]                 = useState("Any Model");
   const [zipInput, setZipInput]           = useState("");
   const [zip, setZip]                     = useState("");
   const [selectedRepair, setSelectedRepair] = useState(null);
@@ -1444,10 +1476,12 @@ export default function RepairIQ() {
     setSubmitted(true);
   };
 
-  const region    = getRegion(zip);
-  const makeMult  = makeMultipliers[make] || 1;
-  const regMult   = region ? region.multiplier : 1;
-  const totalMult = makeMult * regMult;
+  const region     = getRegion(zip);
+  const makeMult   = makeMultipliers[make] || 1;
+  const modelTierList = modelTiers[make] || [];
+  const modelMult  = (modelTierList.find(([m]) => m === model) || [null, 1])[1];
+  const regMult    = region ? region.multiplier : 1;
+  const totalMult  = makeMult * modelMult * regMult;
   const adj = v => Math.round(v * totalMult);
 
   const handleZip = e => {
@@ -1531,12 +1565,17 @@ export default function RepairIQ() {
           </div>
         )}
 
-        {/* Search + Make + Category */}
-        <div style={{ display:"grid", gridTemplateColumns:"1fr auto auto", gap:"10px" }}>
+        {/* Search + Make + Model + Category */}
+        <div style={{ display:"grid", gridTemplateColumns:"1fr auto auto auto", gap:"10px" }}>
           <input placeholder="Search repairs…" value={search} onChange={e => setSearch(e.target.value)} style={IS} />
-          <select value={make} onChange={e => setMake(e.target.value)} style={IS}>
+          <select value={make} onChange={e => { setMake(e.target.value); setModel("Any Model"); }} style={IS}>
             {makes.map(m => <option key={m}>{m}</option>)}
           </select>
+          {make !== "Any Make" && modelTiers[make] && (
+            <select value={model} onChange={e => setModel(e.target.value)} style={IS}>
+              {modelTiers[make].map(([m]) => <option key={m}>{m}</option>)}
+            </select>
+          )}
           <select value={category} onChange={e => setCategory(e.target.value)} style={IS}>
             {categories.map(c => <option key={c}>{c}</option>)}
           </select>
@@ -1545,7 +1584,7 @@ export default function RepairIQ() {
         {/* Combined modifier callout */}
         {(make !== "Any Make" || zip) && (
           <div style={{ marginTop:"10px", background:"#1a1a0a", border:"1px solid #3a3010", borderRadius:"6px", padding:"9px 14px", fontSize:"12px", color:"#c9a84c" }}>
-            📊 Estimates adjusted for{make !== "Any Make" ? ` ${make}` : ""}{zip && region ? ` + ${region.name.split(",")[0]} labor rates` : ""} — total modifier: {totalMult>1?"+":""}{Math.round((totalMult-1)*100)}%
+            📊 Estimates adjusted for{make !== "Any Make" ? ` ${make}${model !== "Any Model" ? ` ${model}` : ""}` : ""}{zip && region ? ` + ${region.name.split(",")[0]} labor rates` : ""} — total modifier: {totalMult>1?"+":""}{Math.round((totalMult-1)*100)}%
           </div>
         )}
       </div>
