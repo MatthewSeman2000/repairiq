@@ -13,7 +13,7 @@ const repairData = {
 
   // ── MAINTENANCE ──────────────────────────────────────────────────────────
   "Oil Change": {
-    icon: "🛢️", category: "Maintenance",
+    icon: "🛢️", category: "Maintenance", trimSensitive: false,
     costs: {
       "Conventional": { low: 35, high: 75 },
       "Synthetic Blend": { low: 55, high: 100 },
@@ -23,7 +23,7 @@ const repairData = {
     notes: "KBB: conventional $35–$75, full synthetic $65–$125. Dealerships typically charge $100–$130 for synthetic.",
   },
   "Tire Rotation": {
-    icon: "⚙️", category: "Maintenance",
+    icon: "⚙️", category: "Maintenance", trimSensitive: false,
     costs: {
       "Standard": { low: 20, high: 50 },
       "With Balance": { low: 80, high: 130 },
@@ -32,7 +32,7 @@ const repairData = {
     notes: "Often free or discounted with tire purchase. Recommended every 5–7k miles.",
   },
   "Cabin Air Filter": {
-    icon: "🌬️", category: "Maintenance",
+    icon: "🌬️", category: "Maintenance", trimSensitive: false,
     costs: {
       "Basic": { low: 30, high: 65 },
       "HEPA/Premium": { low: 55, high: 95 },
@@ -41,13 +41,13 @@ const repairData = {
     notes: "National average ~$95 in 2026. Very DIY-friendly — often under 5 minutes on most vehicles.",
   },
   "Engine Air Filter": {
-    icon: "💨", category: "Maintenance",
+    icon: "💨", category: "Maintenance", trimSensitive: false,
     costs: { "Standard": { low: 25, high: 60 }, "Performance": { low: 50, high: 85 } },
     labor: "0.25 hr",
     notes: "National average ~$83 in 2026. DIY-friendly on most vehicles. Replace every 15–30k miles.",
   },
   "Wiper Blades": {
-    icon: "🌧️", category: "Maintenance",
+    icon: "🌧️", category: "Maintenance", trimSensitive: false,
     costs: {
       "Economy (pair)": { low: 25, high: 55 },
       "Premium Beam (pair)": { low: 60, high: 100 },
@@ -56,7 +56,7 @@ const repairData = {
     notes: "National average ~$93 in 2026. Most auto parts stores install for free with purchase.",
   },
   "Fuel Filter": {
-    icon: "⛽", category: "Maintenance",
+    icon: "⛽", category: "Maintenance", trimSensitive: false,
     costs: {
       "External (inline)": { low: 75, high: 120 },
       "In-tank (with pump)": { low: 220, high: 400 },
@@ -65,7 +65,7 @@ const repairData = {
     notes: "Many modern cars have in-tank filters changed with the fuel pump. Check your service manual.",
   },
   "Tire Replacement (each)": {
-    icon: "🔄", category: "Maintenance",
+    icon: "🔄", category: "Maintenance", trimSensitive: false,
     costs: {
       "Economy": { low: 80, high: 130 },
       "Mid-range": { low: 120, high: 185 },
@@ -75,7 +75,7 @@ const repairData = {
     notes: "Price per tire including mounting and balancing. Buy 4 for better pricing.",
   },
   "Multi-Point Inspection": {
-    icon: "🔍", category: "Maintenance",
+    icon: "🔍", category: "Maintenance", trimSensitive: false,
     costs: { "Standard": { low: 0, high: 60 } },
     labor: "0.5–1 hr",
     notes: "Often free at dealerships with any service. Standalone inspections typically $40–$75.",
@@ -83,7 +83,7 @@ const repairData = {
 
   // ── BRAKES ───────────────────────────────────────────────────────────────
   "Brake Pads (Front)": {
-    icon: "🔧", category: "Brakes",
+    icon: "🔧", category: "Brakes", trimSensitive: true,
     costs: {
       "Economy": { low: 100, high: 175 },
       "OEM": { low: 150, high: 300 },
@@ -93,7 +93,7 @@ const repairData = {
     notes: "KBB average ~$150/axle, up to $300 for premium pads. RepairPal: $320–$379 per axle avg.",
   },
   "Brake Pads (Rear)": {
-    icon: "🔧", category: "Brakes",
+    icon: "🔧", category: "Brakes", trimSensitive: true,
     costs: {
       "Economy": { low: 90, high: 160 },
       "OEM": { low: 130, high: 250 },
@@ -103,7 +103,7 @@ const repairData = {
     notes: "Rear pads typically 10–20% less than front. Electric parking brakes add labor cost.",
   },
   "Brake Rotors (pair)": {
-    icon: "⭕", category: "Brakes",
+    icon: "⭕", category: "Brakes", trimSensitive: true,
     costs: {
       "Economy": { low: 100, high: 175 },
       "OEM": { low: 150, high: 270 },
@@ -113,13 +113,13 @@ const repairData = {
     notes: "KBB: pads + rotors average $250–$400 per axle. Usually replaced in pairs per axle.",
   },
   "Brake Fluid Flush": {
-    icon: "💧", category: "Brakes",
+    icon: "💧", category: "Brakes", trimSensitive: false,
     costs: { "Standard": { low: 80, high: 130 } },
     labor: "0.5–1 hr",
     notes: "Recommended every 2 years or 30k miles. Moisture in old fluid lowers boiling point.",
   },
   "Brake Caliper": {
-    icon: "🗜️", category: "Brakes",
+    icon: "🗜️", category: "Brakes", trimSensitive: true,
     costs: {
       "Remanufactured (each)": { low: 150, high: 280 },
       "OEM New (each)": { low: 250, high: 450 },
@@ -130,7 +130,7 @@ const repairData = {
 
   // ── ENGINE ────────────────────────────────────────────────────────────────
   "Spark Plugs": {
-    icon: "🔥", category: "Engine",
+    icon: "🔥", category: "Engine", trimSensitive: true,
     costs: {
       "Copper (4-cyl)": { low: 80, high: 150 },
       "Iridium (4-cyl)": { low: 140, high: 250 },
@@ -140,7 +140,7 @@ const repairData = {
     notes: "RepairPal national average $150–$300. V8 trucks like F-150 average $328–$438.",
   },
   "Timing Belt": {
-    icon: "⏱️", category: "Engine",
+    icon: "⏱️", category: "Engine", trimSensitive: true,
     costs: {
       "Belt Only": { low: 300, high: 500 },
       "With Water Pump": { low: 500, high: 900 },
@@ -149,25 +149,25 @@ const repairData = {
     notes: "AAA range $400–$900. Many modern vehicles use timing chains instead. Critical safety service.",
   },
   "Timing Chain": {
-    icon: "⛓️", category: "Engine",
+    icon: "⛓️", category: "Engine", trimSensitive: true,
     costs: { "Standard": { low: 900, high: 1800 } },
     labor: "6–12 hrs",
     notes: "Labor-intensive. Rattling on startup is a warning sign — don't ignore it.",
   },
   "Coolant Flush": {
-    icon: "🌡️", category: "Engine",
+    icon: "🌡️", category: "Engine", trimSensitive: false,
     costs: { "Standard": { low: 100, high: 200 } },
     labor: "1 hr",
     notes: "KBB average $131–$209. Recommended every 30k–50k miles or 2–5 years.",
   },
   "Thermostat Replacement": {
-    icon: "🌡️", category: "Engine",
+    icon: "🌡️", category: "Engine", trimSensitive: false,
     costs: { "Standard": { low: 150, high: 275 } },
     labor: "1–2 hrs",
     notes: "Often replaced with coolant flush. Symptoms include overheating or no heat in cabin.",
   },
   "Water Pump": {
-    icon: "💦", category: "Engine",
+    icon: "💦", category: "Engine", trimSensitive: true,
     costs: {
       "Standard": { low: 300, high: 600 },
       "With Timing Belt": { low: 500, high: 900 },
@@ -176,13 +176,13 @@ const repairData = {
     notes: "Often replaced simultaneously with timing belt since access requires similar disassembly.",
   },
   "Head Gasket": {
-    icon: "🔩", category: "Engine",
+    icon: "🔩", category: "Engine", trimSensitive: true,
     costs: { "Standard": { low: 1400, high: 3000 } },
     labor: "8–16 hrs",
     notes: "RepairPal average $2,475–$3,246. Signs include white exhaust smoke or milky oil.",
   },
   "Valve Cover Gasket": {
-    icon: "🔩", category: "Engine",
+    icon: "🔩", category: "Engine", trimSensitive: true,
     costs: {
       "4-cylinder": { low: 210, high: 350 },
       "V6/V8": { low: 350, high: 580 },
@@ -191,13 +191,13 @@ const repairData = {
     notes: "RepairPal average $336–$461. Toyota Corolla ~$212–$290; V6 trucks $481–$699.",
   },
   "Intake Manifold Gasket": {
-    icon: "🔩", category: "Engine",
+    icon: "🔩", category: "Engine", trimSensitive: true,
     costs: { "Standard": { low: 300, high: 600 } },
     labor: "2–4 hrs",
     notes: "Coolant or vacuum leaks often indicate this gasket is failing.",
   },
   "PCV Valve": {
-    icon: "🔧", category: "Engine",
+    icon: "🔧", category: "Engine", trimSensitive: false,
     costs: { "Standard": { low: 40, high: 90 } },
     labor: "0.25–0.5 hr",
     notes: "Cheap and often overlooked. A clogged PCV can cause rough idle and oil leaks.",
@@ -205,7 +205,7 @@ const repairData = {
 
   // ── ELECTRICAL ────────────────────────────────────────────────────────────
   "Battery Replacement": {
-    icon: "🔋", category: "Electrical",
+    icon: "🔋", category: "Electrical", trimSensitive: false,
     costs: {
       "Standard": { low: 120, high: 220 },
       "AGM/Premium": { low: 200, high: 350 },
@@ -214,7 +214,7 @@ const repairData = {
     notes: "Most replacements run $120–$300 including installation. Some vehicles require computer reset.",
   },
   "Alternator": {
-    icon: "⚡", category: "Electrical",
+    icon: "⚡", category: "Electrical", trimSensitive: true,
     costs: {
       "Remanufactured": { low: 400, high: 650 },
       "OEM New": { low: 600, high: 1000 },
@@ -223,7 +223,7 @@ const repairData = {
     notes: "RepairPal $563–$767; KBB $747–$842. Luxury/performance vehicles can exceed $1,200.",
   },
   "Starter Motor": {
-    icon: "🔑", category: "Electrical",
+    icon: "🔑", category: "Electrical", trimSensitive: true,
     costs: {
       "Remanufactured": { low: 250, high: 430 },
       "OEM New": { low: 350, high: 600 },
@@ -232,13 +232,13 @@ const repairData = {
     notes: "Clicking sounds when turning the key are a common symptom of a failing starter.",
   },
   "Fuse Replacement": {
-    icon: "⚡", category: "Electrical",
+    icon: "⚡", category: "Electrical", trimSensitive: false,
     costs: { "Standard": { low: 15, high: 50 } },
     labor: "0.25 hr",
     notes: "Often DIY-friendly. Fuse box locations vary — check your owner's manual.",
   },
   "Oxygen Sensor": {
-    icon: "📡", category: "Electrical",
+    icon: "📡", category: "Electrical", trimSensitive: true,
     costs: {
       "Single sensor": { low: 200, high: 400 },
       "All sensors (4-cyl)": { low: 400, high: 800 },
@@ -247,13 +247,13 @@ const repairData = {
     notes: "RepairPal average $434–$537 per sensor. P0130–P0167 codes are the most common trigger.",
   },
   "Mass Air Flow Sensor": {
-    icon: "💨", category: "Electrical",
+    icon: "💨", category: "Electrical", trimSensitive: true,
     costs: { "Standard": { low: 150, high: 320 } },
     labor: "0.5–1 hr",
     notes: "Try cleaning with MAF cleaner spray ($10–$20) before replacing. Often resolves the issue.",
   },
   "Ignition Coil": {
-    icon: "⚡", category: "Electrical",
+    icon: "⚡", category: "Electrical", trimSensitive: true,
     costs: {
       "Single coil": { low: 100, high: 250 },
       "Full set (4-cyl)": { low: 280, high: 500 },
@@ -264,7 +264,7 @@ const repairData = {
 
   // ── SUSPENSION & STEERING ─────────────────────────────────────────────────
   "Wheel Alignment": {
-    icon: "🎯", category: "Suspension",
+    icon: "🎯", category: "Suspension", trimSensitive: true,
     costs: {
       "2-Wheel": { low: 50, high: 100 },
       "4-Wheel": { low: 100, high: 175 },
@@ -273,7 +273,7 @@ const repairData = {
     notes: "Jiffy Lube: 2-wheel $50–$75, 4-wheel $100–$168. RepairPal certified shops $189–$277.",
   },
   "Shock Absorbers (pair)": {
-    icon: "🏎️", category: "Suspension",
+    icon: "🏎️", category: "Suspension", trimSensitive: true,
     costs: {
       "Economy": { low: 250, high: 450 },
       "OEM/Performance": { low: 400, high: 700 },
@@ -282,7 +282,7 @@ const repairData = {
     notes: "RepairPal average $1,057–$1,260 for all four. Per-axle pair shown here.",
   },
   "Strut Assembly (pair)": {
-    icon: "🏎️", category: "Suspension",
+    icon: "🏎️", category: "Suspension", trimSensitive: true,
     costs: {
       "Economy": { low: 350, high: 600 },
       "OEM": { low: 550, high: 950 },
@@ -291,13 +291,13 @@ const repairData = {
     notes: "Quick-strut assemblies cost more but save labor. Alignment required after replacement.",
   },
   "Sway Bar Links": {
-    icon: "🔗", category: "Suspension",
+    icon: "🔗", category: "Suspension", trimSensitive: false,
     costs: { "Per side": { low: 80, high: 150 } },
     labor: "0.5–1 hr",
     notes: "RepairPal average $103–$143 per side. Clunking over bumps is the main symptom.",
   },
   "Ball Joint": {
-    icon: "⚙️", category: "Suspension",
+    icon: "⚙️", category: "Suspension", trimSensitive: true,
     costs: {
       "Per joint": { low: 150, high: 300 },
       "Both sides": { low: 280, high: 560 },
@@ -306,13 +306,13 @@ const repairData = {
     notes: "RepairPal average $248–$339 per joint. Alignment required after replacement.",
   },
   "Power Steering Fluid Flush": {
-    icon: "🔄", category: "Suspension",
+    icon: "🔄", category: "Suspension", trimSensitive: false,
     costs: { "Standard": { low: 80, high: 140 } },
     labor: "0.5 hr",
     notes: "Not all vehicles have hydraulic power steering — electric systems don't need this service.",
   },
   "Tie Rod End": {
-    icon: "🔩", category: "Suspension",
+    icon: "🔩", category: "Suspension", trimSensitive: false,
     costs: {
       "Inner or outer (each)": { low: 100, high: 220 },
       "Both sides": { low: 200, high: 400 },
@@ -323,7 +323,7 @@ const repairData = {
 
   // ── DRIVETRAIN ────────────────────────────────────────────────────────────
   "Transmission Fluid": {
-    icon: "🔩", category: "Drivetrain",
+    icon: "🔩", category: "Drivetrain", trimSensitive: false,
     costs: {
       "Drain & Fill": { low: 80, high: 175 },
       "Full Flush": { low: 150, high: 290 },
@@ -332,7 +332,7 @@ const repairData = {
     notes: "KBB: drain & fill $150–$175, flush $165–$290. CVT fluid services run 20–30% higher.",
   },
   "CV Axle/Halfshaft": {
-    icon: "🔗", category: "Drivetrain",
+    icon: "🔗", category: "Drivetrain", trimSensitive: true,
     costs: {
       "Remanufactured (each)": { low: 200, high: 380 },
       "OEM New (each)": { low: 350, high: 600 },
@@ -341,7 +341,7 @@ const repairData = {
     notes: "Clicking sounds during turns or vibration under acceleration are key symptoms.",
   },
   "Differential Fluid": {
-    icon: "⚙️", category: "Drivetrain",
+    icon: "⚙️", category: "Drivetrain", trimSensitive: false,
     costs: {
       "Front or rear": { low: 80, high: 150 },
       "Front + rear": { low: 150, high: 275 },
@@ -350,13 +350,13 @@ const repairData = {
     notes: "AWD and 4WD vehicles often have multiple differentials. Check your service schedule.",
   },
   "Transfer Case Service": {
-    icon: "🔩", category: "Drivetrain",
+    icon: "🔩", category: "Drivetrain", trimSensitive: false,
     costs: { "Standard": { low: 100, high: 190 } },
     labor: "0.5–1 hr",
     notes: "Applies to 4WD and AWD vehicles only. Often overlooked in routine maintenance.",
   },
   "Clutch Replacement": {
-    icon: "🦶", category: "Drivetrain",
+    icon: "🦶", category: "Drivetrain", trimSensitive: true,
     costs: {
       "Economy": { low: 600, high: 1000 },
       "OEM/Performance": { low: 900, high: 1800 },
@@ -367,7 +367,7 @@ const repairData = {
 
   // ── HVAC ─────────────────────────────────────────────────────────────────
   "AC Recharge": {
-    icon: "❄️", category: "HVAC",
+    icon: "❄️", category: "HVAC", trimSensitive: false,
     costs: {
       "Standard R-134a": { low: 150, high: 300 },
       "R-1234yf (newer cars)": { low: 250, high: 500 },
@@ -376,7 +376,7 @@ const repairData = {
     notes: "If a leak is present, expect additional $200–$800+ for repair. Leak test recommended.",
   },
   "AC Compressor": {
-    icon: "❄️", category: "HVAC",
+    icon: "❄️", category: "HVAC", trimSensitive: true,
     costs: {
       "Remanufactured": { low: 500, high: 900 },
       "OEM New": { low: 800, high: 1500 },
@@ -385,13 +385,13 @@ const repairData = {
     notes: "System must be evacuated and recharged after replacement. Often includes receiver/dryer.",
   },
   "Heater Core": {
-    icon: "🔥", category: "HVAC",
+    icon: "🔥", category: "HVAC", trimSensitive: true,
     costs: { "Standard": { low: 600, high: 1200 } },
     labor: "5–10 hrs",
     notes: "Labor-intensive — requires dashboard removal on most vehicles. Foggy windshield or sweet smell are signs.",
   },
   "Blend Door Actuator": {
-    icon: "🌡️", category: "HVAC",
+    icon: "🌡️", category: "HVAC", trimSensitive: false,
     costs: { "Standard": { low: 150, high: 350 } },
     labor: "1–3 hrs",
     notes: "Clicking from the dash or stuck temperature control are the main symptoms.",
@@ -2473,8 +2473,10 @@ export default function RepairIQ() {
   const trimList   = (trimData[make] && trimData[make][model]) || [];
   const trimMult   = (trimList.find(([t]) => t === trim) || [null, 1])[1];
   const regMult    = region ? region.multiplier : 1;
-  const totalMult  = makeMult * modelMult * trimMult * regMult;
-  const adj = v => Math.round(v * totalMult);
+  const baseMult   = makeMult * modelMult * regMult; // without trim
+  const totalMult  = makeMult * modelMult * trimMult * regMult; // with trim
+  // adj applies trim multiplier only for trim-sensitive repairs
+  const adj = (v, data) => Math.round(v * (data?.trimSensitive ? totalMult : baseMult));
 
   const handleZip = e => {
     e.preventDefault();
@@ -2590,8 +2592,8 @@ export default function RepairIQ() {
       <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
-          const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)));
-          const hiHigh    = adj(Math.max(...tiers.map(([,v]) => v.high)));
+          const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data);
+          const hiHigh    = adj(Math.max(...tiers.map(([,v]) => v.high)), data);
           const cc        = catColor(data.category);
           const isSel     = selectedRepair === name;
 
@@ -2620,7 +2622,7 @@ export default function RepairIQ() {
                   {tiers.map(([tier, vals]) => (
                     <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"5px 0", borderBottom:"1px solid #1a1a1a", fontSize:"13px" }}>
                       <span style={{ color:"#888" }}>{tier}</span>
-                      <span style={{ color:"#c9a84c" }}>${adj(vals.low).toLocaleString()} – ${adj(vals.high).toLocaleString()}</span>
+                      <span style={{ color:"#c9a84c" }}>${adj(vals.low, data).toLocaleString()} – ${adj(vals.high, data).toLocaleString()}</span>
                     </div>
                   ))}
 
