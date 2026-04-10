@@ -2478,11 +2478,14 @@ const labelColor = l => ({"Very High Cost":"#ef4444","High Cost":"#f97316","Abov
 
 const Stars = ({ rating }) => {
   const full = Math.floor(rating);
-  const half = rating % 1 >= 0.5;
-  const empty = 5 - full - (half ? 1 : 0);
+  const remainder = rating % 1;
+  const half = remainder >= 0.25 && remainder < 0.75;
+  const roundUp = remainder >= 0.75;
+  const fullCount = roundUp ? full + 1 : full;
+  const empty = 5 - fullCount - (half ? 1 : 0);
   return (
     <span style={{ fontSize:"13px", letterSpacing:"1px" }}>
-      <span style={{ color:"#c9a84c" }}>{"★".repeat(full)}</span>
+      <span style={{ color:"#c9a84c" }}>{"★".repeat(fullCount)}</span>
       {half && (
         <span style={{ display:"inline-block", position:"relative", width:"0.65em" }}>
           <span style={{ color:"#555" }}>★</span>
