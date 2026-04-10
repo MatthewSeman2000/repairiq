@@ -1902,6 +1902,506 @@ const modelTiers = {
     ["Polestar 2",1.18],
   ],
 };
+// Known issues per model — sourced from RepairPal, CarComplaints, NHTSA complaint database
+const knownIssues = {
+  "Acura": {
+    "TL": [
+      { issue: "Power steering hose leaks — fluid drips near rack; steering becomes stiff", years: "2004–2008", severity: "Medium", source: "RepairPal" },
+      { issue: "Transmission failure — shuddering, slipping, hard shifts on 5-speed auto", years: "2003–2006", severity: "High", source: "NHTSA/CarComplaints" },
+    ],
+    "MDX": [
+      { issue: "VCM (cylinder deactivation) causes engine vibration and oil consumption", years: "2014–2018", severity: "High", source: "RepairPal/CarComplaints" },
+      { issue: "Transmission shudder — rough downshift especially from 3rd to 2nd", years: "2001–2006", severity: "High", source: "RepairPal" },
+    ],
+    "RDX": [
+      { issue: "Turbo lag and hesitation on 2.3L turbocharged engine", years: "2007–2012", severity: "Medium", source: "RepairPal" },
+      { issue: "Water pump seal failure causing coolant leak", years: "2007–2012", severity: "Medium", source: "RepairPal" },
+    ],
+    "ILX": [
+      { issue: "Transmission hesitation and rough shifts on 8-speed DCT", years: "2016–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+  },
+  "Audi": {
+    "A4": [
+      { issue: "Excessive oil consumption — burns 1 qt per 1,000 miles; faulty piston rings", years: "2009–2013", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Timing chain tensioner failure — rattle on cold start, risk of engine damage", years: "2009–2012", severity: "High", source: "RepairPal" },
+      { issue: "PCV valve failure causing oil leaks and rough idle", years: "2002–2008", severity: "Medium", source: "RepairPal" },
+    ],
+    "Q5": [
+      { issue: "Excessive oil consumption on 2.0T engine — 1 qt per 1,000 miles common", years: "2009–2014", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Timing chain tensioner failure — engine rattle at startup", years: "2009–2012", severity: "High", source: "RepairPal" },
+      { issue: "Water pump failure — defective plastic impeller causes overheating", years: "2013–2022", severity: "High", source: "RepairPal" },
+      { issue: "Transmission rough shifting and hesitation on DSG", years: "2018–2022", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Q7": [
+      { issue: "Water pump failure — defective plastic impeller", years: "2013–2022", severity: "High", source: "RepairPal" },
+      { issue: "Control arm bushing wear — clunking over bumps, premature tire wear", years: "2007–2015", severity: "Medium", source: "RepairPal" },
+    ],
+    "A6": [
+      { issue: "Excessive oil consumption on 3.0T V6 engine", years: "2009–2012", severity: "High", source: "RepairPal" },
+      { issue: "Power window regulator failure — window drops or won't operate", years: "2005–2011", severity: "Low", source: "RepairPal" },
+    ],
+  },
+  "BMW": {
+    "3 Series": [
+      { issue: "Timing chain guide failure — N20 engine rattle at startup, risk of catastrophic engine damage", years: "2012–2015", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Valve cover gasket oil leak — burning smell, oil drips near exhaust", years: "2006–2013", severity: "Medium", source: "RepairPal" },
+      { issue: "Electric water pump failure — overheating, especially on N52/N55 engines", years: "2006–2016", severity: "High", source: "RepairPal" },
+      { issue: "High-pressure fuel pump (HPFP) failure — hesitation, hard start on N54", years: "2007–2010", severity: "High", source: "NHTSA" },
+    ],
+    "5 Series": [
+      { issue: "Electric water pump failure — sudden overheating, N52/N55 engines", years: "2006–2016", severity: "High", source: "RepairPal" },
+      { issue: "Valve cover gasket and PCV valve oil leaks", years: "2004–2013", severity: "Medium", source: "RepairPal" },
+      { issue: "Timing chain guide wear — N63 V8 engine rattle and potential failure", years: "2010–2014", severity: "High", source: "NHTSA" },
+    ],
+    "X3": [
+      { issue: "Timing chain guide failure — N20 4-cylinder engine rattle on startup", years: "2012–2015", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Oil leaks from valve cover and front engine cover", years: "2011–2018", severity: "Medium", source: "RepairPal" },
+      { issue: "Coolant expansion tank crack — coolant loss, overheating risk", years: "2011–2017", severity: "High", source: "RepairPal" },
+    ],
+    "X5": [
+      { issue: "Oil leaks from valve cover gasket — common after 60k miles", years: "2007–2018", severity: "Medium", source: "RepairPal" },
+      { issue: "Water pump failure — coolant leak, overheating", years: "2007–2018", severity: "High", source: "RepairPal" },
+      { issue: "Timing chain guide wear on N63 V8 — rattle, potential engine damage", years: "2010–2014", severity: "High", source: "NHTSA" },
+      { issue: "Transfer case failure — vibration, 4WD malfunction", years: "2007–2013", severity: "High", source: "CarComplaints" },
+    ],
+    "X1": [
+      { issue: "Timing chain guide failure — N20 engine, same issue as 3 Series", years: "2013–2015", severity: "High", source: "RepairPal" },
+    ],
+  },
+  "Chevrolet": {
+    "Silverado 1500": [
+      { issue: "Active Fuel Management (AFM) lifter failure — ticking, oil consumption, misfires on V8", years: "2014–2021", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Transmission shudder — torque converter shudder at light throttle on 8-speed auto", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
+      { issue: "Excessive oil consumption on 5.3L V8 — burning 1+ qt per 1,000 miles", years: "2014–2019", severity: "High", source: "NHTSA" },
+    ],
+    "Colorado": [
+      { issue: "8-speed automatic transmission shudder and rough shifting", years: "2017–2019", severity: "Medium", source: "CarComplaints" },
+      { issue: "Timing chain stretch on 2.8L Duramax diesel at high mileage", years: "2016–2020", severity: "Medium", source: "RepairPal" },
+    ],
+    "Equinox": [
+      { issue: "Timing chain wear — rattle on startup, check engine light on 2.4L engine", years: "2010–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Excessive oil consumption on 2.4L Ecotec — burning 1 qt per 2,000 miles", years: "2010–2017", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "AC compressor failure — warm air, refrigerant leaks", years: "2010–2017", severity: "Medium", source: "RepairPal" },
+    ],
+    "Malibu": [
+      { issue: "Power steering failure — sudden loss of assist on electric system", years: "2013–2016", severity: "High", source: "NHTSA" },
+      { issue: "Timing chain stretch on 2.4L Ecotec engine", years: "2013–2017", severity: "High", source: "RepairPal" },
+    ],
+    "Camaro": [
+      { issue: "AFM/DOD lifter failure on V8 engines — ticking, misfire, oil consumption", years: "2010–2021", severity: "High", source: "NHTSA/CarComplaints" },
+    ],
+    "Tahoe": [
+      { issue: "Active Fuel Management (AFM) lifter failure on 5.3L V8", years: "2014–2021", severity: "High", source: "NHTSA" },
+      { issue: "Air conditioning compressor failure", years: "2007–2014", severity: "Medium", source: "RepairPal" },
+    ],
+  },
+  "Chrysler": {
+    "300": [
+      { issue: "TIPM (Totally Integrated Power Module) failure — random electrical faults, no-start", years: "2011–2014", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Transmission slipping and shudder on 8-speed auto", years: "2012–2015", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Pacifica": [
+      { issue: "Stalling while driving — fuel delivery or PCM fault", years: "2017–2020", severity: "High", source: "NHTSA" },
+      { issue: "Uconnect infotainment system freezing, rebooting", years: "2017–2019", severity: "Low", source: "CarComplaints" },
+    ],
+  },
+  "Dodge": {
+    "Charger": [
+      { issue: "TIPM failure — electrical gremlins, no-start, random component activation", years: "2011–2014", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Transmission shudder on 8-speed ZF automatic", years: "2012–2015", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Challenger": [
+      { issue: "TIPM failure — same as Charger, electrical issues, no-start", years: "2011–2014", severity: "High", source: "NHTSA" },
+      { issue: "Brake fade on base brakes under hard use — undersized for performance trims", years: "2009–2014", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Durango": [
+      { issue: "TIPM failure — fuel pump relay failure, random stalling", years: "2011–2014", severity: "High", source: "NHTSA" },
+      { issue: "Transmission shudder on 8-speed automatic", years: "2014–2016", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Grand Caravan": [
+      { issue: "Power sliding door failure — door won't open/close electrically", years: "2005–2012", severity: "Medium", source: "RepairPal" },
+      { issue: "Transmission failure — harsh shifts, slipping on 4-speed auto", years: "1996–2003", severity: "High", source: "CarComplaints" },
+    ],
+  },
+  "Ford": {
+    "F-150": [
+      { issue: "Spark plug blowout — plugs eject from 2-valve Triton V8 cylinder head", years: "2000–2008", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Phase shifter (cam phaser) rattle — knock on startup on 5.4L Triton V8", years: "2004–2013", severity: "High", source: "RepairPal/CarComplaints" },
+      { issue: "Tailgate latch failure — tailgate opens unexpectedly while driving", years: "2004–2014", severity: "Medium", source: "NHTSA" },
+      { issue: "EcoBoost 3.5L turbo intercooler condensation causing hesitation and misfires", years: "2011–2014", severity: "Medium", source: "NHTSA" },
+    ],
+    "Explorer": [
+      { issue: "Exhaust fumes entering cabin — carbon monoxide via defective rear door seals", years: "2011–2017", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Power steering failure — loss of assist on electric power steering", years: "2011–2017", severity: "High", source: "NHTSA" },
+      { issue: "6-speed transmission shudder and delayed engagement", years: "2011–2015", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Escape": [
+      { issue: "Engine fire risk — coolant leak onto hot exhaust on 1.6L EcoBoost", years: "2013–2014", severity: "High", source: "NHTSA recall" },
+      { issue: "Power steering failure — sudden loss of electric assist", years: "2013–2016", severity: "High", source: "NHTSA" },
+      { issue: "Transmission hesitation and shudder on 6-speed automatic", years: "2013–2016", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Fusion": [
+      { issue: "Door latch failure — door opens while driving, federal safety investigation", years: "2014–2016", severity: "High", source: "NHTSA recall" },
+      { issue: "Power steering failure on electric assist system", years: "2010–2012", severity: "High", source: "NHTSA" },
+      { issue: "MyFord Touch/Sync infotainment system freezing", years: "2010–2014", severity: "Low", source: "CarComplaints" },
+    ],
+    "Mustang GT": [
+      { issue: "Independent rear suspension (IRS) subframe noise and bushing wear", years: "2015–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Mustang EcoBoost": [
+      { issue: "Oil pan gasket leak on 2.3L EcoBoost", years: "2015–2017", severity: "Medium", source: "RepairPal" },
+    ],
+    "Transit": [
+      { issue: "Transmission overheating and shudder on SelectShift 6-speed", years: "2015–2019", severity: "Medium", source: "NHTSA" },
+    ],
+  },
+  "GMC": {
+    "Sierra 1500": [
+      { issue: "Active Fuel Management (AFM) lifter failure — same as Silverado V8", years: "2014–2021", severity: "High", source: "NHTSA" },
+      { issue: "Transmission shudder — torque converter shudder on 8-speed auto", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Acadia": [
+      { issue: "Timing chain wear — check engine, rattle on 3.6L V6", years: "2007–2012", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Transmission failure — slipping, delayed engagement on 6-speed", years: "2007–2012", severity: "High", source: "CarComplaints" },
+    ],
+    "Terrain": [
+      { issue: "Timing chain and excessive oil consumption on 2.4L Ecotec", years: "2010–2017", severity: "High", source: "RepairPal" },
+    ],
+  },
+  "Honda": {
+    "Accord": [
+      { issue: "VCM (Variable Cylinder Management) vibration — shudder at highway speed on V6", years: "2008–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Transmission failure on automatic — slipping, hunting gears", years: "1998–2002", severity: "High", source: "CarComplaints" },
+    ],
+    "Civic": [
+      { issue: "Excessive oil consumption on 1.5T turbocharged engine — oil dilution with fuel", years: "2016–2018", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Air bag inflator recall (Takata) — metal fragments on deployment", years: "2001–2015", severity: "High", source: "NHTSA recall" },
+    ],
+    "CR-V": [
+      { issue: "Oil dilution — gasoline mixing into engine oil on 1.5T in cold climates", years: "2017–2019", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "AC system refrigerant loss — weak cooling performance", years: "2017–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Pilot": [
+      { issue: "VCM vibration — shudder at highway speeds on 3.5L V6", years: "2009–2015", severity: "High", source: "CarComplaints" },
+      { issue: "Transmission shudder and torque converter issues on 6-speed auto", years: "2009–2015", severity: "Medium", source: "RepairPal" },
+    ],
+    "Odyssey": [
+      { issue: "Transmission failure — 4-speed automatic slipping or failure under 100k miles", years: "1999–2004", severity: "High", source: "CarComplaints" },
+      { issue: "Paint peeling on roof and hood — Honda extended warranty on some years", years: "2005–2010", severity: "Low", source: "CarComplaints" },
+    ],
+    "Civic Type R": [
+      { issue: "Infotainment display cracking — Honda issued extended warranty", years: "2017–2019", severity: "Low", source: "CarComplaints" },
+    ],
+  },
+  "Hyundai": {
+    "Sonata": [
+      { issue: "Engine seizure and failure — theta II engine; massive recall/class action", years: "2011–2019", severity: "High", source: "NHTSA recall/class action" },
+      { issue: "Engine fire risk — connecting rod failure on Theta II 2.4L and 2.0T", years: "2011–2019", severity: "High", source: "NHTSA" },
+    ],
+    "Elantra": [
+      { issue: "Engine failure — Theta II 2.0L/2.4L connecting rod bearing failure", years: "2011–2016", severity: "High", source: "NHTSA recall" },
+      { issue: "Automatic transmission hesitation and rough shifting", years: "2011–2016", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Santa Fe": [
+      { issue: "Engine failure — theta II engine bearing and rod failure", years: "2013–2018", severity: "High", source: "NHTSA recall" },
+      { issue: "Sunroof shattering spontaneously", years: "2013–2018", severity: "Medium", source: "NHTSA" },
+    ],
+    "Tucson": [
+      { issue: "Engine failure — 2.4L Theta II engine connecting rod failure", years: "2010–2015", severity: "High", source: "NHTSA recall" },
+      { issue: "Transmission jerking and hesitation on DCT dual-clutch", years: "2016–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+  },
+  "Infiniti": {
+    "Q50": [
+      { issue: "Brake system — premature front brake wear on sport trim larger rotors", years: "2014–2017", severity: "Medium", source: "CarComplaints" },
+      { issue: "Infotainment InTouch system freezing and restarting", years: "2014–2017", severity: "Low", source: "CarComplaints" },
+    ],
+    "QX60": [
+      { issue: "CVT transmission judder and hesitation", years: "2013–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Timing chain stretch on VQ35 V6 — rattle at startup", years: "2013–2018", severity: "Medium", source: "RepairPal" },
+    ],
+    "QX80": [
+      { issue: "Timing chain stretch on 5.6L V8 at high mileage", years: "2011–2019", severity: "Medium", source: "RepairPal" },
+    ],
+  },
+  "Jeep": {
+    "Grand Cherokee": [
+      { issue: "TIPM failure — electrical faults, no-start, windows/wipers acting randomly", years: "2011–2014", severity: "High", source: "NHTSA/CarComplaints class action" },
+      { issue: "Air suspension failure — compressor failure, vehicle sits low", years: "2011–2016", severity: "High", source: "CarComplaints" },
+      { issue: "Transmission shudder on 8-speed ZF automatic", years: "2014–2016", severity: "Medium", source: "CarComplaints" },
+      { issue: "Electronic gear shifter uncommanded movement — park to neutral slip; recall issued", years: "2014–2015", severity: "High", source: "NHTSA recall" },
+    ],
+    "Wrangler": [
+      { issue: "Death wobble — violent steering oscillation at highway speeds over bumps", years: "2007–2018", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Pinion seal leak — Dana front axle differential oil leak", years: "2007–2018", severity: "Medium", source: "RepairPal" },
+      { issue: "Manual transmission — synchro wear and difficulty shifting into 3rd gear", years: "2012–2018", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Cherokee": [
+      { issue: "9-speed ZF transmission hesitation, rough shifts, and hunting gears", years: "2014–2018", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Timing chain noise on 3.2L Pentastar V6 at startup", years: "2014–2019", severity: "Medium", source: "RepairPal" },
+    ],
+    "Wrangler Rubicon": [
+      { issue: "Dana 44 front axle seal leak — differential fluid loss", years: "2007–2018", severity: "Medium", source: "RepairPal" },
+    ],
+  },
+  "Kia": {
+    "Sorento": [
+      { issue: "Engine seizure — theta II 2.4L engine bearing failure; recall issued", years: "2011–2016", severity: "High", source: "NHTSA recall" },
+      { issue: "Transmission shudder on 6-speed automatic", years: "2011–2016", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Optima": [
+      { issue: "Theta II engine failure — rod bearing failure on 2.4L and 2.0T", years: "2011–2018", severity: "High", source: "NHTSA recall/class action" },
+    ],
+    "K5": [
+      { issue: "Smartstream 1.6T or 2.5T engine oil consumption at higher mileage", years: "2021–2023", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Stinger": [
+      { issue: "Excessive oil consumption on 2.0T engine — some owners report 1 qt per 2,000 miles", years: "2018–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+  },
+  "Lexus": {
+    "IS": [
+      { issue: "Valve spring fracture risk on 2GR-FSE engine — recall issued in some markets", years: "2006–2012", severity: "High", source: "NHTSA" },
+    ],
+    "GX": [
+      { issue: "Frame rust perforation — rusted frames on vehicles in salt-belt states", years: "2003–2009", severity: "High", source: "NHTSA" },
+      { issue: "Brake proportioning — Consumer Reports suspended recommendation for safety", years: "2010–2010", severity: "High", source: "Consumer Reports/NHTSA" },
+    ],
+    "RX": [
+      { issue: "Brake actuator noise — grinding during initial brake engagement", years: "2010–2015", severity: "Medium", source: "CarComplaints" },
+    ],
+    "ES": [
+      { issue: "Floor mat entrapping accelerator — Lexus recall", years: "2007–2010", severity: "High", source: "NHTSA recall" },
+    ],
+  },
+  "Lincoln": {
+    "MKZ": [
+      { issue: "Electric parking brake failure — won't engage or disengage properly", years: "2013–2016", severity: "Medium", source: "CarComplaints" },
+      { issue: "Panoramic roof noise and seal leaks", years: "2013–2016", severity: "Low", source: "CarComplaints" },
+    ],
+    "Navigator": [
+      { issue: "Air suspension compressor failure — vehicle sits low on one corner", years: "2003–2014", severity: "High", source: "RepairPal" },
+      { issue: "Spark plug ejection — Triton 5.4L V8, same as F-150", years: "2004–2010", severity: "High", source: "RepairPal" },
+    ],
+  },
+  "Mazda": {
+    "CX-5": [
+      { issue: "Windshield delamination — inner layer separates from glass; recall in some regions", years: "2013–2016", severity: "Medium", source: "NHTSA" },
+      { issue: "Infotainment MZD Connect system lag and freezing", years: "2014–2018", severity: "Low", source: "CarComplaints" },
+    ],
+    "Mazda3": [
+      { issue: "Engine mount wear — vibration felt through steering wheel and seat", years: "2010–2013", severity: "Medium", source: "RepairPal" },
+    ],
+    "Mazda6": [
+      { issue: "Spider nesting in fuel vent tube — causes fuel leak and fire risk", years: "2009–2012", severity: "High", source: "NHTSA recall" },
+    ],
+    "MX-5 Miata": [
+      { issue: "Soft top wear and window separation — window separates from canvas", years: "2006–2015", severity: "Low", source: "CarComplaints" },
+    ],
+  },
+  "Mercedes-Benz": {
+    "C-Class": [
+      { issue: "Camshaft adjuster solenoid failure — rough idle, rattle at startup", years: "2008–2014", severity: "Medium", source: "RepairPal" },
+      { issue: "Rust on rear wheel arches and subframe in salt-belt states", years: "2001–2007", severity: "High", source: "CarComplaints" },
+      { issue: "Balance shaft chain failure on 2.5L V6 — catastrophic engine damage possible", years: "2005–2011", severity: "High", source: "RepairPal" },
+    ],
+    "E-Class": [
+      { issue: "Camshaft adjuster and timing chain wear on M272/M273 engines", years: "2006–2012", severity: "High", source: "RepairPal" },
+      { issue: "Air suspension failure — airmatic compressor and struts on all 4 corners", years: "2003–2009", severity: "High", source: "RepairPal" },
+    ],
+    "S-Class": [
+      { issue: "Airmatic air suspension failure — all four corners require expensive repair", years: "2000–2013", severity: "High", source: "RepairPal" },
+    ],
+    "GLE": [
+      { issue: "7G-Tronic transmission shudder and delayed shifts", years: "2016–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+    "GLC": [
+      { issue: "Panoramic sunroof rattling and potential shattering", years: "2016–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+    "AMG C 63": [
+      { issue: "Carbon buildup on intake valves — direct injection M156/M177 V8 engines", years: "2008–2021", severity: "Medium", source: "RepairPal" },
+    ],
+  },
+  "Mitsubishi": {
+    "Outlander": [
+      { issue: "CVT transmission shudder — hesitation and judder under load", years: "2014–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Lancer Evolution": [
+      { issue: "Rear differential limited slip wear — chattering on tight turns", years: "2003–2015", severity: "Medium", source: "RepairPal" },
+    ],
+    "Galant": [
+      { issue: "Transmission failure — slipping and harsh shifts on automatic", years: "2004–2009", severity: "Medium", source: "CarComplaints" },
+    ],
+  },
+  "Nissan": {
+    "Altima": [
+      { issue: "CVT transmission failure — shudder, hesitation, failure under 100k miles", years: "2013–2018", severity: "High", source: "CarComplaints/NHTSA class action" },
+      { issue: "Control arm bolt loosening — suspension noise and recall", years: "2013–2015", severity: "High", source: "NHTSA recall" },
+      { issue: "Timing chain stretch on 2.5L QR25 engine — rattle at startup", years: "2002–2006", severity: "High", source: "RepairPal" },
+    ],
+    "Rogue": [
+      { issue: "CVT transmission judder and hesitation under load", years: "2014–2018", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Windshield wiper freezing — motor burnout in cold weather", years: "2014–2016", severity: "Medium", source: "NHTSA recall" },
+    ],
+    "Pathfinder": [
+      { issue: "CVT transmission failure — overheating, limp mode", years: "2013–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Coolant mixing into transmission fluid — CVT cooler failure", years: "2013–2016", severity: "High", source: "NHTSA/class action" },
+    ],
+    "GT-R": [
+      { issue: "Transmission failure if launch control overused — VR38DETT dual-clutch", years: "2009–2014", severity: "High", source: "RepairPal" },
+    ],
+    "Leaf": [
+      { issue: "Battery capacity degradation in hot climates — no thermal management", years: "2011–2017", severity: "High", source: "CarComplaints/NHTSA" },
+    ],
+  },
+  "RAM": {
+    "1500": [
+      { issue: "TIPM failure — electrical gremlins, fuel pump issues, no-start", years: "2011–2014", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Electronic gear shifter uncommanded movement — recall issued", years: "2014–2018", severity: "High", source: "NHTSA recall" },
+      { issue: "Transmission shudder — torque converter on 8-speed ZF auto", years: "2014–2018", severity: "Medium", source: "CarComplaints" },
+      { issue: "Uconnect radio freeze and blank screen", years: "2014–2018", severity: "Low", source: "CarComplaints" },
+    ],
+    "2500": [
+      { issue: "TIPM failure — same as 1500", years: "2011–2014", severity: "High", source: "NHTSA" },
+      { issue: "Exhaust brake valve failure on Cummins diesel — lack of engine braking", years: "2007–2012", severity: "Medium", source: "RepairPal" },
+    ],
+  },
+  "Subaru": {
+    "Outback": [
+      { issue: "Head gasket failure — coolant and oil mixing on EJ25 engine", years: "2000–2009", severity: "High", source: "CarComplaints/class action" },
+      { issue: "Excessive oil consumption — FB25 engine burns oil between changes", years: "2013–2017", severity: "High", source: "NHTSA/CarComplaints class action" },
+      { issue: "Premature battery failure — DCM telematics system drains battery", years: "2017–2019", severity: "High", source: "CarComplaints/NHTSA (893 complaints)" },
+      { issue: "Steering loss risk — improperly machined steering column; do not drive warning issued", years: "2017–2017", severity: "High", source: "NHTSA recall" },
+    ],
+    "Forester": [
+      { issue: "Head gasket failure — EJ25 phase 1 gasket failure, coolant loss", years: "1999–2010", severity: "High", source: "CarComplaints" },
+      { issue: "Excessive oil consumption — 2.5L FB25 burns 1 qt per 1,000 miles", years: "2011–2018", severity: "High", source: "NHTSA/CarComplaints (1,000+ complaints)" },
+      { issue: "CVT transmission failure — torque converter and valve body issues", years: "2014–2018", severity: "High", source: "CarComplaints" },
+      { issue: "Infotainment system freeze — Starlink head unit lockup, backup camera failure", years: "2018–2018", severity: "Medium", source: "CarComplaints/lawsuit" },
+    ],
+    "Impreza": [
+      { issue: "Head gasket failure on EJ25 engine — coolant and oil mixing", years: "1999–2011", severity: "High", source: "CarComplaints" },
+      { issue: "Spark plug tube seal oil leak — oil soaks ignition coil boots, causes misfires", years: "2006–2014", severity: "Medium", source: "RepairPal" },
+    ],
+    "WRX": [
+      { issue: "Ringland failure — piston ring land cracks on EJ257 engine under high load", years: "2008–2014", severity: "High", source: "RepairPal/community data" },
+      { issue: "Transmission synchro wear — 3rd/4th gear grind on 6-speed manual", years: "2015–2021", severity: "Medium", source: "CarComplaints" },
+    ],
+    "WRX STI": [
+      { issue: "Ringland failure — EJ257 engine piston ring land fracture, often catastrophic", years: "2004–2021", severity: "High", source: "RepairPal/NHTSA" },
+      { issue: "Rear differential limited slip wear — chattering on tight turns", years: "2004–2021", severity: "Medium", source: "RepairPal" },
+    ],
+    "Legacy": [
+      { issue: "Head gasket failure on EJ25 — same issue as Outback", years: "2000–2009", severity: "High", source: "CarComplaints" },
+      { issue: "CVT failure — transmission judder and hesitation", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Crosstrek": [
+      { issue: "Excessive oil consumption on 2.0L FB20 engine", years: "2013–2017", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "ECM issue — ignition coil stays powered after shutoff, blows fuse; recall", years: "2018–2019", severity: "Medium", source: "NHTSA recall" },
+    ],
+    "BRZ": [
+      { issue: "Infotainment display delamination — touchscreen layer separates", years: "2013–2020", severity: "Low", source: "CarComplaints" },
+    ],
+    "Ascent": [
+      { issue: "Transmission shifting problems — hesitation, lurching reported to NHTSA", years: "2019–2020", severity: "Medium", source: "NHTSA" },
+      { issue: "Fuel pump failure — defective Denso low-pressure pump; recall issued", years: "2019–2019", severity: "High", source: "NHTSA recall" },
+    ],
+  },
+  "Tesla": {
+    "Model S": [
+      { issue: "Door handle failure — electrically actuated handles fail to present", years: "2012–2019", severity: "Medium", source: "CarComplaints" },
+      { issue: "MCU (Media Control Unit) eMMC memory chip failure — no touchscreen, no backup camera", years: "2012–2018", severity: "High", source: "NHTSA recall" },
+      { issue: "12V battery failure — sudden power loss with no warning; recall", years: "2012–2021", severity: "High", source: "NHTSA recall" },
+    ],
+    "Model 3 RWD": [
+      { issue: "Trunk and frunk lid misalignment and wind noise", years: "2017–2020", severity: "Low", source: "CarComplaints" },
+      { issue: "Suspension ball joint wear — accelerated wear reported", years: "2017–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Model X": [
+      { issue: "Falcon wing door failure — sensors misaligning, doors won't close", years: "2015–2020", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "MCU eMMC memory chip failure — same as Model S", years: "2016–2018", severity: "High", source: "NHTSA recall" },
+    ],
+    "Cybertruck": [
+      { issue: "Accelerator pedal pad delamination — stainless steel cover dislodges, jamming pedal; recall", years: "2024–2024", severity: "High", source: "NHTSA recall" },
+    ],
+  },
+  "Toyota": {
+    "Camry": [
+      { issue: "Excessive oil consumption on 2.5L 4-cylinder — burns oil between changes", years: "2007–2011", severity: "Medium", source: "NHTSA/CarComplaints" },
+      { issue: "Unintended acceleration investigation — floor mat and throttle pedal sticking", years: "2007–2010", severity: "High", source: "NHTSA recall/class action" },
+      { issue: "EVAP charcoal canister failure — check engine light P0456/P0441", years: "2018–2022", severity: "Low", source: "RepairPal" },
+    ],
+    "Corolla": [
+      { issue: "Oil consumption on 1.8L 2ZR-FE — burns oil, deposits on plugs", years: "2009–2014", severity: "Medium", source: "NHTSA/RepairPal" },
+    ],
+    "RAV4": [
+      { issue: "EVAP canister releasing charcoal pellets into vent valve — check engine light", years: "2006–2015", severity: "Medium", source: "RepairPal" },
+      { issue: "Excessive oil consumption on 2.5L engine", years: "2006–2010", severity: "Medium", source: "NHTSA" },
+      { issue: "Premature rear differential wear — chattering on turns", years: "2006–2012", severity: "Medium", source: "RepairPal" },
+    ],
+    "Tacoma": [
+      { issue: "Frame rust perforation — frames rotting through in salt-belt states; Toyota extended warranty", years: "2004–2010", severity: "High", source: "NHTSA/class action" },
+      { issue: "Timing chain stretch on 4.0L V6 1GR-FE engine at high mileage", years: "2005–2015", severity: "Medium", source: "RepairPal" },
+      { issue: "Automatic transmission hunting and harsh downshift on 5-speed auto", years: "2005–2012", severity: "Medium", source: "CarComplaints" },
+    ],
+    "4Runner": [
+      { issue: "Frame rust — same issue as Tacoma in salt-belt states", years: "2003–2009", severity: "High", source: "NHTSA" },
+      { issue: "Timing chain stretch on 4.0L V6 at high mileage", years: "2003–2015", severity: "Medium", source: "RepairPal" },
+    ],
+    "Tundra": [
+      { issue: "Frame rust perforation — class action and extended warranty in salt-belt states", years: "2000–2006", severity: "High", source: "NHTSA/class action" },
+      { issue: "Secondary air injection pump failure — check engine light on cold starts", years: "2007–2011", severity: "Medium", source: "RepairPal" },
+    ],
+    "Highlander": [
+      { issue: "Timing chain stretch on 3.5L 2GR-FE V6 at high mileage", years: "2008–2013", severity: "Medium", source: "RepairPal" },
+      { issue: "Fuel tank pressure sensor — EVAP system check engine codes", years: "2008–2013", severity: "Low", source: "RepairPal" },
+    ],
+    "GR Supra": [
+      { issue: "Fuel injector coding mismatch — rough idle, codes from BMW B58 engine", years: "2020–2022", severity: "Medium", source: "RepairPal" },
+    ],
+    "Prius": [
+      { issue: "Inverter failure — total vehicle shutdown; Toyota issued extended warranty", years: "2004–2009", severity: "High", source: "NHTSA/Toyota extended warranty" },
+      { issue: "Hybrid battery failure earlier than expected in extreme heat climates", years: "2004–2009", severity: "High", source: "CarComplaints" },
+    ],
+  },
+  "Volkswagen": {
+    "Jetta": [
+      { issue: "Timing chain tensioner failure on 2.0T TSI — engine rattle, risk of catastrophic failure", years: "2008–2013", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "DSG dual-clutch transmission shudder and rough low-speed engagement", years: "2008–2015", severity: "Medium", source: "CarComplaints" },
+      { issue: "Key stuck in ignition — steering column lock housing failure", years: "2008–2018", severity: "Medium", source: "NHTSA" },
+    ],
+    "GTI": [
+      { issue: "Timing chain tensioner failure on 2.0T TSI — same issue as Jetta", years: "2008–2013", severity: "High", source: "RepairPal" },
+      { issue: "DSG clutch shudder on low-speed engagement", years: "2008–2014", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Golf R": [
+      { issue: "DQ381 DSG transmission software shudder at low speed", years: "2015–2020", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Passat": [
+      { issue: "Timing chain tensioner failure on 2.0T TSI engine", years: "2008–2012", severity: "High", source: "RepairPal" },
+      { issue: "EGR cooler failure — coolant leak into intake; common on TDI diesel", years: "2009–2015", severity: "High", source: "RepairPal" },
+    ],
+    "Tiguan": [
+      { issue: "Timing chain tensioner failure on 2.0T TSI", years: "2009–2013", severity: "High", source: "RepairPal" },
+      { issue: "AC blend door actuator clicking — common failure", years: "2009–2017", severity: "Low", source: "RepairPal" },
+    ],
+  },
+  "Volvo": {
+    "XC90": [
+      { issue: "Throttle body failure — stuck open or closed, stalling or runaway", years: "2003–2012", severity: "High", source: "RepairPal" },
+      { issue: "Timing belt tensioner failure on B6294T — catastrophic engine failure if not replaced", years: "2003–2014", severity: "High", source: "RepairPal" },
+    ],
+    "XC60": [
+      { issue: "Fuel injector failure — engine shudder, misfire on T6 turbo engine", years: "2010–2015", severity: "Medium", source: "CarComplaints" },
+      { issue: "Sunroof seal leak — water intrusion into cabin", years: "2010–2017", severity: "Medium", source: "CarComplaints" },
+    ],
+    "S60": [
+      { issue: "Throttle body failure — stalling, sudden loss of power", years: "2001–2009", severity: "High", source: "RepairPal" },
+    ],
+  },
+};
+
 const categories = ["All", ...new Set(Object.values(repairData).map(r => r.category))];
 
 // Year multipliers based on real data:
@@ -3196,7 +3696,43 @@ const modelYears = {
         )}
       </div>
 
-      {/* Cards grid */}
+      {/* Known Issues Section */}
+      {make !== "Any Make" && model !== "Any Model" && knownIssues[make] && knownIssues[make][model] && (
+        <section style={{ maxWidth:"900px", margin:"20px auto 0", padding:"0 24px" }}>
+          <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"16px" }}>
+              <span style={{ fontSize:"18px" }}>⚠️</span>
+              <h2 style={{ margin:0, fontSize:"15px", fontWeight:"600", letterSpacing:"-0.01em" }}>
+                Known Issues — {make} {model}
+              </h2>
+              <span style={{ fontSize:"11px", color:"#555", marginLeft:"auto" }}>
+                Sources: RepairPal · CarComplaints · NHTSA
+              </span>
+            </div>
+            <div style={{ display:"grid", gap:"10px" }}>
+              {knownIssues[make][model].map((item, i) => {
+                const severityColor = item.severity === "High" ? "#ef4444" : item.severity === "Medium" ? "#f59e0b" : "#22c55e";
+                const severityBg = item.severity === "High" ? "#ef444418" : item.severity === "Medium" ? "#f59e0b18" : "#22c55e18";
+                return (
+                  <div key={i} style={{ display:"flex", gap:"12px", padding:"12px", background:"#0e0e0e", borderRadius:"8px", border:"1px solid #1a1a1a" }}>
+                    <div style={{ flexShrink:0, marginTop:"2px" }}>
+                      <span style={{ display:"inline-block", width:"8px", height:"8px", borderRadius:"50%", background:severityColor, marginTop:"4px" }} />
+                    </div>
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontSize:"13px", lineHeight:"1.5", color:"#ccc" }}>{item.issue}</div>
+                      <div style={{ display:"flex", gap:"8px", marginTop:"6px", flexWrap:"wrap" }}>
+                        <span style={{ fontSize:"11px", color:"#777" }}>📅 {item.years}</span>
+                        <span style={{ fontSize:"11px", padding:"1px 7px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity} severity</span>
+                        <span style={{ fontSize:"11px", color:"#555" }}>{item.source}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
       <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
