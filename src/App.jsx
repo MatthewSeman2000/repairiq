@@ -2477,11 +2477,22 @@ const catColor = c => ({"Maintenance":"#22c55e","Brakes":"#ef4444","Electrical":
 const labelColor = l => ({"Very High Cost":"#ef4444","High Cost":"#f97316","Above Average":"#f59e0b","Average":"#22c55e","Below Average":"#06b6d4"}[l] || "#888");
 
 const Stars = ({ rating }) => {
-  const full = Math.floor(rating), half = rating % 1 >= 0.5;
-  return <span style={{ color:"#c9a84c", fontSize:"13px" }}>
-    {"★".repeat(full)}{half?"½":""}{" "}{"☆".repeat(5-full-(half?1:0))}
-    <span style={{ color:"#555", marginLeft:"5px" }}>{rating.toFixed(1)}</span>
-  </span>;
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  const empty = 5 - full - (half ? 1 : 0);
+  return (
+    <span style={{ fontSize:"13px", letterSpacing:"1px" }}>
+      <span style={{ color:"#c9a84c" }}>{"★".repeat(full)}</span>
+      {half && (
+        <span style={{ display:"inline-block", position:"relative", width:"0.65em" }}>
+          <span style={{ color:"#555" }}>★</span>
+          <span style={{ color:"#c9a84c", position:"absolute", left:0, top:0, width:"50%", overflow:"hidden" }}>★</span>
+        </span>
+      )}
+      <span style={{ color:"#555" }}>{"★".repeat(empty)}</span>
+      <span style={{ color:"#555", marginLeft:"5px", letterSpacing:"0" }}>{rating.toFixed(1)}</span>
+    </span>
+  );
 };
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
