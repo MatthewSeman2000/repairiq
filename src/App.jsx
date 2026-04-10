@@ -1,7 +1,9 @@
 import { useState, useMemo } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { inject } from "@vercel/analytics";
 
 // ─── SUPABASE ─────────────────────────────────────────────────────────────────
+inject(); // Vercel Analytics
 const supabase = createClient(
   "https://bgulreqwhlsqlglivrbb.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJndWxyZXF3aGxzcWxnbGl2cmJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDIyNDYsImV4cCI6MjA5MTIxODI0Nn0.LVmTb7YpjF1GlT2uPipzB4g6aqPzTLIxwbqqbkjZPfM"
