@@ -3018,6 +3018,7 @@ export default function RepairIQ() {
   const [submitting, setSubmitting]       = useState(false);
   const [submitError, setSubmitError]     = useState(null);
   const [votes, setVotes]                 = useState({});
+  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside"
 
 // Production year ranges — verified manufacturer data (start year, end year)
 const modelYears = {
@@ -3606,6 +3607,65 @@ const modelYears = {
       (category === "All" || d.category === category)
     ), [search, category]);
 
+  // Cross-reference known issues to repair cards for cost lookup
+  const issueToRepair = {
+    "head gasket": "Head Gasket",
+    "timing chain": "Timing Chain",
+    "timing belt": "Timing Belt",
+    "water pump": "Water Pump",
+    "valve cover": "Valve Cover Gasket",
+    "oil consumption": "Oil Change",
+    "transmission": "Transmission Fluid",
+    "cvt": "Transmission Fluid",
+    "spark plug": "Spark Plugs",
+    "alternator": "Alternator",
+    "starter": "Starter Motor",
+    "oxygen sensor": "Oxygen Sensor",
+    "ignition coil": "Ignition Coil",
+    "ac compressor": "AC Compressor",
+    "air suspension": "Shock Absorbers (pair)",
+    "strut": "Strut Assembly (pair)",
+    "shock": "Shock Absorbers (pair)",
+    "ball joint": "Ball Joint",
+    "control arm": "Ball Joint",
+    "tie rod": "Tie Rod End",
+    "sway bar": "Sway Bar Links",
+    "brake": "Brake Pads (Front)",
+    "battery": "Battery Replacement",
+    "coolant": "Coolant Flush",
+    "thermostat": "Thermostat Replacement",
+    "cv axle": "CV Axle/Halfshaft",
+    "differential": "Differential Fluid",
+    "maf sensor": "Mass Air Flow Sensor",
+    "blend door": "Blend Door Actuator",
+  };
+
+  const getLinkedRepair = (issueText) => {
+    const lower = issueText.toLowerCase();
+    for (const [keyword, repairName] of Object.entries(issueToRepair)) {
+      if (lower.includes(keyword)) return repairName;
+    }
+    return null;
+  };
+
+  const getYearIssues = () => {
+    if (!knownIssues[make] || !knownIssues[make][model]) return [];
+    if (year === "Any Year") return knownIssues[make][model];
+    const yr = parseInt(year);
+    return knownIssues[make][model].filter(item => {
+      const match = item.years.match(/(\d{4})[–\-](\d{4})/);
+      if (!match) return true;
+      return yr >= parseInt(match[1]) && yr <= parseInt(match[2]);
+    });
+  };
+
+  const yearIssues = getYearIssues();
+  const highCount  = yearIssues.filter(i => i.severity === "High").length;
+  const medCount   = yearIssues.filter(i => i.severity === "Medium").length;
+  const riskScore  = highCount * 3 + medCount * 1;
+  const riskLabel  = riskScore === 0 ? "Low Risk" : riskScore <= 2 ? "Moderate Risk" : riskScore <= 5 ? "Elevated Risk" : "High Risk";
+  const riskColor  = riskScore === 0 ? "#22c55e" : riskScore <= 2 ? "#f59e0b" : riskScore <= 5 ? "#f97316" : "#ef4444";
+
   return (
     <div style={{ fontFamily:"'Georgia','Times New Roman',serif", background:"#0f0f0f", minHeight:"100vh", color:"#f0ede6" }}>
 
@@ -3614,10 +3674,22 @@ const modelYears = {
       {/* Header */}
       <header style={{ maxWidth:"900px", margin:"0 auto", padding:"40px 24px 28px", borderBottom:"1px solid #1a1a1a" }}>
         <div style={{ fontSize:"11px", letterSpacing:"0.3em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"6px" }}>Repair Cost Intelligence</div>
-        <h1 style={{ fontSize:"clamp(36px,6vw,56px)", fontWeight:"400", margin:"0 0 8px", lineHeight:1, letterSpacing:"-0.02em" }}>
-          Repair<span style={{ color:"#c9a84c", fontStyle:"italic" }}>IQ</span>
-        </h1>
-        <p style={{ color:"#555", fontSize:"14px", margin:0, fontStyle:"italic" }}>Real-world cost ranges — adjusted for your location &amp; vehicle.</p>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", flexWrap:"wrap", gap:"16px" }}>
+          <div>
+            <h1 style={{ fontSize:"clamp(36px,6vw,56px)", fontWeight:"400", margin:"0 0 8px", lineHeight:1, letterSpacing:"-0.02em" }}>
+              Repair<span style={{ color:"#c9a84c", fontStyle:"italic" }}>IQ</span>
+            </h1>
+            <p style={{ color:"#555", fontSize:"14px", margin:0, fontStyle:"italic" }}>Real-world cost ranges — adjusted for your location &amp; vehicle.</p>
+          </div>
+          <div style={{ display:"flex", gap:"4px", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"4px" }}>
+            <button onClick={() => setAppMode("costs")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "costs" ? "#c9a84c" : "transparent", color: appMode === "costs" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+              💰 Repair Costs
+            </button>
+            <button onClick={() => setAppMode("buyside")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "buyside" ? "#c9a84c" : "transparent", color: appMode === "buyside" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+              🔍 Before You Buy
+            </button>
+          </div>
+        </div>
       </header>
 
       {/* Controls */}
@@ -3696,8 +3768,8 @@ const modelYears = {
         )}
       </div>
 
-      {/* Known Issues Section */}
-      {make !== "Any Make" && model !== "Any Model" && knownIssues[make] && knownIssues[make][model] && (
+      {/* Known Issues Section — costs mode only */}
+      {appMode === "costs" && make !== "Any Make" && model !== "Any Model" && knownIssues[make] && knownIssues[make][model] && (
         <section style={{ maxWidth:"900px", margin:"20px auto 0", padding:"0 24px" }}>
           <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px" }}>
             <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"16px" }}>
@@ -3733,6 +3805,9 @@ const modelYears = {
           </div>
         </section>
       )}
+
+      {/* ── REPAIR COSTS MODE ─────────────────────────────────────────────── */}
+      {appMode === "costs" && (
       <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
@@ -3842,8 +3917,139 @@ const modelYears = {
           </div>
         )}
       </main>
+      )} {/* end costs mode */}
 
-      {/* Submit form */}
+      {/* ── BEFORE YOU BUY MODE ───────────────────────────────────────────── */}
+      {appMode === "buyside" && (
+        <section style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px" }}>
+          {make === "Any Make" || model === "Any Model" ? (
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"48px 24px", textAlign:"center" }}>
+              <div style={{ fontSize:"40px", marginBottom:"16px" }}>🔍</div>
+              <div style={{ fontSize:"18px", fontWeight:"400", marginBottom:"8px", letterSpacing:"-0.01em" }}>Select a Make &amp; Model to Begin</div>
+              <div style={{ color:"#555", fontSize:"13px", fontStyle:"italic" }}>Choose a vehicle above to see known issues, risk profile, and what to inspect before buying.</div>
+            </div>
+          ) : (
+            <div style={{ display:"grid", gap:"16px" }}>
+
+              {/* Risk Summary Card */}
+              <div style={{ background:"#161616", border:`1px solid ${riskColor}33`, borderRadius:"10px", padding:"24px" }}>
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:"12px" }}>
+                  <div>
+                    <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#555", marginBottom:"6px" }}>Pre-Purchase Risk Assessment</div>
+                    <div style={{ fontSize:"22px", fontWeight:"400", letterSpacing:"-0.02em" }}>
+                      {make} {model}{year !== "Any Year" ? ` — ${year}` : ""}
+                    </div>
+                  </div>
+                  <div style={{ textAlign:"right" }}>
+                    <div style={{ fontSize:"24px", fontWeight:"600", color:riskColor }}>{riskLabel}</div>
+                    <div style={{ fontSize:"12px", color:"#555", marginTop:"2px" }}>
+                      {yearIssues.length === 0 ? "No documented issues" : `${yearIssues.length} known issue${yearIssues.length !== 1 ? "s" : ""} · ${highCount} high severity`}
+                    </div>
+                  </div>
+                </div>
+                {yearIssues.length > 0 && (
+                  <div style={{ marginTop:"16px", display:"flex", gap:"8px", flexWrap:"wrap" }}>
+                    {highCount > 0 && <span style={{ fontSize:"12px", padding:"3px 10px", borderRadius:"20px", background:"#ef444418", color:"#ef4444" }}>⚠️ {highCount} High Severity</span>}
+                    {medCount > 0 && <span style={{ fontSize:"12px", padding:"3px 10px", borderRadius:"20px", background:"#f59e0b18", color:"#f59e0b" }}>⚡ {medCount} Medium Severity</span>}
+                    {yearIssues.filter(i => i.severity === "Low").length > 0 && <span style={{ fontSize:"12px", padding:"3px 10px", borderRadius:"20px", background:"#22c55e18", color:"#22c55e" }}>ℹ️ {yearIssues.filter(i => i.severity === "Low").length} Low Severity</span>}
+                    {year === "Any Year" && <span style={{ fontSize:"12px", color:"#555", fontStyle:"italic" }}>Select a year to filter issues by model year</span>}
+                  </div>
+                )}
+              </div>
+
+              {/* Known Issues with Cost Links */}
+              {yearIssues.length > 0 ? (
+                <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px" }}>
+                  <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"16px" }}>Known Issues &amp; Repair Costs</div>
+                  <div style={{ display:"grid", gap:"12px" }}>
+                    {yearIssues.map((item, i) => {
+                      const severityColor = item.severity === "High" ? "#ef4444" : item.severity === "Medium" ? "#f59e0b" : "#22c55e";
+                      const severityBg    = item.severity === "High" ? "#ef444418" : item.severity === "Medium" ? "#f59e0b18" : "#22c55e18";
+                      const linked        = getLinkedRepair(item.issue);
+                      const repData       = linked ? repairData[linked] : null;
+                      const costLow       = repData ? adj(Math.min(...Object.values(repData.costs).map(v => v.low)), repData, linked) : null;
+                      const costHigh      = repData ? adj(Math.max(...Object.values(repData.costs).map(v => v.high)), repData, linked) : null;
+                      return (
+                        <div key={i} style={{ padding:"16px", background:"#0e0e0e", borderRadius:"8px", border:`1px solid ${severityColor}22` }}>
+                          <div style={{ display:"flex", gap:"10px", alignItems:"flex-start" }}>
+                            <span style={{ display:"inline-block", width:"8px", height:"8px", borderRadius:"50%", background:severityColor, flexShrink:0, marginTop:"5px" }} />
+                            <div style={{ flex:1 }}>
+                              <div style={{ fontSize:"13px", lineHeight:"1.5", color:"#ccc", marginBottom:"8px" }}>{item.issue}</div>
+                              <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", alignItems:"center" }}>
+                                <span style={{ fontSize:"11px", color:"#777" }}>📅 {item.years}</span>
+                                <span style={{ fontSize:"11px", padding:"1px 7px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity}</span>
+                                <span style={{ fontSize:"11px", color:"#555" }}>{item.source}</span>
+                                {costLow && (
+                                  <span style={{ fontSize:"12px", color:"#c9a84c", marginLeft:"auto", fontWeight:"500" }}>
+                                    Est. repair: ${costLow.toLocaleString()}–${costHigh.toLocaleString()}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px", textAlign:"center" }}>
+                  <div style={{ fontSize:"24px", marginBottom:"8px" }}>✅</div>
+                  <div style={{ fontSize:"15px", color:"#ccc" }}>No documented issues{year !== "Any Year" ? ` for the ${year} model year` : ""}</div>
+                  <div style={{ fontSize:"13px", color:"#555", marginTop:"4px", fontStyle:"italic" }}>This doesn't guarantee a problem-free vehicle — always get a pre-purchase inspection.</div>
+                </div>
+              )}
+
+              {/* Inspection Checklist */}
+              <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px" }}>
+                <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"16px" }}>Pre-Purchase Inspection Checklist</div>
+                <div style={{ display:"grid", gap:"8px" }}>
+                  {[
+                    ...(yearIssues.filter(i => i.severity === "High").map(i => {
+                      const keyword = Object.keys(issueToRepair).find(k => i.issue.toLowerCase().includes(k));
+                      if (!keyword) return null;
+                      const checks = {
+                        "head gasket": "Check for white exhaust smoke, milky oil on dipstick, and coolant loss",
+                        "timing chain": "Listen for metallic rattle on cold start — disappears within 30 seconds if chain is worn",
+                        "timing belt": "Ask for service records confirming timing belt replacement",
+                        "water pump": "Check for coolant leaks near water pump, inspect for weeping from weep hole",
+                        "transmission": "Test all gears — feel for slipping, hesitation, shudder at highway speeds",
+                        "cvt": "Feel for judder during acceleration from a stop, especially when warm",
+                        "oil consumption": "Check oil level and look for blue smoke on acceleration or deceleration",
+                        "air suspension": "Check if vehicle sits level — park on flat surface and inspect all four corners",
+                        "spark plug": "Ask for records of spark plug replacement, listen for misfires at idle",
+                        "brake": "Test brakes hard from 40mph — feel for pulsation, pulling, or grinding",
+                        "battery": "Ask when battery was last replaced, test with a battery tester at the shop",
+                      };
+                      return checks[keyword] ? { text: checks[keyword], severity: "High" } : null;
+                    }).filter(Boolean)),
+                    { text: "Check all fluid levels — oil, coolant, brake fluid, transmission fluid", severity: "Low" },
+                    { text: "Run a vehicle history report (Carfax or AutoCheck) for accidents and title issues", severity: "Low" },
+                    { text: "Have an independent mechanic perform a pre-purchase inspection ($100–$200)", severity: "Low" },
+                    { text: "Test all electronics — windows, locks, infotainment, climate control", severity: "Low" },
+                    { text: "Check for rust under the vehicle, around wheel wells, and on the frame", severity: "Low" },
+                    { text: "Test drive on highway — feel for vibration, pulling, or unusual noise at speed", severity: "Low" },
+                  ].map((item, i) => (
+                    <div key={i} style={{ display:"flex", gap:"10px", padding:"10px 12px", background:"#0e0e0e", borderRadius:"6px" }}>
+                      <span style={{ color: item.severity === "High" ? "#ef4444" : "#22c55e", flexShrink:0 }}>
+                        {item.severity === "High" ? "⚠️" : "✓"}
+                      </span>
+                      <span style={{ fontSize:"13px", color:"#bbb", lineHeight:"1.5" }}>{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Disclaimer */}
+              <div style={{ fontSize:"11px", color:"#444", textAlign:"center", fontStyle:"italic", padding:"0 8px" }}>
+                Issues sourced from RepairPal, CarComplaints.com, and NHTSA complaint database. Always get a pre-purchase inspection from a licensed mechanic.
+              </div>
+
+            </div>
+          )}
+        </section>
+      )} {/* end buyside mode */}
+      {appMode === "costs" && (
       <div style={{ maxWidth:"900px", margin:"0 auto 40px", padding:"0 24px" }}>
         <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"28px" }}>
           <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"8px" }}>Help the Community</div>
@@ -3896,6 +4102,7 @@ const modelYears = {
           )}
         </div>
       </div>
+      )} {/* end costs mode submit form */}
 
       <footer style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", textAlign:"center" }}>
         <div style={{ fontSize:"16px", fontWeight:"400", color:"#f0ede6", letterSpacing:"-0.01em", marginBottom:"8px" }}>
