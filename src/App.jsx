@@ -1963,7 +1963,7 @@ const knownIssues = {
       { issue: "Oil leaks from valve cover gasket — common after 60k miles", years: "2007–2018", severity: "Medium", source: "RepairPal" },
       { issue: "Water pump failure — coolant leak, overheating", years: "2007–2018", severity: "High", source: "RepairPal" },
       { issue: "Timing chain guide wear on N63 V8 — rattle, potential engine damage", years: "2010–2014", severity: "High", source: "NHTSA" },
-      { issue: "Transfer case failure — vibration, 4WD malfunction", years: "2007–2013", severity: "High", source: "CarComplaints" },
+      { issue: "Transfer case failure — vibration, 4WD malfunction", years: "2007–2013", severity: "High", source: "CarComplaints", trims: ["xDrive40i", "xDrive45e", "M60i"] },
     ],
     "X1": [
       { issue: "Timing chain guide failure — N20 engine, same issue as 3 Series", years: "2013–2015", severity: "High", source: "RepairPal" },
@@ -1971,9 +1971,9 @@ const knownIssues = {
   },
   "Chevrolet": {
     "Silverado 1500": [
-      { issue: "Active Fuel Management (AFM) lifter failure — ticking, oil consumption, misfires on V8", years: "2014–2021", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Active Fuel Management (AFM) lifter failure — ticking, oil consumption, misfires on V8", years: "2014–2021", severity: "High", source: "NHTSA/CarComplaints", trims: ["LT", "LTZ", "RST", "Trail Boss", "High Country", "ZR2"] },
       { issue: "Transmission shudder — torque converter shudder at light throttle on 8-speed auto", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
-      { issue: "Excessive oil consumption on 5.3L V8 — burning 1+ qt per 1,000 miles", years: "2014–2019", severity: "High", source: "NHTSA" },
+      { issue: "Excessive oil consumption on 5.3L V8 — burning 1+ qt per 1,000 miles", years: "2014–2019", severity: "High", source: "NHTSA", trims: ["LT", "LTZ", "RST", "Trail Boss", "High Country", "ZR2"] },
     ],
     "Colorado": [
       { issue: "8-speed automatic transmission shudder and rough shifting", years: "2017–2019", severity: "Medium", source: "CarComplaints" },
@@ -1989,10 +1989,10 @@ const knownIssues = {
       { issue: "Timing chain stretch on 2.4L Ecotec engine", years: "2013–2017", severity: "High", source: "RepairPal" },
     ],
     "Camaro": [
-      { issue: "AFM/DOD lifter failure on V8 engines — ticking, misfire, oil consumption", years: "2010–2021", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "AFM/DOD lifter failure on V8 engines — ticking, misfire, oil consumption", years: "2010–2021", severity: "High", source: "NHTSA/CarComplaints", trims: ["LT1", "SS", "ZL1"] },
     ],
     "Tahoe": [
-      { issue: "Active Fuel Management (AFM) lifter failure on 5.3L V8", years: "2014–2021", severity: "High", source: "NHTSA" },
+      { issue: "Active Fuel Management (AFM) lifter failure on 5.3L V8", years: "2014–2021", severity: "High", source: "NHTSA", trims: ["LT", "Z71", "RST", "Premier", "High Country"] },
       { issue: "Air conditioning compressor failure", years: "2007–2014", severity: "Medium", source: "RepairPal" },
     ],
   },
@@ -2013,7 +2013,7 @@ const knownIssues = {
     ],
     "Challenger": [
       { issue: "TIPM failure — same as Charger, electrical issues, no-start", years: "2011–2014", severity: "High", source: "NHTSA" },
-      { issue: "Brake fade on base brakes under hard use — undersized for performance trims", years: "2009–2014", severity: "Medium", source: "CarComplaints" },
+      { issue: "Brake fade on base brakes under hard use — undersized for performance trims", years: "2009–2014", severity: "Medium", source: "CarComplaints", trims: ["SXT", "GT"] },
     ],
     "Durango": [
       { issue: "TIPM failure — fuel pump relay failure, random stalling", years: "2011–2014", severity: "High", source: "NHTSA" },
@@ -2058,7 +2058,7 @@ const knownIssues = {
   },
   "GMC": {
     "Sierra 1500": [
-      { issue: "Active Fuel Management (AFM) lifter failure — same as Silverado V8", years: "2014–2021", severity: "High", source: "NHTSA" },
+      { issue: "Active Fuel Management (AFM) lifter failure — same as Silverado V8", years: "2014–2021", severity: "High", source: "NHTSA", trims: ["SLE", "SLT", "AT4", "Denali", "AT4X", "Denali Ultimate"] },
       { issue: "Transmission shudder — torque converter shudder on 8-speed auto", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
     ],
     "Acadia": [
@@ -2071,7 +2071,7 @@ const knownIssues = {
   },
   "Honda": {
     "Accord": [
-      { issue: "VCM (Variable Cylinder Management) vibration — shudder at highway speed on V6", years: "2008–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "VCM (Variable Cylinder Management) vibration — shudder at highway speed on V6", years: "2008–2017", severity: "High", source: "CarComplaints/NHTSA", trims: ["V6 Sport", "Touring"] },
       { issue: "Transmission failure on automatic — slipping, hunting gears", years: "1998–2002", severity: "High", source: "CarComplaints" },
     ],
     "Civic": [
@@ -2128,7 +2128,7 @@ const knownIssues = {
   "Jeep": {
     "Grand Cherokee": [
       { issue: "TIPM failure — electrical faults, no-start, windows/wipers acting randomly", years: "2011–2014", severity: "High", source: "NHTSA/CarComplaints class action" },
-      { issue: "Air suspension failure — compressor failure, vehicle sits low", years: "2011–2016", severity: "High", source: "CarComplaints" },
+      { issue: "Air suspension failure — compressor failure, vehicle sits low", years: "2011–2016", severity: "High", source: "CarComplaints", trims: ["Summit", "Overland", "Trailhawk", "Limited"] },
       { issue: "Transmission shudder on 8-speed ZF automatic", years: "2014–2016", severity: "Medium", source: "CarComplaints" },
       { issue: "Electronic gear shifter uncommanded movement — park to neutral slip; recall issued", years: "2014–2015", severity: "High", source: "NHTSA recall" },
     ],
@@ -2208,7 +2208,7 @@ const knownIssues = {
     ],
     "E-Class": [
       { issue: "Camshaft adjuster and timing chain wear on M272/M273 engines", years: "2006–2012", severity: "High", source: "RepairPal" },
-      { issue: "Air suspension failure — airmatic compressor and struts on all 4 corners", years: "2003–2009", severity: "High", source: "RepairPal" },
+      { issue: "Air suspension failure — airmatic compressor and struts on all 4 corners", years: "2003–2009", severity: "High", source: "RepairPal", trims: ["E 450", "E 450 4MATIC", "E 53 AMG", "E 63 S AMG"] },
     ],
     "S-Class": [
       { issue: "Airmatic air suspension failure — all four corners require expensive repair", years: "2000–2013", severity: "High", source: "RepairPal" },
@@ -2277,7 +2277,7 @@ const knownIssues = {
     "Forester": [
       { issue: "Head gasket failure — EJ25 phase 1 gasket failure, coolant loss", years: "1999–2010", severity: "High", source: "CarComplaints" },
       { issue: "Excessive oil consumption — 2.5L FB25 burns 1 qt per 1,000 miles", years: "2011–2018", severity: "High", source: "NHTSA/CarComplaints (1,000+ complaints)" },
-      { issue: "CVT transmission failure — torque converter and valve body issues", years: "2014–2018", severity: "High", source: "CarComplaints" },
+      { issue: "CVT transmission failure — torque converter and valve body issues", years: "2014–2018", severity: "High", source: "CarComplaints", trims: ["Premium", "Sport", "Limited", "Touring"] },
       { issue: "Infotainment system freeze — Starlink head unit lockup, backup camera failure", years: "2018–2018", severity: "Medium", source: "CarComplaints/lawsuit" },
     ],
     "Impreza": [
@@ -2285,7 +2285,7 @@ const knownIssues = {
       { issue: "Spark plug tube seal oil leak — oil soaks ignition coil boots, causes misfires", years: "2006–2014", severity: "Medium", source: "RepairPal" },
     ],
     "WRX": [
-      { issue: "Ringland failure — piston ring land cracks on EJ257 engine under high load", years: "2008–2014", severity: "High", source: "RepairPal/community data" },
+      { issue: "Ringland failure — piston ring land cracks on EJ257 engine under high load", years: "2008–2014", severity: "High", source: "RepairPal/community data", trims: ["Base", "Premium"] },
       { issue: "Transmission synchro wear — 3rd/4th gear grind on 6-speed manual", years: "2015–2021", severity: "Medium", source: "CarComplaints" },
     ],
     "WRX STI": [
@@ -3650,12 +3650,20 @@ const modelYears = {
 
   const getYearIssues = () => {
     if (!knownIssues[make] || !knownIssues[make][model]) return [];
-    if (year === "Any Year") return knownIssues[make][model];
-    const yr = parseInt(year);
     return knownIssues[make][model].filter(item => {
-      const match = item.years.match(/(\d{4})[–\-](\d{4})/);
-      if (!match) return true;
-      return yr >= parseInt(match[1]) && yr <= parseInt(match[2]);
+      // Filter by year
+      if (year !== "Any Year") {
+        const match = item.years.match(/(\d{4})[–\-](\d{4})/);
+        if (match) {
+          const yr = parseInt(year);
+          if (yr < parseInt(match[1]) || yr > parseInt(match[2])) return false;
+        }
+      }
+      // Filter by trim — if issue has trims array, only show if selected trim matches
+      if (item.trims && trim !== "Any Trim") {
+        return item.trims.some(t => trim.includes(t) || t.includes(trim));
+      }
+      return true;
     });
   };
 
@@ -3796,6 +3804,7 @@ const modelYears = {
                         <span style={{ fontSize:"11px", color:"#777" }}>📅 {item.years}</span>
                         <span style={{ fontSize:"11px", padding:"1px 7px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity} severity</span>
                         <span style={{ fontSize:"11px", color:"#555" }}>{item.source}</span>
+                        {item.trims && <span style={{ fontSize:"11px", color:"#3b82f6", background:"#3b82f618", padding:"1px 7px", borderRadius:"20px" }}>⚙️ {item.trims.slice(0,3).join(", ")}{item.trims.length > 3 ? "…" : ""} only</span>}
                       </div>
                     </div>
                   </div>
@@ -3979,6 +3988,7 @@ const modelYears = {
                                 <span style={{ fontSize:"11px", color:"#777" }}>📅 {item.years}</span>
                                 <span style={{ fontSize:"11px", padding:"1px 7px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity}</span>
                                 <span style={{ fontSize:"11px", color:"#555" }}>{item.source}</span>
+                                {item.trims && <span style={{ fontSize:"11px", color:"#3b82f6", background:"#3b82f618", padding:"1px 7px", borderRadius:"20px" }}>⚙️ {item.trims.slice(0,3).join(", ")}{item.trims.length > 3 ? "…" : ""} only</span>}
                                 {costLow && (
                                   <span style={{ fontSize:"12px", color:"#c9a84c", marginLeft:"auto", fontWeight:"500" }}>
                                     Est. repair: ${costLow.toLocaleString()}–${costHigh.toLocaleString()}
