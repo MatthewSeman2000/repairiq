@@ -5142,17 +5142,22 @@ const modelYears = {
           )}
           {make !== "Any Make" && model !== "Any Model" && trimData[make] && trimData[make][model] && (
             <select value={trim} onChange={e => setTrim(e.target.value)} style={IS}>
-              {trimData[make][model].filter(([t]) => {
-                if (t === "Any Trim") return true;
-                if (year === "Any Year") return true;
-                const yr = parseInt(year);
-                // Check trimYears if available for this make/model
-                if (trimYears[make] && trimYears[make][model] && trimYears[make][model][t]) {
-                  const [start, end] = trimYears[make][model][t];
-                  return yr >= start && yr <= end;
-                }
-                return true; // no data = show it
-              }).map(([t]) => <option key={t}>{t}</option>)}
+            {(() => {
+                const yr = year === "Any Year" ? null : parseInt(year);
+                const allTrims = trimData[make][model];
+                const filtered = allTrims.filter(([t]) => {
+                  if (t === "Any Trim") return true;
+                  if (!yr) return true;
+                  if (trimYears[make] && trimYears[make][model] && trimYears[make][model][t]) {
+                    const [start, end] = trimYears[make][model][t];
+                    return yr >= start && yr <= end;
+                  }
+                  return true; // no trimYears data = always show
+                });
+                // If filtering removed everything except Any Trim, show all trims instead
+                const toShow = filtered.length <= 1 ? allTrims : filtered;
+                return toShow.map(([t]) => <option key={t}>{t}</option>);
+              })()}
             </select>
           )}
           <select value={year} onChange={e => setYear(e.target.value)} style={IS}>
