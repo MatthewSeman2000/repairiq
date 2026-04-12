@@ -1910,11 +1910,11 @@ const knownIssues = {
       { issue: "Transmission failure — shuddering, slipping, hard shifts on 5-speed auto", years: "2003–2006", severity: "High", source: "NHTSA/CarComplaints" },
     ],
     "MDX": [
-      { issue: "VCM (cylinder deactivation) causes engine vibration and oil consumption", years: "2014–2018", severity: "High", source: "RepairPal/CarComplaints" },
+      { issue: "VCM (cylinder deactivation) causes engine vibration and oil consumption", years: "2014–2018", severity: "High", source: "RepairPal/CarComplaints", trims: ["Base", "Technology", "Advance", "Sport Hybrid"] },
       { issue: "Transmission shudder — rough downshift especially from 3rd to 2nd", years: "2001–2006", severity: "High", source: "RepairPal" },
     ],
     "RDX": [
-      { issue: "Turbo lag and hesitation on 2.3L turbocharged engine", years: "2007–2012", severity: "Medium", source: "RepairPal" },
+      { issue: "Turbo lag and hesitation on 2.3L turbocharged engine", years: "2007–2012", severity: "Medium", source: "RepairPal", trims: ["Base", "Technology"] },
       { issue: "Water pump seal failure causing coolant leak", years: "2007–2012", severity: "Medium", source: "RepairPal" },
     ],
     "ILX": [
@@ -1931,42 +1931,42 @@ const knownIssues = {
       { issue: "Excessive oil consumption on 2.0T engine — 1 qt per 1,000 miles common", years: "2009–2014", severity: "High", source: "CarComplaints/NHTSA" },
       { issue: "Timing chain tensioner failure — engine rattle at startup", years: "2009–2012", severity: "High", source: "RepairPal" },
       { issue: "Water pump failure — defective plastic impeller causes overheating", years: "2013–2022", severity: "High", source: "RepairPal" },
-      { issue: "Transmission rough shifting and hesitation on DSG", years: "2018–2022", severity: "Medium", source: "CarComplaints" },
+      { issue: "Transmission rough shifting and hesitation on DSG", years: "2018–2022", severity: "Medium", source: "CarComplaints", trims: ["Premium", "Premium Plus", "Prestige"] },
     ],
     "Q7": [
       { issue: "Water pump failure — defective plastic impeller", years: "2013–2022", severity: "High", source: "RepairPal" },
       { issue: "Control arm bushing wear — clunking over bumps, premature tire wear", years: "2007–2015", severity: "Medium", source: "RepairPal" },
     ],
     "A6": [
-      { issue: "Excessive oil consumption on 3.0T V6 engine", years: "2009–2012", severity: "High", source: "RepairPal" },
+      { issue: "Excessive oil consumption on 3.0T V6 engine", years: "2009–2012", severity: "High", source: "RepairPal", trims: ["Premium Plus", "Prestige"] },
       { issue: "Power window regulator failure — window drops or won't operate", years: "2005–2011", severity: "Low", source: "RepairPal" },
     ],
   },
   "BMW": {
     "3 Series": [
-      { issue: "Timing chain guide failure — N20 engine rattle at startup, risk of catastrophic engine damage", years: "2012–2015", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Timing chain guide failure — N20 engine rattle at startup, risk of catastrophic engine damage", years: "2012–2015", severity: "High", source: "NHTSA/CarComplaints", trims: ["328i", "328i xDrive", "320i"] },
       { issue: "Valve cover gasket oil leak — burning smell, oil drips near exhaust", years: "2006–2013", severity: "Medium", source: "RepairPal" },
       { issue: "Electric water pump failure — overheating, especially on N52/N55 engines", years: "2006–2016", severity: "High", source: "RepairPal" },
-      { issue: "High-pressure fuel pump (HPFP) failure — hesitation, hard start on N54", years: "2007–2010", severity: "High", source: "NHTSA" },
+      { issue: "High-pressure fuel pump (HPFP) failure — hesitation, hard start on N54", years: "2007–2010", severity: "High", source: "NHTSA", trims: ["335i", "335i xDrive", "335is"] },
     ],
     "5 Series": [
       { issue: "Electric water pump failure — sudden overheating, N52/N55 engines", years: "2006–2016", severity: "High", source: "RepairPal" },
       { issue: "Valve cover gasket and PCV valve oil leaks", years: "2004–2013", severity: "Medium", source: "RepairPal" },
-      { issue: "Timing chain guide wear — N63 V8 engine rattle and potential failure", years: "2010–2014", severity: "High", source: "NHTSA" },
+      { issue: "Timing chain guide wear — N63 V8 engine rattle and potential failure", years: "2010–2014", severity: "High", source: "NHTSA", trims: ["550i", "550i xDrive", "M550i xDrive"] },
     ],
     "X3": [
-      { issue: "Timing chain guide failure — N20 4-cylinder engine rattle on startup", years: "2012–2015", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Timing chain guide failure — N20 4-cylinder engine rattle on startup", years: "2012–2015", severity: "High", source: "CarComplaints/NHTSA", trims: ["sDrive30i", "xDrive30i"] },
       { issue: "Oil leaks from valve cover and front engine cover", years: "2011–2018", severity: "Medium", source: "RepairPal" },
       { issue: "Coolant expansion tank crack — coolant loss, overheating risk", years: "2011–2017", severity: "High", source: "RepairPal" },
     ],
     "X5": [
       { issue: "Oil leaks from valve cover gasket — common after 60k miles", years: "2007–2018", severity: "Medium", source: "RepairPal" },
       { issue: "Water pump failure — coolant leak, overheating", years: "2007–2018", severity: "High", source: "RepairPal" },
-      { issue: "Timing chain guide wear on N63 V8 — rattle, potential engine damage", years: "2010–2014", severity: "High", source: "NHTSA" },
+      { issue: "Timing chain guide wear on N63 V8 — rattle, potential engine damage", years: "2010–2014", severity: "High", source: "NHTSA", trims: ["xDrive50i", "M50i"] },
       { issue: "Transfer case failure — vibration, 4WD malfunction", years: "2007–2013", severity: "High", source: "CarComplaints", trims: ["xDrive40i", "xDrive45e", "M60i"] },
     ],
     "X1": [
-      { issue: "Timing chain guide failure — N20 engine, same issue as 3 Series", years: "2013–2015", severity: "High", source: "RepairPal" },
+      { issue: "Timing chain guide failure — N20 engine, same issue as 3 Series", years: "2013–2015", severity: "High", source: "RepairPal", trims: ["xDrive28i", "sDrive28i"] },
     ],
   },
   "Chevrolet": {
@@ -1977,7 +1977,7 @@ const knownIssues = {
     ],
     "Colorado": [
       { issue: "8-speed automatic transmission shudder and rough shifting", years: "2017–2019", severity: "Medium", source: "CarComplaints" },
-      { issue: "Timing chain stretch on 2.8L Duramax diesel at high mileage", years: "2016–2020", severity: "Medium", source: "RepairPal" },
+      { issue: "Timing chain stretch on 2.8L Duramax diesel at high mileage", years: "2016–2020", severity: "Medium", source: "RepairPal", trims: ["Z71", "LT"] },
     ],
     "Equinox": [
       { issue: "Timing chain wear — rattle on startup, check engine light on 2.4L engine", years: "2010–2017", severity: "High", source: "CarComplaints/NHTSA" },
@@ -2026,10 +2026,10 @@ const knownIssues = {
   },
   "Ford": {
     "F-150": [
-      { issue: "Spark plug blowout — plugs eject from 2-valve Triton V8 cylinder head", years: "2000–2008", severity: "High", source: "NHTSA/CarComplaints" },
-      { issue: "Phase shifter (cam phaser) rattle — knock on startup on 5.4L Triton V8", years: "2004–2013", severity: "High", source: "RepairPal/CarComplaints" },
+      { issue: "Spark plug blowout — plugs eject from 2-valve Triton V8 cylinder head", years: "2000–2008", severity: "High", source: "NHTSA/CarComplaints", trims: ["XL", "XLT", "Lariat", "King Ranch"] },
+      { issue: "Phase shifter (cam phaser) rattle — knock on startup on 5.4L Triton V8", years: "2004–2013", severity: "High", source: "RepairPal/CarComplaints", trims: ["XL", "XLT", "Lariat", "King Ranch", "Platinum"] },
       { issue: "Tailgate latch failure — tailgate opens unexpectedly while driving", years: "2004–2014", severity: "Medium", source: "NHTSA" },
-      { issue: "EcoBoost 3.5L turbo intercooler condensation causing hesitation and misfires", years: "2011–2014", severity: "Medium", source: "NHTSA" },
+      { issue: "EcoBoost 3.5L turbo intercooler condensation causing hesitation and misfires", years: "2011–2014", severity: "Medium", source: "NHTSA", trims: ["XLT", "Lariat", "King Ranch", "Platinum", "Limited"] },
     ],
     "Explorer": [
       { issue: "Exhaust fumes entering cabin — carbon monoxide via defective rear door seals", years: "2011–2017", severity: "High", source: "NHTSA/CarComplaints" },
@@ -2037,7 +2037,7 @@ const knownIssues = {
       { issue: "6-speed transmission shudder and delayed engagement", years: "2011–2015", severity: "Medium", source: "CarComplaints" },
     ],
     "Escape": [
-      { issue: "Engine fire risk — coolant leak onto hot exhaust on 1.6L EcoBoost", years: "2013–2014", severity: "High", source: "NHTSA recall" },
+      { issue: "Engine fire risk — coolant leak onto hot exhaust on 1.6L EcoBoost", years: "2013–2014", severity: "High", source: "NHTSA recall", trims: ["SE"] },
       { issue: "Power steering failure — sudden loss of electric assist", years: "2013–2016", severity: "High", source: "NHTSA" },
       { issue: "Transmission hesitation and shudder on 6-speed automatic", years: "2013–2016", severity: "Medium", source: "CarComplaints" },
     ],
@@ -2050,7 +2050,7 @@ const knownIssues = {
       { issue: "Independent rear suspension (IRS) subframe noise and bushing wear", years: "2015–2020", severity: "Medium", source: "CarComplaints" },
     ],
     "Mustang EcoBoost": [
-      { issue: "Oil pan gasket leak on 2.3L EcoBoost", years: "2015–2017", severity: "Medium", source: "RepairPal" },
+      { issue: "Oil pan gasket leak on 2.3L EcoBoost", years: "2015–2017", severity: "Medium", source: "RepairPal", trims: ["Base", "Premium"] },
     ],
     "Transit": [
       { issue: "Transmission overheating and shudder on SelectShift 6-speed", years: "2015–2019", severity: "Medium", source: "NHTSA" },
@@ -2075,7 +2075,7 @@ const knownIssues = {
       { issue: "Transmission failure on automatic — slipping, hunting gears", years: "1998–2002", severity: "High", source: "CarComplaints" },
     ],
     "Civic": [
-      { issue: "Excessive oil consumption on 1.5T turbocharged engine — oil dilution with fuel", years: "2016–2018", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Excessive oil consumption on 1.5T turbocharged engine — oil dilution with fuel", years: "2016–2018", severity: "High", source: "NHTSA/CarComplaints", trims: ["EX", "EX-L", "Touring", "Sport"] },
       { issue: "Air bag inflator recall (Takata) — metal fragments on deployment", years: "2001–2015", severity: "High", source: "NHTSA recall" },
     ],
     "CR-V": [
@@ -2139,7 +2139,7 @@ const knownIssues = {
     ],
     "Cherokee": [
       { issue: "9-speed ZF transmission hesitation, rough shifts, and hunting gears", years: "2014–2018", severity: "High", source: "CarComplaints/NHTSA" },
-      { issue: "Timing chain noise on 3.2L Pentastar V6 at startup", years: "2014–2019", severity: "Medium", source: "RepairPal" },
+      { issue: "Timing chain noise on 3.2L Pentastar V6 at startup", years: "2014–2019", severity: "Medium", source: "RepairPal", trims: ["Limited", "Trailhawk", "Overland"] },
     ],
     "Wrangler Rubicon": [
       { issue: "Dana 44 front axle seal leak — differential fluid loss", years: "2007–2018", severity: "Medium", source: "RepairPal" },
@@ -2220,7 +2220,7 @@ const knownIssues = {
       { issue: "Panoramic sunroof rattling and potential shattering", years: "2016–2020", severity: "Medium", source: "CarComplaints" },
     ],
     "AMG C 63": [
-      { issue: "Carbon buildup on intake valves — direct injection M156/M177 V8 engines", years: "2008–2021", severity: "Medium", source: "RepairPal" },
+      { issue: "Carbon buildup on intake valves — direct injection M156/M177 V8 engines", years: "2008–2021", severity: "Medium", source: "RepairPal", trims: ["AMG C 63", "AMG C 63 S"] },
     ],
   },
   "Mitsubishi": {
@@ -2264,7 +2264,7 @@ const knownIssues = {
     ],
     "2500": [
       { issue: "TIPM failure — same as 1500", years: "2011–2014", severity: "High", source: "NHTSA" },
-      { issue: "Exhaust brake valve failure on Cummins diesel — lack of engine braking", years: "2007–2012", severity: "Medium", source: "RepairPal" },
+      { issue: "Exhaust brake valve failure on Cummins diesel — lack of engine braking", years: "2007–2012", severity: "Medium", source: "RepairPal", trims: ["Laramie", "Big Horn", "Power Wagon"] },
     ],
   },
   "Subaru": {
