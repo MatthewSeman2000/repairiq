@@ -3232,7 +3232,7 @@ const trimYears = {
       "S":         [2007, 2026],
       "SV":        [2007, 2026],
       "SR":        [2016, 2026],
-      "Platinum":  [2019, 2025],
+      "Platinum":  [2019, 2022],
     },
     "Maxima": {
       "Any Trim":  [1990, 2023],
@@ -4786,7 +4786,7 @@ const trimYears = {
       "Any Trim":         [1999, 2026],
       "Base":             [1999, 2026],
       "Luxury":           [2007, 2026],
-      "Premium Luxury":   [2015, 2026],
+      "Premium Luxury":   [2017, 2026],
       "Sport Platinum":   [2021, 2026],
       "Platinum":         [2007, 2026],
     },
@@ -4794,7 +4794,7 @@ const trimYears = {
       "Any Trim":         [2003, 2026],
       "Base":             [2003, 2026],
       "Luxury":           [2007, 2026],
-      "Premium Luxury":   [2015, 2026],
+      "Premium Luxury":   [2017, 2026],
       "Platinum":         [2007, 2026],
     },
     "Lyriq": {
