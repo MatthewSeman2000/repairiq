@@ -6274,6 +6274,29 @@ const modelYears = {
   const [formAmount, setFormAmount]       = useState("");
   const [formZip, setFormZip]             = useState("");
 
+  // Feedback form state
+  const [feedbackText, setFeedbackText]   = useState("");
+  const [feedbackEmail, setFeedbackEmail] = useState("");
+  const [feedbackSent, setFeedbackSent]   = useState(false);
+  const [feedbackSending, setFeedbackSending] = useState(false);
+  const [feedbackError, setFeedbackError] = useState(null);
+
+  const handleFeedback = async () => {
+    if (!feedbackText.trim()) return;
+    setFeedbackSending(true);
+    setFeedbackError(null);
+    const { error } = await supabase.from("feedback").insert({
+      message: feedbackText.trim(),
+      email:   feedbackEmail.trim() || null,
+      page_context: make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make}${model !== "Any Model" ? " " + model : ""}` : null,
+    });
+    setFeedbackSending(false);
+    if (error) { setFeedbackError("Something went wrong. Please try again."); return; }
+    setFeedbackSent(true);
+    setFeedbackText("");
+    setFeedbackEmail("");
+  };
+
   const handleSubmission = async () => {
     if (!formRepair || !formAmount) return;
     setSubmitting(true);
@@ -6874,6 +6897,47 @@ const modelYears = {
         </div>
       </div>
       )} {/* end costs mode submit form */}
+
+      {/* ── FEEDBACK SECTION ─────────────────────────────────────────────── */}
+      <div style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", maxWidth:"600px", margin:"0 auto" }}>
+        <div style={{ fontSize:"13px", fontWeight:"500", color:"#c9a84c", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>
+          Suggest a Change
+        </div>
+        <p style={{ fontSize:"13px", color:"#666", margin:"0 0 16px", lineHeight:"1.5" }}>
+          Missing a repair? Wrong price range? Incorrect trim or year data? Let us know — every suggestion helps.
+        </p>
+        {!feedbackSent ? (
+          <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+            <textarea
+              placeholder="What should we fix or add? (e.g. 'Timing belt for 2015 Honda CR-V is missing' or 'Brake pad range for BMW seems too low')"
+              value={feedbackText}
+              onChange={e => setFeedbackText(e.target.value)}
+              rows={4}
+              style={{ ...IS, resize:"vertical", lineHeight:"1.5" }}
+            />
+            <input
+              placeholder="Email (optional — only if you'd like a reply)"
+              value={feedbackEmail}
+              onChange={e => setFeedbackEmail(e.target.value)}
+              style={IS}
+            />
+            {feedbackError && (
+              <div style={{ color:"#ef4444", fontSize:"12px" }}>{feedbackError}</div>
+            )}
+            <button
+              onClick={handleFeedback}
+              disabled={feedbackSending || !feedbackText.trim()}
+              style={{ background:"transparent", border:"1px solid #c9a84c", color: (feedbackSending || !feedbackText.trim()) ? "#555" : "#c9a84c", borderRadius:"6px", padding:"11px", fontSize:"12px", fontFamily:"inherit", cursor: (feedbackSending || !feedbackText.trim()) ? "not-allowed" : "pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}
+            >
+              {feedbackSending ? "Sending..." : "Send Feedback →"}
+            </button>
+          </div>
+        ) : (
+          <div style={{ textAlign:"center", padding:"20px", color:"#22c55e", fontSize:"14px" }}>
+            ✓ Got it — thanks for helping make RepairIQ better.
+          </div>
+        )}
+      </div>
 
       <footer style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", textAlign:"center" }}>
         <div style={{ fontSize:"16px", fontWeight:"400", color:"#f0ede6", letterSpacing:"-0.01em", marginBottom:"8px" }}>
