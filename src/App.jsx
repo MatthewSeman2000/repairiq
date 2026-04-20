@@ -15,7 +15,7 @@ const repairData = {
 
   // ── MAINTENANCE ──────────────────────────────────────────────────────────
   "Oil Change": {
-    icon: "🛢️", category: "Maintenance", trimSensitive: false,
+    icon: "🛢️", category: "Maintenance", trimSensitive: false, iceOnly: true,
     costs: {
       "Conventional": { low: 35, high: 75 },
       "Synthetic Blend": { low: 55, high: 100 },
@@ -43,7 +43,7 @@ const repairData = {
     notes: "National average ~$95 in 2026. Very DIY-friendly — often under 5 minutes on most vehicles.",
   },
   "Engine Air Filter": {
-    icon: "💨", category: "Maintenance", trimSensitive: false,
+    icon: "💨", category: "Maintenance", trimSensitive: false, iceOnly: true,
     costs: { "Standard": { low: 25, high: 60 }, "Performance": { low: 50, high: 85 } },
     labor: "0.25 hr",
     notes: "National average ~$83 in 2026. DIY-friendly on most vehicles. Replace every 15–30k miles.",
@@ -58,7 +58,7 @@ const repairData = {
     notes: "National average ~$93 in 2026. Most auto parts stores install for free with purchase.",
   },
   "Fuel Filter": {
-    icon: "⛽", category: "Maintenance", trimSensitive: false,
+    icon: "⛽", category: "Maintenance", trimSensitive: false, iceOnly: true,
     costs: {
       "External (inline)": { low: 75, high: 120 },
       "In-tank (with pump)": { low: 220, high: 400 },
@@ -132,7 +132,7 @@ const repairData = {
 
   // ── ENGINE ────────────────────────────────────────────────────────────────
   "Spark Plugs": {
-    icon: "🔥", category: "Engine", trimSensitive: true,
+    icon: "🔥", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Copper (4-cyl)": { low: 80, high: 150 },
       "Iridium (4-cyl)": { low: 140, high: 250 },
@@ -142,7 +142,7 @@ const repairData = {
     notes: "RepairPal national average $150–$300. V8 trucks like F-150 average $328–$438.",
   },
   "Timing Belt": {
-    icon: "⏱️", category: "Engine", trimSensitive: true,
+    icon: "⏱️", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Belt Only": { low: 300, high: 500 },
       "With Water Pump": { low: 500, high: 900 },
@@ -151,7 +151,7 @@ const repairData = {
     notes: "AAA range $400–$900. Many modern vehicles use timing chains instead. Critical safety service.",
   },
   "Timing Chain": {
-    icon: "⛓️", category: "Engine", trimSensitive: true,
+    icon: "⛓️", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: { "Standard": { low: 900, high: 1800 } },
     labor: "6–12 hrs",
     notes: "Labor-intensive. Rattling on startup is a warning sign — don't ignore it.",
@@ -163,13 +163,13 @@ const repairData = {
     notes: "KBB average $131–$209. Recommended every 30k–50k miles or 2–5 years.",
   },
   "Thermostat Replacement": {
-    icon: "🌡️", category: "Engine", trimSensitive: false,
+    icon: "🌡️", category: "Engine", trimSensitive: false, iceOnly: true,
     costs: { "Standard": { low: 150, high: 275 } },
     labor: "1–2 hrs",
     notes: "Often replaced with coolant flush. Symptoms include overheating or no heat in cabin.",
   },
   "Water Pump": {
-    icon: "💦", category: "Engine", trimSensitive: true,
+    icon: "💦", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Standard": { low: 300, high: 600 },
       "With Timing Belt": { low: 500, high: 900 },
@@ -178,13 +178,13 @@ const repairData = {
     notes: "Often replaced simultaneously with timing belt since access requires similar disassembly.",
   },
   "Head Gasket": {
-    icon: "🔩", category: "Engine", trimSensitive: true,
+    icon: "🔩", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: { "Standard": { low: 1400, high: 3000 } },
     labor: "8–16 hrs",
     notes: "RepairPal average $2,475–$3,246. Signs include white exhaust smoke or milky oil.",
   },
   "Valve Cover Gasket": {
-    icon: "🔩", category: "Engine", trimSensitive: true,
+    icon: "🔩", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "4-cylinder": { low: 210, high: 350 },
       "V6/V8": { low: 350, high: 580 },
@@ -193,13 +193,13 @@ const repairData = {
     notes: "RepairPal average $336–$461. Toyota Corolla ~$212–$290; V6 trucks $481–$699.",
   },
   "Intake Manifold Gasket": {
-    icon: "🔩", category: "Engine", trimSensitive: true,
+    icon: "🔩", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: { "Standard": { low: 300, high: 600 } },
     labor: "2–4 hrs",
     notes: "Coolant or vacuum leaks often indicate this gasket is failing.",
   },
   "PCV Valve": {
-    icon: "🔧", category: "Engine", trimSensitive: false,
+    icon: "🔧", category: "Engine", trimSensitive: false, iceOnly: true,
     costs: { "Standard": { low: 40, high: 90 } },
     labor: "0.25–0.5 hr",
     notes: "Cheap and often overlooked. A clogged PCV can cause rough idle and oil leaks.",
@@ -216,7 +216,7 @@ const repairData = {
     notes: "Most replacements run $120–$300 including installation. Some vehicles require computer reset.",
   },
   "Alternator": {
-    icon: "⚡", category: "Electrical", trimSensitive: true,
+    icon: "⚡", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: {
       "Remanufactured": { low: 400, high: 650 },
       "OEM New": { low: 600, high: 1000 },
@@ -225,7 +225,7 @@ const repairData = {
     notes: "RepairPal $563–$767; KBB $747–$842. Luxury/performance vehicles can exceed $1,200.",
   },
   "Starter Motor": {
-    icon: "🔑", category: "Electrical", trimSensitive: true,
+    icon: "🔑", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: {
       "Remanufactured": { low: 250, high: 430 },
       "OEM New": { low: 350, high: 600 },
@@ -240,7 +240,7 @@ const repairData = {
     notes: "Often DIY-friendly. Fuse box locations vary — check your owner's manual.",
   },
   "Oxygen Sensor": {
-    icon: "📡", category: "Electrical", trimSensitive: true,
+    icon: "📡", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: {
       "Single sensor": { low: 200, high: 400 },
       "All sensors (4-cyl)": { low: 400, high: 800 },
@@ -249,13 +249,13 @@ const repairData = {
     notes: "RepairPal average $434–$537 per sensor. P0130–P0167 codes are the most common trigger.",
   },
   "Mass Air Flow Sensor": {
-    icon: "💨", category: "Electrical", trimSensitive: true,
+    icon: "💨", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: { "Standard": { low: 150, high: 320 } },
     labor: "0.5–1 hr",
     notes: "Try cleaning with MAF cleaner spray ($10–$20) before replacing. Often resolves the issue.",
   },
   "Ignition Coil": {
-    icon: "⚡", category: "Electrical", trimSensitive: true,
+    icon: "⚡", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: {
       "Single coil": { low: 100, high: 250 },
       "Full set (4-cyl)": { low: 280, high: 500 },
@@ -397,6 +397,86 @@ const repairData = {
     costs: { "Standard": { low: 150, high: 350 } },
     labor: "1–3 hrs",
     notes: "Clicking from the dash or stuck temperature control are the main symptoms.",
+  },
+
+  // ── EV SYSTEMS ────────────────────────────────────────────────────────────
+  "EV: 12V Battery": {
+    icon: "🔋", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: { "Standard": { low: 200, high: 450 } },
+    labor: "0.5–1 hr",
+    notes: "Tesla 12V: ~$165-200 part + $75-100 labor. Other EVs similar. Total typically $250-450. Fails without warning — common on older Teslas. Can strand vehicle completely.",
+  },
+  "EV: HV Battery Diagnostic": {
+    icon: "🔍", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: { "Standard": { low: 150, high: 350 } },
+    labor: "1–2 hrs",
+    notes: "High-voltage battery health scan, BMS fault codes, module analysis. Required before any HV repair. Get this first — many apparent pack failures are actually module-level issues.",
+  },
+  "EV: Battery Module Repair": {
+    icon: "⚡", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Single Module": { low: 1500, high: 5000 },
+      "Multiple Modules": { low: 4000, high: 9000 },
+    },
+    labor: "4–10 hrs",
+    notes: "Module-level repair is far cheaper than full pack replacement. Increasingly available at independent EV shops. Most real-world battery failures are module-level, not full pack.",
+  },
+  "EV: Battery Pack (Compact)": {
+    icon: "🔋", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Remanufactured": { low: 6000, high: 10000 },
+      "New Pack": { low: 10000, high: 15000 },
+    },
+    labor: "5–12 hrs",
+    notes: "Leaf, Model 3 SR, Bolt EV, Ioniq 5 SR, EV6, etc. Full out-of-warranty replacement. Most packs covered 8 yrs/100k mi — verify warranty status before paying out of pocket.",
+  },
+  "EV: Battery Pack (Large/Luxury)": {
+    icon: "🔋", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Remanufactured": { low: 10000, high: 16000 },
+      "New Pack": { low: 14000, high: 22000 },
+    },
+    labor: "8–15 hrs",
+    notes: "Model S/X, large luxury EVs, long-range packs. Module repairs ($3,600-$8,000) are often possible — always get diagnostic first. Labor ~$175-200/hr at Tesla service centers.",
+  },
+  "EV: Drive Motor / Inverter": {
+    icon: "⚙️", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Motor Repair": { low: 2000, high: 5000 },
+      "Drive Unit Replacement": { low: 7000, high: 14000 },
+    },
+    labor: "5–12 hrs",
+    notes: "Electric motors are very reliable but inverter failures occur. Tesla drive unit warranty: 8 yrs/100k-150k mi depending on model. Average full replacement ~$8,000.",
+  },
+  "EV: Charging Port Repair": {
+    icon: "🔌", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: {
+      "Door / Actuator": { low: 250, high: 600 },
+      "Port Assembly": { low: 500, high: 1200 },
+    },
+    labor: "1–3 hrs",
+    notes: "Charge port door actuator failure is common on older Teslas ($250-600). Full port assembly $500-1,200. Tesla mobile service can often handle at home. On-board charger (OBC) failure is a separate, costlier issue.",
+  },
+  "EV: On-Board Charger (OBC)": {
+    icon: "⚡", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: { "Replacement": { low: 1000, high: 2500 } },
+    labor: "2–5 hrs",
+    notes: "Controls AC Level 1 and Level 2 charging. Failure = car can only DC fast charge or not charge at all. DC-DC converter sometimes replaced at same time. Total: $1,000-$2,500.",
+  },
+  "EV: Thermal Management Service": {
+    icon: "🌡️", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: {
+      "Coolant Flush": { low: 150, high: 300 },
+      "System Repair": { low: 800, high: 2000 },
+    },
+    labor: "1–4 hrs",
+    notes: "Battery coolant flush every 4-5 years per most manufacturer schedules. Heat pump or battery cooling system repairs $800-$2,000+. Neglecting this accelerates battery degradation.",
+  },
+  "EV: Annual Service": {
+    icon: "✅", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: { "Standard": { low: 150, high: 300 } },
+    labor: "1–2 hrs",
+    notes: "EVs have minimal scheduled maintenance. Annual check includes brakes (regen braking extends pad life 2-3x vs. gas cars), tire rotation, HV battery health check, fluid levels, software update.",
   },
 };
 
@@ -2231,7 +2311,30 @@ const knownIssues = {
       { issue: "Transmission failure if launch control overused — VR38DETT dual-clutch", years: "2009–2014", severity: "High", source: "RepairPal" },
     ],
     "Leaf": [
-      { issue: "Battery capacity degradation in hot climates — no thermal management", years: "2011–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Battery capacity degradation in hot climates — no active thermal management on Gen 1", years: "2011–2017", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Rapid battery capacity loss — some owners report 20–30% range loss within 3 years", years: "2011–2015", severity: "High", source: "CarComplaints" },
+      { issue: "Charge port latch failure — CHAdeMO port won't latch or release properly", years: "2011–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Ariya EV": [
+      { issue: "Software update issues causing charging errors and connectivity problems", years: "2023–2024", severity: "Medium", source: "CarComplaints" },
+    ],
+  },
+  "Chevrolet": {
+    "Bolt EV": [
+      { issue: "High-voltage battery fire risk — battery replaced under recall; affected 2017–2022 models", years: "2017–2022", severity: "High", source: "NHTSA recall" },
+      { issue: "DC fast charging disabled by recall — owners told not to charge above 90% or park indoors", years: "2020–2022", severity: "High", source: "NHTSA recall" },
+    ],
+    "Bolt EUV": [
+      { issue: "Same battery fire recall as Bolt EV — all units had battery replaced under recall", years: "2022–2022", severity: "High", source: "NHTSA recall" },
+    ],
+  },
+  "Hyundai": {
+    "Ioniq 5": [
+      { issue: "Integrated Charging Control Unit (ICCU) failure — car stops charging, tow required; recall", years: "2022–2023", severity: "High", source: "NHTSA recall" },
+      { issue: "12V battery drain causing no-start condition if ICCU fails", years: "2022–2023", severity: "High", source: "NHTSA recall" },
+    ],
+    "Ioniq 6": [
+      { issue: "ICCU charging failure — same issue as Ioniq 5; recall issued", years: "2023–2024", severity: "High", source: "NHTSA recall" },
     ],
   },
   "RAM": {
@@ -5716,7 +5819,47 @@ const trimData = {
     "Polestar 2":    [["Any Trim",1.00],["Standard Range Single Motor",0.95],["Long Range Single Motor",1.00],["Long Range Dual Motor",1.05],["Performance",1.12]],
   },
 };
-const catColor = c => ({"Maintenance":"#22c55e","Brakes":"#ef4444","Electrical":"#f59e0b","Drivetrain":"#8b5cf6","Engine":"#f97316","HVAC":"#06b6d4","Suspension":"#3b82f6"}[c] || "#6b7280");
+const catColor = c => ({"Maintenance":"#22c55e","Brakes":"#ef4444","Electrical":"#f59e0b","Drivetrain":"#8b5cf6","Engine":"#f97316","HVAC":"#06b6d4","Suspension":"#3b82f6","EV Systems":"#34d399"}[c] || "#6b7280");
+
+// EV models — used to filter iceOnly repairs and surface EV-specific repairs
+const evModels = new Set([
+  // Tesla — all models are EV
+  "Any Model","Model 3 RWD","Model 3 Long Range","Model 3 Performance",
+  "Model Y RWD","Model Y Long Range","Model Y Performance",
+  "Model S","Model S Plaid","Model X","Model X Plaid","Cybertruck","Roadster",
+  // Nissan
+  "Leaf","Ariya EV",
+  // Hyundai
+  "Ioniq 5","Ioniq 6","Ioniq 9","Kona Electric",
+  // Kia
+  "EV6","EV6 GT","EV9","Niro EV",
+  // Chevrolet
+  "Bolt EV","Bolt EUV","Blazer EV","Silverado EV",
+  // Ford
+  "Mustang Mach-E","F-150 Lightning",
+  // VW
+  "ID.4","ID.Buzz",
+  // Lexus
+  "RZ EV",
+  // Toyota
+  "bZ4X EV",
+  // Honda
+  "Prologue EV",
+  // Acura
+  "ZDX",
+  // Cadillac
+  "Lyriq",
+  // BMW
+  "i3","i4","i5","i7","iX",
+  // Volvo
+  "XC40 Recharge","C40 Recharge","XC60 Recharge","XC90 Recharge","S60 Recharge",
+  // Audi
+  "e-tron","e-tron GT","Q4 e-tron","Q8 e-tron",
+  // Subaru
+  "Solterra EV",
+]);
+
+
 const labelColor = l => ({"Very High Cost":"#ef4444","High Cost":"#f97316","Above Average":"#f59e0b","Average":"#22c55e","Below Average":"#06b6d4"}[l] || "#888");
 
 const Stars = ({ rating }) => {
@@ -6370,11 +6513,16 @@ const modelYears = {
     }
   };
 
+  const isEV = make === "Tesla" || (model !== "Any Model" && evModels.has(model));
+
   const filtered = useMemo(() =>
-    Object.entries(repairData).filter(([n, d]) =>
-      n.toLowerCase().includes(search.toLowerCase()) &&
-      (category === "All" || d.category === category)
-    ), [search, category]);
+    Object.entries(repairData).filter(([n, d]) => {
+      if (!n.toLowerCase().includes(search.toLowerCase())) return false;
+      if (category !== "All" && d.category !== category) return false;
+      if (isEV && d.iceOnly) return false;
+      if (!isEV && d.evOnly) return false;
+      return true;
+    }), [search, category, isEV]);
 
   // Cross-reference known issues to repair cards for cost lookup
   const issueToRepair = {
@@ -6400,7 +6548,11 @@ const modelYears = {
     "tie rod": "Tie Rod End",
     "sway bar": "Sway Bar Links",
     "brake": "Brake Pads (Front)",
-    "battery": "Battery Replacement",
+    "battery": isEV ? "EV: HV Battery Diagnostic" : "Battery Replacement",
+    "charge port": "EV: Charging Port Repair",
+    "charging port": "EV: Charging Port Repair",
+    "12v battery": "EV: 12V Battery",
+    "drive unit": "EV: Drive Motor / Inverter",
     "coolant": "Coolant Flush",
     "thermostat": "Thermostat Replacement",
     "cv axle": "CV Axle/Halfshaft",
@@ -6962,3 +7114,84 @@ const IS = {
   padding:"10px 14px", color:"#f0ede6", fontSize:"13px", outline:"none",
   fontFamily:"inherit", width:"100%", boxSizing:"border-box",
 };
+
+  // ── EV SYSTEMS ────────────────────────────────────────────────────────────
+  "EV: 12V Battery": {
+    icon: "🔋", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: { "Standard": { low: 200, high: 450 } },
+    labor: "0.5–1 hr",
+    notes: "Tesla 12V: ~$165-200 part + $75-100 labor. Other EVs similar. Service center total typically $250-450. Fails without warning — common on older Teslas.",
+  },
+  "EV: HV Battery Diagnostic": {
+    icon: "🔍", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: { "Standard": { low: 150, high: 350 } },
+    labor: "1–2 hrs",
+    notes: "Specialized high-voltage battery health scan, BMS fault codes, module analysis. Required before any HV repair. Some shops charge toward repair if work is done.",
+  },
+  "EV: Battery Module Repair": {
+    icon: "⚡", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Single Module": { low: 1500, high: 5000 },
+      "Multiple Modules": { low: 4000, high: 9000 },
+    },
+    labor: "4–10 hrs",
+    notes: "Module-level repair is often possible and far cheaper than full pack replacement. Specialized independent EV shops increasingly offer this. Most real-world battery failures are module-level.",
+  },
+  "EV: Battery Pack Replacement (Compact)": {
+    icon: "🔋", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Remanufactured Pack": { low: 6000, high: 10000 },
+      "New Pack": { low: 10000, high: 15000 },
+    },
+    labor: "5–12 hrs",
+    notes: "Compact EVs: Leaf, Model 3 SR, Bolt EV, Ioniq 5 SR, Kia EV6, etc. Full out-of-warranty replacement. Most packs covered 8 yrs/100k mi — always verify warranty status first.",
+  },
+  "EV: Battery Pack Replacement (Large/Luxury)": {
+    icon: "🔋", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Remanufactured Pack": { low: 10000, high: 16000 },
+      "New Pack": { low: 14000, high: 22000 },
+    },
+    labor: "8–15 hrs",
+    notes: "Model S/X, large luxury EVs, long-range packs. Always get diagnostic before assuming full replacement — module repairs ($3,600-$8,000) are often an option. Labor ~$175-200/hr at Tesla.",
+  },
+  "EV: Drive Motor / Inverter": {
+    icon: "⚙️", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: {
+      "Motor Repair": { low: 2000, high: 5000 },
+      "Drive Unit Replacement": { low: 7000, high: 14000 },
+    },
+    labor: "5–12 hrs",
+    notes: "Electric motors are very reliable, but inverter and bearing failures do occur. Tesla drive unit warranty: 8 yrs/100k-150k mi depending on model. Average motor replacement ~$8,000.",
+  },
+  "EV: Charging Port Repair": {
+    icon: "🔌", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: {
+      "Door / Actuator": { low: 250, high: 600 },
+      "Port Assembly": { low: 500, high: 1200 },
+    },
+    labor: "1–3 hrs",
+    notes: "Charge port door actuator failure is common on older Teslas. Full port replacement $500-1,200. Tesla mobile service can often handle at home. On-board charger is a separate, costlier repair.",
+  },
+  "EV: On-Board Charger (OBC)": {
+    icon: "⚡", category: "EV Systems", evOnly: true, trimSensitive: true,
+    costs: { "Replacement": { low: 1000, high: 2500 } },
+    labor: "2–5 hrs",
+    notes: "Controls AC Level 1 and Level 2 charging. Failure means car can only DC fast charge or not charge at all. DC-DC converter sometimes replaced together. $1,000-$2,500 total.",
+  },
+  "EV: Thermal Management Service": {
+    icon: "🌡️", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: {
+      "Coolant Flush": { low: 150, high: 300 },
+      "System Repair": { low: 800, high: 2000 },
+    },
+    labor: "1–4 hrs",
+    notes: "Battery coolant flush every 4-5 years per most manufacturer schedules. Heat pump or battery cooling repairs $800-$2,000+. Neglecting this can accelerate battery degradation.",
+  },
+  "EV: Annual Service": {
+    icon: "✅", category: "EV Systems", evOnly: true, trimSensitive: false,
+    costs: { "Standard": { low: 150, high: 300 } },
+    labor: "1–2 hrs",
+    notes: "EVs have minimal scheduled maintenance. Annual service includes brake inspection (regen braking extends pad life 2-3x), tire rotation, HV battery check, fluid levels, software update check.",
+  },
+
