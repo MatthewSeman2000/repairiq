@@ -7140,6 +7140,8 @@ const modelYears = {
         )}
       </main>
 
+      )} {/* end costs mode */}
+
       {/* ── REPAIR DETAIL MODAL ───────────────────────────────────────────── */}
       {selectedRepair && repairData[selectedRepair] && (
         <ModalContent
@@ -7156,8 +7158,6 @@ const modelYears = {
           Stars={Stars}
         />
       )}
-
-      )} {/* end costs mode */}
 
       {/* ── BEFORE YOU BUY MODE ───────────────────────────────────────────── */}
       {appMode === "buyside" && (
