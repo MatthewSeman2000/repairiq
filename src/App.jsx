@@ -6996,7 +6996,7 @@ const modelYears = {
           const isSel     = selectedRepair === name;
 
           return (
-            <div key={name} onClick={() => handleCard(name)} style={{ background:isSel?"#1a1a12":"#161616", border:`1px solid ${isSel?"#c9a84c44":"#1e1e1e"}`, borderRadius:"10px", padding:"20px", cursor:"pointer", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
+            <div key={name} onClick={() => handleCard(name)} style={{ background:"#161616", border:`1px solid ${isSel?"#c9a84c44":"#1e1e1e"}`, borderRadius:"10px", padding:"20px", cursor:"pointer", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
               <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, opacity:0.7 }} />
 
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"12px" }}>
@@ -7014,81 +7014,6 @@ const modelYears = {
                 <span>⏱ {data.labor}</span>
                 <span style={{ fontSize:"10px", color:"#555", letterSpacing:"0.04em" }}>parts + labor</span>
               </div>
-
-              {isSel && (
-                <div style={{ marginTop:"16px", borderTop:"1px solid #1e1e1e", paddingTop:"16px" }}>
-
-                  {/* Tier breakdown */}
-                  <div style={{ fontSize:"11px", color:"#555", marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em" }}>By Service Tier</div>
-                  {tiers.map(([tier, vals]) => (
-                    <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"5px 0", borderBottom:"1px solid #1a1a1a", fontSize:"13px" }}>
-                      <span style={{ color:"#888" }}>{tier}</span>
-                      <span style={{ color:"#c9a84c" }}>${adj(vals.low, data, name).toLocaleString()} – ${adj(vals.high, data, name).toLocaleString()}</span>
-                    </div>
-                  ))}
-
-                  <div style={{ marginTop:"12px", background:"#111", borderRadius:"6px", padding:"10px 12px", fontSize:"12px", color:"#555", lineHeight:"1.6", fontStyle:"italic" }}>
-                    💡 {data.notes}
-                  </div>
-
-                  {/* Nearby shops */}
-                  <div style={{ marginTop:"18px" }}>
-                    <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
-                      {zip ? `Shops Near ${zip}` : "Nearby Shops"}
-                    </div>
-
-                    {!zip ? (
-                      <div style={{ background:"#111", border:"1px dashed #222", borderRadius:"6px", padding:"16px", textAlign:"center", fontSize:"12px", color:"#444" }}>
-                        📍 Enter your ZIP above to see nearby shops
-                      </div>
-                    ) : loadingShops ? (
-                      <div style={{ textAlign:"center", padding:"20px", color:"#444", fontSize:"13px" }}>
-                        🔍 Finding shops near you…
-                      </div>
-                    ) : (
-                      <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
-                        {shops.map(shop => (
-                          <a key={shop.place_id} href={shop.affiliate_url} onClick={e => e.stopPropagation()}
-                            style={{ display:"block", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px", textDecoration:"none", color:"inherit" }}>
-                            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-                              <div>
-                                <div style={{ fontSize:"13px", fontWeight:"600", color:"#f0ede6", marginBottom:"2px" }}>{shop.name}</div>
-                                <div style={{ fontSize:"11px", color:"#444", marginBottom:"5px" }}>{shop.vicinity}</div>
-                                <Stars rating={shop.rating} />
-                                <span style={{ fontSize:"11px", color:"#444", marginLeft:"6px" }}>({shop.user_ratings_total})</span>
-                              </div>
-                              <div style={{ textAlign:"right", flexShrink:0, marginLeft:"12px" }}>
-                                <div style={{ fontSize:"10px", padding:"3px 8px", borderRadius:"20px", marginBottom:"6px", background:shop.open_now?"#22c55e18":"#ef444418", color:shop.open_now?"#22c55e":"#ef4444" }}>
-                                  {shop.open_now ? "Open Now" : "Closed"}
-                                </div>
-                                <div style={{ fontSize:"11px", color:"#c9a84c" }}>Get Quote →</div>
-                              </div>
-                            </div>
-                          </a>
-                        ))}
-                        <p style={{ fontSize:"10px", color:"#2a2a2a", margin:"4px 0 0", fontStyle:"italic" }}>
-                          * Mock data — connect to Google Places API via backend to show real shops
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Helpful vote */}
-                  <div style={{ marginTop:"16px", display:"flex", alignItems:"center", gap:"10px" }}>
-                    <span style={{ fontSize:"12px", color:"#555" }}>Were these prices helpful?</span>
-                    <button onClick={e => handleVote(e, name, "up")} style={{ background: votes[name]==="up" ? "#22c55e22" : "transparent", border:`1px solid ${votes[name]==="up" ? "#22c55e" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="up" ? "#22c55e" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
-                      👍 {votes[name]==="up" ? "Thanks!" : "Yes"}
-                    </button>
-                    <button onClick={e => handleVote(e, name, "down")} style={{ background: votes[name]==="down" ? "#ef444422" : "transparent", border:`1px solid ${votes[name]==="down" ? "#ef4444" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="down" ? "#ef4444" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
-                      👎 {votes[name]==="down" ? "Got it" : "No"}
-                    </button>
-                  </div>
-
-                  <button style={{ marginTop:"14px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"6px", padding:"10px", fontSize:"12px", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
-                    Get Free Quotes →
-                  </button>
-                </div>
-              )}
             </div>
           );
         })}
@@ -7099,6 +7024,123 @@ const modelYears = {
           </div>
         )}
       </main>
+
+      {/* ── REPAIR DETAIL MODAL ───────────────────────────────────────────── */}
+      {selectedRepair && repairData[selectedRepair] && (() => {
+        const name = selectedRepair;
+        const data = repairData[name];
+        const tiers = Object.entries(data.costs);
+        const cc = catColor(data.category);
+        const loLow  = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
+        const hiHigh = adj(Math.max(...tiers.map(([,v]) => v.high)), data, name);
+        return (
+          <div onClick={() => { setSelectedRepair(null); setShops([]); }}
+            style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
+            <div onClick={e => e.stopPropagation()}
+              style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"520px", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+
+              {/* Color bar */}
+              <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, borderRadius:"14px 14px 0 0" }} />
+
+              {/* Header */}
+              <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e" }}>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                  <div>
+                    <div style={{ fontSize:"24px", marginBottom:"6px" }}>{data.icon}</div>
+                    <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>{name}</div>
+                    <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px" }}>{data.category}</span>
+                  </div>
+                  <button onClick={() => { setSelectedRepair(null); setShops([]); }}
+                    style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, fontFamily:"inherit" }}>
+                    ✕
+                  </button>
+                </div>
+                <div style={{ marginTop:"16px" }}>
+                  <div style={{ fontSize:"28px", fontWeight:"300", letterSpacing:"-0.03em" }}>
+                    ${loLow.toLocaleString()} – ${hiHigh.toLocaleString()}
+                  </div>
+                  <div style={{ fontSize:"12px", color:"#444", display:"flex", gap:"12px", marginTop:"4px" }}>
+                    <span>⏱ {data.labor}</span>
+                    <span style={{ color:"#333" }}>parts + labor</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div style={{ padding:"20px 24px" }}>
+
+                {/* Tier breakdown */}
+                <div style={{ fontSize:"11px", color:"#555", marginBottom:"10px", textTransform:"uppercase", letterSpacing:"0.08em" }}>By Service Tier</div>
+                {tiers.map(([tier, vals]) => (
+                  <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"8px 0", borderBottom:"1px solid #1a1a1a", fontSize:"13px" }}>
+                    <span style={{ color:"#888" }}>{tier}</span>
+                    <span style={{ color:"#c9a84c", fontWeight:"500" }}>${adj(vals.low, data, name).toLocaleString()} – ${adj(vals.high, data, name).toLocaleString()}</span>
+                  </div>
+                ))}
+
+                {/* Notes */}
+                <div style={{ marginTop:"16px", background:"#111", borderRadius:"8px", padding:"12px 14px", fontSize:"12px", color:"#555", lineHeight:"1.7", fontStyle:"italic" }}>
+                  💡 {data.notes}
+                </div>
+
+                {/* Nearby shops */}
+                <div style={{ marginTop:"20px" }}>
+                  <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
+                    {zip ? `Shops Near ${zip}` : "Nearby Shops"}
+                  </div>
+                  {!zip ? (
+                    <div style={{ background:"#111", border:"1px dashed #222", borderRadius:"8px", padding:"16px", textAlign:"center", fontSize:"12px", color:"#444" }}>
+                      📍 Enter your ZIP above to see nearby shops
+                    </div>
+                  ) : loadingShops ? (
+                    <div style={{ textAlign:"center", padding:"20px", color:"#444", fontSize:"13px" }}>
+                      🔍 Finding shops near you…
+                    </div>
+                  ) : (
+                    <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+                      {shops.map(shop => (
+                        <a key={shop.place_id} href={shop.affiliate_url} onClick={e => e.stopPropagation()}
+                          style={{ display:"block", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px", textDecoration:"none", color:"inherit" }}>
+                          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                            <div>
+                              <div style={{ fontSize:"13px", fontWeight:"600", color:"#f0ede6", marginBottom:"2px" }}>{shop.name}</div>
+                              <div style={{ fontSize:"11px", color:"#444", marginBottom:"5px" }}>{shop.vicinity}</div>
+                              <Stars rating={shop.rating} />
+                              <span style={{ fontSize:"11px", color:"#444", marginLeft:"6px" }}>({shop.user_ratings_total})</span>
+                            </div>
+                            <div style={{ textAlign:"right", flexShrink:0, marginLeft:"12px" }}>
+                              <div style={{ fontSize:"10px", padding:"3px 8px", borderRadius:"20px", marginBottom:"6px", background:shop.open_now?"#22c55e18":"#ef444418", color:shop.open_now?"#22c55e":"#ef4444" }}>
+                                {shop.open_now ? "Open Now" : "Closed"}
+                              </div>
+                              <div style={{ fontSize:"11px", color:"#c9a84c" }}>Get Quote →</div>
+                            </div>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Vote */}
+                <div style={{ marginTop:"20px", display:"flex", alignItems:"center", gap:"10px" }}>
+                  <span style={{ fontSize:"12px", color:"#555" }}>Were these prices helpful?</span>
+                  <button onClick={e => handleVote(e, name, "up")} style={{ background: votes[name]==="up" ? "#22c55e22" : "transparent", border:`1px solid ${votes[name]==="up" ? "#22c55e" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="up" ? "#22c55e" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
+                    👍 {votes[name]==="up" ? "Thanks!" : "Yes"}
+                  </button>
+                  <button onClick={e => handleVote(e, name, "down")} style={{ background: votes[name]==="down" ? "#ef444422" : "transparent", border:`1px solid ${votes[name]==="down" ? "#ef4444" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="down" ? "#ef4444" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
+                    👎 {votes[name]==="down" ? "Got it" : "No"}
+                  </button>
+                </div>
+
+                <button style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+                  Get Free Quotes →
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       )} {/* end costs mode */}
 
       {/* ── BEFORE YOU BUY MODE ───────────────────────────────────────────── */}
