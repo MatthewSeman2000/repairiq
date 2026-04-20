@@ -6853,7 +6853,10 @@ const modelYears = {
               <div style={{ fontSize:"22px", fontWeight:"300", letterSpacing:"-0.02em", marginBottom:"4px" }}>
                 ${loLow.toLocaleString()} – ${hiHigh.toLocaleString()}
               </div>
-              <div style={{ fontSize:"12px", color:"#444" }}>⏱ {data.labor}</div>
+              <div style={{ fontSize:"12px", color:"#444", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <span>⏱ {data.labor}</span>
+                <span style={{ fontSize:"10px", color:"#555", letterSpacing:"0.04em" }}>parts + labor</span>
+              </div>
 
               {isSel && (
                 <div style={{ marginTop:"16px", borderTop:"1px solid #1e1e1e", paddingTop:"16px" }}>
