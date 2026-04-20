@@ -6987,7 +6987,7 @@ const modelYears = {
 
       {/* ── REPAIR COSTS MODE ─────────────────────────────────────────────── */}
       {appMode === "costs" && (
-      <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px" }}>
+      <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px", alignItems:"start" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
           const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
