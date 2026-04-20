@@ -2210,11 +2210,20 @@ const knownIssues = {
   },
   "Kia": {
     "Sorento": [
-      { issue: "Engine seizure — theta II 2.4L engine bearing failure; recall issued", years: "2011–2016", severity: "High", source: "NHTSA recall" },
+      { issue: "Theta II engine seizure — 2.4L rod bearing failure; fire risk; NHTSA recall and $758M settlement", years: "2011–2016", severity: "High", source: "NHTSA recall/class action" },
       { issue: "Transmission shudder on 6-speed automatic", years: "2011–2016", severity: "Medium", source: "CarComplaints" },
     ],
     "Optima": [
       { issue: "Theta II engine failure — rod bearing failure on 2.4L and 2.0T", years: "2011–2018", severity: "High", source: "NHTSA recall/class action" },
+    ],
+    "Sportage": [
+      { issue: "Theta II 2.4L engine failure — rod bearing wear, stall, fire risk; recall and extended warranty to 15yr/150k mi", years: "2011–2016", severity: "High", source: "NHTSA recall/class action" },
+    ],
+    "Soul": [
+      { issue: "Piston ring failure on 2.0L — oil consumption, engine knock, stall risk; recall for 2020–2021 models", years: "2020–2021", severity: "High", source: "NHTSA recall" },
+    ],
+    "Forte": [
+      { issue: "Theta II / Nu 2.0L GDI engine oil consumption and potential failure — extended warranty issued", years: "2014–2016", severity: "High", source: "NHTSA/class action" },
     ],
     "K5": [
       { issue: "Smartstream 1.6T or 2.5T engine oil consumption at higher mileage", years: "2021–2023", severity: "Medium", source: "CarComplaints" },
@@ -2329,6 +2338,20 @@ const knownIssues = {
     ],
   },
   "Hyundai": {
+    "Sonata": [
+      { issue: "Theta II 2.0L/2.4L GDI engine failure — rod bearing wear, stall, fire risk; $1.3B class action settlement, 15yr/150k mi warranty extension", years: "2011–2019", severity: "High", source: "NHTSA/class action settlement" },
+      { issue: "Engine fire risk from non-crash events — oil leaks onto hot surfaces from failed bearings", years: "2011–2018", severity: "High", source: "NHTSA/class action" },
+    ],
+    "Santa Fe": [
+      { issue: "Theta II engine failure — same rod bearing issue as Sonata; recall and extended warranty", years: "2013–2019", severity: "High", source: "NHTSA recall" },
+    ],
+    "Tucson": [
+      { issue: "Theta II engine failure on 2.4L GDI — bearing wear, stall risk; covered under extended warranty", years: "2014–2019", severity: "High", source: "NHTSA recall" },
+      { issue: "Dual-clutch DCT transmission hesitation and shudder at low speeds", years: "2016–2019", severity: "Medium", source: "CarComplaints" },
+    ],
+    "Elantra": [
+      { issue: "Gamma 1.6L GDI engine oil consumption and stalling — class action filed; extended warranty issued", years: "2014–2016", severity: "High", source: "NHTSA/class action" },
+    ],
     "Ioniq 5": [
       { issue: "Integrated Charging Control Unit (ICCU) failure — car stops charging, tow required; recall", years: "2022–2023", severity: "High", source: "NHTSA recall" },
       { issue: "12V battery drain causing no-start condition if ICCU fails", years: "2022–2023", severity: "High", source: "NHTSA recall" },
@@ -2338,12 +2361,23 @@ const knownIssues = {
     ],
   },
   "RAM": {
-    "1500": [["Any Trim",1.0],["Tradesman",0.95],["ST",0.95],["Express",0.97],["SLT",1.0],["Big Horn",1.0],["Lone Star",1.0],["Sport",1.05],["Rebel",1.05],["Laramie",1.08],["Laramie Longhorn",1.12],["Limited",1.15],["TRX",1.3]],
+    "1500": [
+      { issue: "TIPM (Totally Integrated Power Module) failure — stalling, no-start, random electrical faults", years: "2011–2014", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Air suspension failure in cold weather — bags deflate below freezing, vehicle unsafe to drive; class action filed", years: "2013–2023", severity: "High", source: "CarComplaints/class action" },
+      { issue: "8-speed automatic transmission shudder — torque converter vibration at 40–50 mph on light throttle", years: "2014–2018", severity: "Medium", source: "CarComplaints" },
+      { issue: "eTorque 5.7L mild hybrid battery drain — loss of power, system failure warnings", years: "2019–2023", severity: "Medium", source: "NHTSA/CarComplaints" },
+      { issue: "Rear window and third brake light water intrusion — leaks into headliner and electronics", years: "2019–2022", severity: "Medium", source: "CarComplaints/NHTSA TSBs" },
+    ],
     "2500": [
-      { issue: "TIPM failure — same as 1500", years: "2011–2014", severity: "High", source: "NHTSA" },
-      { issue: "Exhaust brake valve failure on Cummins diesel — lack of engine braking", years: "2007–2012", severity: "Medium", source: "RepairPal", trims: ["Laramie", "Big Horn", "Power Wagon"] },
+      { issue: "TIPM failure — same stalling/no-start issue as 1500", years: "2011–2014", severity: "High", source: "NHTSA" },
+      { issue: "Cummins exhaust brake valve failure — loss of engine braking on downhills", years: "2007–2012", severity: "Medium", source: "RepairPal" },
+      { issue: "Front axle differential pinion seal leak — common on 4WD models over 80k miles", years: "2010–2018", severity: "Medium", source: "RepairPal" },
+    ],
+    "3500": [
+      { issue: "Rear axle bearing failure on SRW (single rear wheel) models — grinding noise", years: "2014–2018", severity: "Medium", source: "RepairPal" },
     ],
   },
+
   "Subaru": {
     "Outback": [
       { issue: "Head gasket failure — coolant and oil mixing on EJ25 engine", years: "2000–2009", severity: "High", source: "CarComplaints/class action" },
@@ -2475,6 +2509,49 @@ const knownIssues = {
     ],
     "S60": [
       { issue: "Throttle body failure — stalling, sudden loss of power", years: "2001–2009", severity: "High", source: "RepairPal" },
+    ],
+  },
+  "Buick": {
+    "Enclave": [
+      { issue: "Timing chain wear on 3.6L V6 — premature stretch, rough idle, check engine; TSB 11340 covered 2009 Enclave up to 10yr/120k mi", years: "2008–2012", severity: "High", source: "NHTSA/TSB 11340" },
+      { issue: "Water pump failure on 3.6L — coolant leak, overheating risk", years: "2008–2014", severity: "Medium", source: "RepairPal" },
+      { issue: "Power steering fluid leak from rack and pinion — loss of assist", years: "2008–2017", severity: "Medium", source: "RepairPal" },
+    ],
+    "LaCrosse": [
+      { issue: "Transmission shudder on 6-speed automatic — torque converter vibration at 40–50 mph", years: "2010–2016", severity: "Medium", source: "CarComplaints" },
+      { issue: "Oil consumption on 3.6L V6 — burning 1 qt per 2,000 miles", years: "2010–2013", severity: "Medium", source: "RepairPal" },
+    ],
+    "Encore": [
+      { issue: "Turbocharger failure on 1.4L Ecotec — loss of power, oil leak from turbo seals", years: "2013–2017", severity: "Medium", source: "RepairPal/CarComplaints" },
+    ],
+    "Verano": [
+      { issue: "Timing chain stretch on 2.0T Ecotec — same as Chevy Malibu/Cruze; rattling on cold start", years: "2012–2017", severity: "High", source: "RepairPal" },
+    ],
+  },
+  "Cadillac": {
+    "CTS": [
+      { issue: "Timing chain premature wear on 3.6L V6 — P0008/P0017 codes; TSB 11340C covers 2007–2009 up to 10yr/120k mi", years: "2007–2009", severity: "High", source: "NHTSA/TSB 11340C" },
+      { issue: "CUE touchscreen delamination and unresponsiveness — screen cracks or ghost inputs; class action", years: "2013–2018", severity: "Medium", source: "CarComplaints/class action" },
+      { issue: "Rear differential clutch pack failure — grinding on turns", years: "2014–2019", severity: "Medium", source: "RepairPal", trims: ["Vsport", "V"] },
+    ],
+    "ATS": [
+      { issue: "CUE touchscreen delamination — same failure as CTS; class action settlement", years: "2013–2018", severity: "Medium", source: "CarComplaints/class action" },
+      { issue: "Brake pedal bracket fracture — can cause complete brake loss; NHTSA recall", years: "2013–2018", severity: "High", source: "NHTSA recall" },
+      { issue: "8-speed transmission shudder — torque converter vibration; updated fluid and TSB 18-NA-355", years: "2016–2018", severity: "Medium", source: "CarComplaints/TSB 18-NA-355" },
+    ],
+    "Escalade": [
+      { issue: "DFM lifter collapse on 6.2L V8 — ticking, misfire, stall; GM recall April 2025 covering 597k vehicles (2021–2024)", years: "2021–2024", severity: "High", source: "NHTSA recall 25V274000" },
+      { issue: "Magneride shock absorber leakage — oily shock body, poor damping, Service Suspension warning", years: "2015–2020", severity: "Medium", source: "CarComplaints/TSBs" },
+      { issue: "CUE touchscreen failure — delamination and ghost inputs; $1,200+ out-of-warranty", years: "2013–2018", severity: "Medium", source: "CarComplaints" },
+    ],
+    "CT4": [
+      { issue: "2.0T engine oil consumption — some owners report 1 qt per 3,000 miles", years: "2020–2022", severity: "Medium", source: "CarComplaints" },
+    ],
+    "XT5": [
+      { issue: "8-speed transmission shudder at 40–55 mph — torque converter; updated fluid resolves most cases", years: "2017–2021", severity: "Medium", source: "CarComplaints/TSB 18-NA-355" },
+    ],
+    "Lyriq": [
+      { issue: "Charging and software update failures — ICCU and over-the-air update issues causing car to not charge", years: "2023–2024", severity: "Medium", source: "CarComplaints/NHTSA" },
     ],
   },
 };
