@@ -392,6 +392,151 @@ const repairData = {
     labor: "5–10 hrs",
     notes: "Labor-intensive — requires dashboard removal on most vehicles. Foggy windshield or sweet smell are signs.",
   },
+
+  // ── BODY / GLASS ─────────────────────────────────────────────────────────
+  "Windshield Replacement": {
+    icon: "🪟", category: "Maintenance", trimSensitive: false, yearSensitive: true,
+    costs: {
+      "Standard (no ADAS)":       { low: 250,  high: 600  },
+      "With ADAS Recalibration":  { low: 500,  high: 1200 },
+      "Luxury / OEM Glass":       { low: 800,  high: 1800 },
+    },
+    labor: "1–3 hrs",
+    notes: "Standard glass $250–$600. 85% of 2023+ vehicles require ADAS recalibration ($300–$600 extra) after replacement. Many comprehensive insurance policies cover windshield with no deductible — check before paying out of pocket.",
+  },
+
+  // ── ENGINE ────────────────────────────────────────────────────────────────
+  "Serpentine Belt": {
+    icon: "⏱️", category: "Engine", trimSensitive: false, iceOnly: true,
+    costs: {
+      "Belt Only":          { low: 100, high: 200 },
+      "Belt + Tensioner":   { low: 200, high: 380 },
+    },
+    labor: "0.5–1.5 hrs",
+    notes: "RepairPal average $84–$231 depending on vehicle. Replace every 60–100k miles. A snapping belt leaves you stranded instantly — replace at first signs of cracking or squealing.",
+  },
+  "Radiator Replacement": {
+    icon: "🌡️", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Economy/Import":   { low: 700,  high: 1200 },
+      "Domestic/Truck":   { low: 900,  high: 1500 },
+      "Luxury/European":  { low: 1200, high: 1900 },
+    },
+    labor: "2–4 hrs",
+    notes: "RepairPal average $1,042–$1,196. Always pressure-test the full cooling system during replacement. Consider replacing hoses, thermostat, and coolant at the same time to avoid a repeat job.",
+  },
+  "Fuel Pump Replacement": {
+    icon: "⛽", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "In-tank (most vehicles)":  { low: 900,  high: 1500 },
+      "High-pressure (truck/V8)": { low: 1200, high: 1800 },
+    },
+    labor: "2–4 hrs",
+    notes: "RepairPal average $1,247–$1,506. Symptoms: hard starts, sputtering at speed, sudden stall. Replace fuel filter at same time. Diagnosis is important — similar symptoms can come from a fuel relay or clogged filter.",
+  },
+  "Catalytic Converter": {
+    icon: "🔧", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Economy/Direct-fit":   { low: 800,  high: 1800 },
+      "V6/V8 or Dual":        { low: 1500, high: 3500 },
+      "Luxury/European":      { low: 2500, high: 5500 },
+    },
+    labor: "1–3 hrs",
+    notes: "RepairPal range $936–$5,460 depending on make. Toyota/Honda converters are expensive due to higher precious metal content. California CARB-compliant converters cost more. Confirm it's actually failed (O2 sensors can mimic symptoms) before replacing.",
+  },
+  "Oil Pump Replacement": {
+    icon: "🛢️", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: { "Standard": { low: 1200, high: 2200 } },
+    labor: "4–8 hrs",
+    notes: "RepairPal average $1,569–$2,099. Low oil pressure warning light is the main trigger. Verify with a mechanical gauge before replacing — a faulty oil pressure sensor ($50–$150) is a much cheaper fix and can show identical symptoms.",
+  },
+
+  // ── DRIVETRAIN ────────────────────────────────────────────────────────────
+  "Transmission Rebuild / Replacement": {
+    icon: "⚙️", category: "Drivetrain", trimSensitive: true,
+    costs: {
+      "Rebuild (manual)":         { low: 1500, high: 3500 },
+      "Rebuild (automatic)":      { low: 2500, high: 5000 },
+      "Remanufactured unit":      { low: 3500, high: 6500 },
+      "New OEM replacement":      { low: 5000, high: 8500 },
+    },
+    labor: "8–15 hrs",
+    notes: "RepairPal average $5,700–$6,259 for full replacement. Get a diagnosis first — fluid service, solenoid, or valve body repairs ($300–$1,200) can fix many issues without a full rebuild. CVTs and DCTs trend toward the higher end.",
+  },
+
+  // ── SUSPENSION & STEERING ─────────────────────────────────────────────────
+  "Wheel Bearing / Hub Assembly": {
+    icon: "🎯", category: "Suspension", trimSensitive: false,
+    costs: {
+      "Standard (bolt-on hub)":   { low: 300, high: 550 },
+      "Press-fit / AWD / Truck":  { low: 450, high: 750 },
+    },
+    labor: "1.5–3 hrs",
+    notes: "RepairPal average $343–$504. Symptom: humming or rumbling noise that changes pitch when swerving. Front bearings typically cost 15–20% more than rear. ABS relearn may be required after replacement ($50–$150 extra at some shops).",
+  },
+  "Control Arm Replacement": {
+    icon: "🔧", category: "Suspension", trimSensitive: false,
+    costs: {
+      "Single arm (aftermarket)": { low: 350, high: 600  },
+      "Single arm (OEM)":         { low: 500, high: 900  },
+      "Both front arms":          { low: 700, high: 1500 },
+    },
+    labor: "1.5–3 hrs per arm",
+    notes: "Wheel alignment ($100–$175) is always required after control arm replacement. Symptoms include clunking over bumps, pulling, or uneven tire wear. Often combined with ball joint or bushing replacement.",
+  },
+  "Power Steering Rack (Rack & Pinion)": {
+    icon: "🎯", category: "Suspension", trimSensitive: true,
+    costs: {
+      "Remanufactured":   { low: 1200, high: 2000 },
+      "OEM New":          { low: 1800, high: 3000 },
+    },
+    labor: "3–6 hrs",
+    notes: "RepairPal average $2,027–$2,452. Symptoms: stiff steering, fluid leak, clunking while turning. Many modern vehicles require sub-frame removal — verify diagnosis before committing. Alignment required after replacement.",
+  },
+  "Power Steering Pump": {
+    icon: "💧", category: "Suspension", trimSensitive: false, iceOnly: true,
+    costs: {
+      "Remanufactured":   { low: 500, high: 800  },
+      "OEM New":          { low: 700, high: 1000 },
+    },
+    labor: "1.5–3 hrs",
+    notes: "RepairPal average $699–$925. Symptoms: whining noise when turning, heavy steering, fluid leak. Replace hoses and fluid reservoir at same time to prevent repeat failures.",
+  },
+
+  // ── ELECTRICAL ────────────────────────────────────────────────────────────
+  "Wheel Speed Sensor (ABS)": {
+    icon: "📡", category: "Electrical", trimSensitive: false,
+    costs: { "Standard (per sensor)": { low: 200, high: 400 } },
+    labor: "0.5–1.5 hrs",
+    notes: "ABS warning light and traction control light are the main symptoms. Diagnosis important — tone ring damage or wiring issues can mimic a bad sensor at lower cost. YourMechanic average $150–$350 per sensor.",
+  },
+  "TPMS Sensor (per tire)": {
+    icon: "🔋", category: "Electrical", trimSensitive: false,
+    costs: {
+      "Aftermarket (each)": { low: 50,  high: 150 },
+      "OEM (each)":         { low: 100, high: 250 },
+      "All 4 sensors":      { low: 250, high: 700 },
+    },
+    labor: "0.5 hr per sensor",
+    notes: "KBB average $314–$368 for all 4. Sensors last 5–7 years (battery-limited). Programming/relearn required after replacement ($25–$50 per sensor at most shops). Required on all US vehicles since 2007.",
+  },
+  "Crankshaft Position Sensor": {
+    icon: "⚡", category: "Electrical", trimSensitive: false, iceOnly: true,
+    costs: { "Standard": { low: 175, high: 350 } },
+    labor: "0.5–2 hrs",
+    notes: "P0335/P0336 are the most common codes. Symptoms: no-start, intermittent stall, rough running. Location varies widely — some are a 15-minute job, others require intake manifold removal.",
+  },
+  "Throttle Body Cleaning / Replacement": {
+    icon: "💨", category: "Electrical", trimSensitive: false, iceOnly: true,
+    costs: {
+      "Cleaning":     { low: 100, high: 200 },
+      "Replacement":  { low: 300, high: 700 },
+    },
+    labor: "0.5–1.5 hrs",
+    notes: "Carbon buildup causes rough idle, hesitation, or stalling — cleaning often resolves it without replacement. Electronic throttle bodies (drive-by-wire) require relearn procedure after cleaning or replacement.",
+  },
+
+
   "Blend Door Actuator": {
     icon: "🌡️", category: "HVAC", trimSensitive: false,
     costs: { "Standard": { low: 150, high: 350 } },
@@ -5394,6 +5539,8 @@ const yearSensitiveRepairs = new Set([
   "Head Gasket",
   "Valve Cover Gasket",
   "CV Axle/Halfshaft",
+  "Windshield Replacement",
+  "Radiator Replacement",
 ]);
 
 // Trim multipliers per model — stacks on top of make × model multiplier
@@ -6626,6 +6773,16 @@ const modelYears = {
     "sway bar": "Sway Bar Links",
     "brake": "Brake Pads (Front)",
     "battery": isEV ? "EV: HV Battery Diagnostic" : "Battery Replacement",
+    "catalytic": "Catalytic Converter",
+    "wheel bearing": "Wheel Bearing / Hub Assembly",
+    "hub assembly": "Wheel Bearing / Hub Assembly",
+    "fuel pump": "Fuel Pump Replacement",
+    "serpentine": "Serpentine Belt",
+    "windshield": "Windshield Replacement",
+    "radiator": "Radiator Replacement",
+    "rack and pinion": "Power Steering Rack (Rack & Pinion)",
+    "control arm": "Control Arm Replacement",
+    "transmission": "Transmission Rebuild / Replacement",
     "charge port": "EV: Charging Port Repair",
     "charging port": "EV: Charging Port Repair",
     "12v battery": "EV: 12V Battery",
