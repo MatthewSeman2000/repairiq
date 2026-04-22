@@ -6314,7 +6314,7 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   );
 }
 
-function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon }) {
+function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare }) {
   const items = Array.from(basket.entries()).map(([name, tierName]) => {
     const d = repairData[name];
     if (!d) return null;
@@ -6328,7 +6328,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
 
   return (
     <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
-      <div onClick={e => e.stopPropagation()} style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+      <div onClick={e => e.stopPropagation()} className="print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Header */}
         <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e", display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
@@ -6380,6 +6380,14 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
           <button style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
             Get Shop Quotes →
           </button>
+          <div className="no-print" style={{ display:"flex", gap:"8px", marginTop:"8px" }}>
+            <button onClick={() => handleShare(shareURL, "RepairIQ Estimate")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+              🔗 Share
+            </button>
+            <button onClick={() => window.print()} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+              🖨️ Print
+            </button>
+          </div>
           <button onClick={onClear} style={{ width:"100%", background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginTop:"8px" }}>
             Clear All &amp; Start Over
           </button>
@@ -6403,7 +6411,7 @@ function RepairIcon({ icon, size = 20 }) {
 }
 
 
-function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars }) {
+function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare }) {
   const tiers = Object.entries(data.costs);
   const cc = catColor(data.category);
   const loLow  = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
@@ -6412,7 +6420,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
     <div onClick={onClose}
       style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
       <div onClick={e => e.stopPropagation()}
-        style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"520px", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+        className="print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"520px", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Color bar */}
         <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, borderRadius:"14px 14px 0 0" }} />
@@ -6510,6 +6518,14 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
           <button style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
             Get Free Quotes →
           </button>
+          <div className="no-print" style={{ display:"flex", gap:"8px", marginTop:"8px" }}>
+            <button onClick={() => handleShare(shareURL, `${name} — RepairIQ Estimate`)} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+              🔗 Share
+            </button>
+            <button onClick={() => window.print()} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+              🖨️ Print
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -6538,6 +6554,28 @@ export default function RepairIQ() {
   const [showBasket, setShowBasket]       = useState(false);
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside"
+
+// ── URL STATE SYNC ────────────────────────────────────────────────────────
+  // Parse URL params on first render to restore shared state
+  useState(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("make"))  { setMake(p.get("make")); }
+    if (p.get("model")) { setModel(p.get("model")); }
+    if (p.get("trim"))  { setTrim(p.get("trim")); }
+    if (p.get("year"))  { setYear(p.get("year")); }
+    if (p.get("zip"))   { setZip(p.get("zip")); setZipInput(p.get("zip")); }
+    if (p.get("repair")) { setSelectedRepair(p.get("repair")); }
+    if (p.get("repairs")) {
+      try {
+        const restored = new Map();
+        p.get("repairs").split(",").forEach(pair => {
+          const [name, tier] = pair.split(":").map(decodeURIComponent);
+          if (name && tier) restored.set(name, tier);
+        });
+        if (restored.size > 0) setBasket(restored);
+      } catch {}
+    }
+  });
 
 // Production year ranges — verified manufacturer data (start year, end year)
 const modelYears = {
@@ -7182,6 +7220,45 @@ const modelYears = {
     return { low, high };
   };
 
+  const buildShareURL = (opts = {}) => {
+    const p = new URLSearchParams();
+    const m = opts.make  ?? make;
+    const mo = opts.model ?? model;
+    const tr = opts.trim  ?? trim;
+    const yr = opts.year  ?? year;
+    const z  = opts.zip   ?? zip;
+    if (m  !== "Any Make")  p.set("make",  m);
+    if (mo !== "Any Model") p.set("model", mo);
+    if (tr !== "Any Trim")  p.set("trim",  tr);
+    if (yr !== "Any Year")  p.set("year",  yr);
+    if (z)                  p.set("zip",   z);
+    if (opts.repair)        p.set("repair", opts.repair);
+    if (opts.basket && opts.basket.size > 0) {
+      const encoded = Array.from(opts.basket.entries())
+        .map(([n, t]) => `${encodeURIComponent(n)}:${encodeURIComponent(t)}`)
+        .join(",");
+      p.set("repairs", encoded);
+    }
+    const base = window.location.origin + window.location.pathname;
+    return p.toString() ? `${base}?${p.toString()}` : base;
+  };
+
+  const handleShare = async (url, title = "RepairIQ Estimate") => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text: "Check out this repair cost estimate", url });
+        return;
+      } catch {}
+    }
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("Link copied to clipboard!");
+    } catch {
+      prompt("Copy this link:", url);
+    }
+  };
+
   const isEV = make === "Tesla" || (model !== "Any Model" && evModels.has(model));
 
   const filtered = useMemo(() =>
@@ -7532,6 +7609,8 @@ const modelYears = {
           onRemove={removeFromBasket}
           onClear={() => { setBasket(new Map()); setShowBasket(false); }}
           RepairIcon={RepairIcon}
+          shareURL={buildShareURL({ basket })}
+          handleShare={handleShare}
         />
       )}
 
@@ -7549,6 +7628,8 @@ const modelYears = {
           votes={votes}
           handleVote={handleVote}
           Stars={Stars}
+          shareURL={buildShareURL({ repair: selectedRepair })}
+          handleShare={handleShare}
         />
       )}
 
@@ -7791,7 +7872,15 @@ const modelYears = {
         </div>
       </footer>
 
-      <style>{`select option { background: #1a1a1a; }`}</style>
+      <style>{`
+        select option { background: #1a1a1a; }
+        @media print {
+          body > * { display: none !important; }
+          .print-target { display: block !important; position: static !important; background: white !important; color: black !important; box-shadow: none !important; border: none !important; max-height: none !important; overflow: visible !important; }
+          .print-target * { color: black !important; background: white !important; border-color: #ccc !important; }
+          .no-print { display: none !important; }
+        }
+      `}</style>
     </div>
   );
 }
