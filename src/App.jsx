@@ -7830,44 +7830,183 @@ const modelYears = {
               )}
 
               {/* Inspection Checklist */}
-              <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px" }}>
-                <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"16px" }}>Pre-Purchase Inspection Checklist</div>
-                <div style={{ display:"grid", gap:"8px" }}>
-                  {[
-                    ...(yearIssues.filter(i => i.severity === "High").map(i => {
-                      const keyword = Object.keys(issueToRepair).find(k => i.issue.toLowerCase().includes(k));
-                      if (!keyword) return null;
-                      const checks = {
-                        "head gasket": "Check for white exhaust smoke, milky oil on dipstick, and coolant loss",
-                        "timing chain": "Listen for metallic rattle on cold start — disappears within 30 seconds if chain is worn",
-                        "timing belt": "Ask for service records confirming timing belt replacement",
-                        "water pump": "Check for coolant leaks near water pump, inspect for weeping from weep hole",
-                        "transmission": "Test all gears — feel for slipping, hesitation, shudder at highway speeds",
-                        "cvt": "Feel for judder during acceleration from a stop, especially when warm",
-                        "oil consumption": "Check oil level and look for blue smoke on acceleration or deceleration",
-                        "air suspension": "Check if vehicle sits level — park on flat surface and inspect all four corners",
-                        "spark plug": "Ask for records of spark plug replacement, listen for misfires at idle",
-                        "brake": "Test brakes hard from 40mph — feel for pulsation, pulling, or grinding",
-                        "battery": "Ask when battery was last replaced, test with a battery tester at the shop",
-                      };
-                      return checks[keyword] ? { text: checks[keyword], severity: "High" } : null;
-                    }).filter(Boolean)),
-                    { text: "Check all fluid levels — oil, coolant, brake fluid, transmission fluid", severity: "Low" },
-                    { text: "Run a vehicle history report (Carfax or AutoCheck) for accidents and title issues", severity: "Low" },
-                    { text: "Have an independent mechanic perform a pre-purchase inspection ($100–$200)", severity: "Low" },
-                    { text: "Test all electronics — windows, locks, infotainment, climate control", severity: "Low" },
-                    { text: "Check for rust under the vehicle, around wheel wells, and on the frame", severity: "Low" },
-                    { text: "Test drive on highway — feel for vibration, pulling, or unusual noise at speed", severity: "Low" },
-                  ].map((item, i) => (
-                    <div key={i} style={{ display:"flex", gap:"10px", padding:"10px 12px", background:"#0e0e0e", borderRadius:"6px" }}>
-                      <span style={{ color: item.severity === "High" ? "#ef4444" : "#22c55e", flexShrink:0 }}>
-                        {item.severity === "High" ? "⚠️" : "✓"}
-                      </span>
-                      <span style={{ fontSize:"13px", color:"#bbb", lineHeight:"1.5" }}>{item.text}</span>
+              {(() => {
+                const vehicleWarnings = yearIssues.filter(i => i.severity === "High").map(issue => {
+                  const lower = issue.issue.toLowerCase();
+                  if (lower.includes("head gasket") || lower.includes("coolant"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — check for white exhaust smoke, milky oil on dipstick, coolant loss`, severity:"High" };
+                  if (lower.includes("timing chain") || lower.includes("timing belt"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — listen for metallic rattle on cold start, ask for service records`, severity:"High" };
+                  if (lower.includes("engine") || lower.includes("oil consumption") || lower.includes("lifter") || lower.includes("bearing"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — check oil level and color, listen for knocking or ticking`, severity:"High" };
+                  if (lower.includes("transmission") || lower.includes("cvt") || lower.includes("gearbox"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — test all gears, feel for slipping or shudder`, severity:"High" };
+                  if (lower.includes("air suspension"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — park on flat surface and inspect all four corners for level ride height`, severity:"High" };
+                  if (lower.includes("turbo"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — listen for whining or lag, check for oil smoke on hard acceleration`, severity:"High" };
+                  if (lower.includes("rust") || lower.includes("frame"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — inspect frame, underbody, and wheel wells carefully`, severity:"High" };
+                  if (lower.includes("brake"))
+                    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — test brakes hard from 40mph, feel for pulsation or pulling`, severity:"High" };
+                  if (lower.includes("recall"))
+                    return { text: `⚠️ Known recall: ${issue.issue.split("—")[0].trim()} — verify recall was completed via NHTSA.gov VIN lookup`, severity:"High" };
+                  return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — verify with a pre-purchase inspection`, severity:"High" };
+                }).filter(Boolean);
+
+                const sections = [
+                  {
+                    title: "Engine & Fluids",
+                    icon: "🛢️",
+                    items: [
+                      "Check oil level and color — should be amber/brown, not black, milky, or low",
+                      "Check coolant level and color — should be green/orange, not rusty or milky",
+                      "Check transmission fluid — should be red/pink, not brown or burnt-smelling",
+                      "Inspect brake fluid reservoir — should be clear to light yellow",
+                      "Start cold — listen for knocking, ticking, or rattling that fades after warmup",
+                      "Check for white smoke from exhaust (coolant leak) or blue smoke (oil burning)",
+                      "Look for oil leaks under the vehicle and on engine block surfaces",
+                      "Check for coolant leaks around hoses, radiator, and water pump",
+                    ]
+                  },
+                  {
+                    title: "Transmission & Drivetrain",
+                    icon: "⚙️",
+                    items: [
+                      "Test all gears — feel for hesitation, slipping, hard shifts, or shuddering",
+                      "On CVT vehicles: feel for judder or surging from a stop, especially when warm",
+                      "Test 4WD / AWD engagement if equipped — no grinding or hesitation",
+                      "Listen for clunking or vibration under load and when coasting in gear",
+                      "Check for differential or axle fluid leaks on AWD/4WD vehicles",
+                    ]
+                  },
+                  {
+                    title: "Brakes & Suspension",
+                    icon: "🛑",
+                    items: [
+                      "Test brakes firmly from 40mph — no pulsation, pulling, or grinding",
+                      "Check brake pedal feel — should be firm, not spongy or sinking to the floor",
+                      "Bounce each corner of the vehicle — shocks/struts should dampen in 1–2 cycles",
+                      "Listen for clunking over speed bumps and turning at low speed (ball joints, tie rods)",
+                      "Check steering for excessive play or pulling to one side",
+                      "Inspect tires for uneven wear — indicates alignment or suspension issues",
+                      "Check tire tread depth and look for sidewall cracking",
+                    ]
+                  },
+                  {
+                    title: "Body & Exterior",
+                    icon: "🪟",
+                    items: [
+                      "Check for rust on frame, underbody, wheel wells, and rocker panels",
+                      "Inspect body panel gaps — inconsistent gaps suggest prior collision repair",
+                      "Check paint for overspray on rubber trim — sign of repainted panels",
+                      "Look for water stains on headliner and carpet (flood damage)",
+                      "Test all windows — up, down, and ensure seals are tight",
+                      "Check all exterior lights — headlights, taillights, turn signals, reverse",
+                      "Inspect windshield for cracks, chips, or delamination",
+                    ]
+                  },
+                  {
+                    title: "Interior & Electronics",
+                    icon: "🖥️",
+                    items: [
+                      "Test infotainment, Bluetooth, backup camera, and navigation",
+                      "Test all power features — seats, mirrors, locks, sunroof",
+                      "Check AC and heat — full temperature range and all fan speeds",
+                      "Verify no warning lights are illuminated on the dashboard",
+                      "Plug in an OBD-II scanner — check for stored fault codes (P, B, U, C codes)",
+                      "Test horn, wipers, and all interior lighting",
+                    ]
+                  },
+                  {
+                    title: "Documents & History",
+                    icon: "📋",
+                    items: [
+                      "Run a VIN report (Carfax or AutoCheck) — check for accidents, title brands, and odometer rollbacks",
+                      "Verify all recalls are completed at NHTSA.gov/recalls using the VIN",
+                      "Ask for service records — look for consistent oil change and maintenance history",
+                      "Confirm title is clean — no salvage, flood, lemon law, or rebuilt brands",
+                      "Check that VIN on dashboard, door jamb, and title all match",
+                      "Have an independent mechanic perform a full pre-purchase inspection ($100–$200) — worth every penny",
+                    ]
+                  },
+                ];
+
+                const [checked, setChecked] = useState({});
+                const toggleCheck = (key) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
+                const totalItems = sections.reduce((s, sec) => s + sec.items.length, 0) + vehicleWarnings.length;
+                const checkedCount = Object.values(checked).filter(Boolean).length;
+
+                return (
+                  <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"16px", flexWrap:"wrap", gap:"10px" }}>
+                      <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c" }}>
+                        Pre-Purchase Inspection Checklist
+                      </div>
+                      <div style={{ display:"flex", gap:"8px", alignItems:"center" }}>
+                        <span style={{ fontSize:"12px", color:"#555" }}>{checkedCount}/{totalItems} checked</span>
+                        <button onClick={() => {
+                          const html = `
+                            <h1>Pre-Purchase Checklist — ${make} ${model}${year !== "Any Year" ? " " + year : ""}</h1>
+                            <p style="color:#666;margin-bottom:24px">${zip ? "ZIP " + zip + " · " : ""}Generated by RepairIQ</p>
+                            ${vehicleWarnings.length > 0 ? `<h2 style="color:#c0392b;margin-bottom:8px">⚠️ Vehicle-Specific Warnings</h2>${vehicleWarnings.map(w => `<p style="margin:6px 0;padding:8px;background:#fff3f3;border-left:3px solid #c0392b">${w.text}</p>`).join("")}` : ""}
+                            ${sections.map(sec => `
+                              <h2 style="margin-top:20px;margin-bottom:8px">${sec.icon} ${sec.title}</h2>
+                              ${sec.items.map(item => `<p style="margin:4px 0;padding:4px 0;border-bottom:1px solid #eee">☐ ${item}</p>`).join("")}
+                            `).join("")}
+                          `;
+                          const w = window.open("", "_blank", "width=800,height=600");
+                          if (!w) return;
+                          w.document.write(`<!DOCTYPE html><html><head><title>Pre-Purchase Checklist</title><style>body{font-family:system-ui,sans-serif;padding:32px;max-width:700px;margin:0 auto;color:#111}h1{font-size:20px;margin-bottom:4px}h2{font-size:14px;font-weight:600;margin-top:20px}p{font-size:13px;line-height:1.6}@media print{body{padding:16px}}</style></head><body>${html}<p style="margin-top:32px;color:#aaa;font-size:11px;border-top:1px solid #eee;padding-top:12px">RepairIQ · repairiqhq.com</p></body></html>`);
+                          w.document.close();
+                          w.focus();
+                          setTimeout(() => { w.print(); w.close(); }, 400);
+                        }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"5px 12px", fontSize:"11px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+                          🖨️ Print
+                        </button>
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+
+                    {/* Vehicle-specific warnings */}
+                    {vehicleWarnings.length > 0 && (
+                      <div style={{ marginBottom:"20px" }}>
+                        <div style={{ fontSize:"11px", color:"#ef4444", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px" }}>Vehicle-Specific Warnings</div>
+                        {vehicleWarnings.map((w, i) => {
+                          const key = `warn-${i}`;
+                          return (
+                            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"10px", padding:"10px 12px", background: checked[key] ? "#0a1a0a" : "#1a0a0a", borderRadius:"6px", marginBottom:"6px", border:`1px solid ${checked[key] ? "#22c55e33" : "#ef444433"}`, cursor:"pointer", transition:"all 0.15s" }}>
+                              <span style={{ fontSize:"16px", flexShrink:0, marginTop:"1px" }}>{checked[key] ? "✅" : "☐"}</span>
+                              <span style={{ fontSize:"12px", color: checked[key] ? "#555" : "#e88", lineHeight:"1.5", textDecoration: checked[key] ? "line-through" : "none" }}>{w.text}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Sectioned checklist */}
+                    {sections.map(sec => (
+                      <div key={sec.title} style={{ marginBottom:"20px" }}>
+                        <div style={{ fontSize:"12px", fontWeight:"500", color:"#888", marginBottom:"8px", display:"flex", alignItems:"center", gap:"6px" }}>
+                          <span>{sec.icon}</span> {sec.title}
+                        </div>
+                        {sec.items.map((item, j) => {
+                          const key = `${sec.title}-${j}`;
+                          return (
+                            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"10px", padding:"8px 10px", background: checked[key] ? "#0a120a" : "#0e0e0e", borderRadius:"6px", marginBottom:"4px", cursor:"pointer", border:`1px solid ${checked[key] ? "#22c55e22" : "transparent"}`, transition:"all 0.15s" }}>
+                              <span style={{ fontSize:"15px", flexShrink:0, marginTop:"1px", color: checked[key] ? "#22c55e" : "#444" }}>{checked[key] ? "✅" : "☐"}</span>
+                              <span style={{ fontSize:"12px", color: checked[key] ? "#555" : "#bbb", lineHeight:"1.5", textDecoration: checked[key] ? "line-through" : "none" }}>{item}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ))}
+
+                    <div style={{ fontSize:"11px", color:"#444", fontStyle:"italic", marginTop:"8px" }}>
+                      Tap any item to check it off during your inspection.
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Disclaimer */}
               <div style={{ fontSize:"11px", color:"#444", textAlign:"center", fontStyle:"italic", padding:"0 8px" }}>
