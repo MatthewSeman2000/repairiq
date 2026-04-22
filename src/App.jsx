@@ -6419,10 +6419,14 @@ function RepairIcon({ icon, size = 20 }) {
 
 
 function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML }) {
+  const [shopType, setShopType] = React.useState("both"); // "both" | "dealer" | "independent"
+  const shopMult = shopType === "dealer" ? 1.18 : shopType === "independent" ? 0.80 : 1.0;
+  const sadj = (v, d, n) => Math.round(adj(v, d, n) * shopMult);
+
   const tiers = Object.entries(data.costs);
   const cc = catColor(data.category);
-  const loLow  = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
-  const hiHigh = adj(Math.max(...tiers.map(([,v]) => v.high)), data, name);
+  const loLow  = sadj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
+  const hiHigh = sadj(Math.max(...tiers.map(([,v]) => v.high)), data, name);
   return (
     <div onClick={onClose}
       style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
@@ -6454,6 +6458,21 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
               <span style={{ color:"#333" }}>parts + labor</span>
             </div>
           </div>
+
+          {/* Shop type toggle */}
+          <div style={{ display:"flex", gap:"6px", marginTop:"14px" }}>
+            {[["both","Both"], ["independent","Independent"], ["dealer","Dealer"]].map(([val, label]) => (
+              <button key={val} onClick={() => setShopType(val)}
+                style={{ flex:1, padding:"6px 0", fontSize:"11px", fontWeight:"500", fontFamily:"inherit", borderRadius:"6px", cursor:"pointer", letterSpacing:"0.04em", border:`1px solid ${shopType===val ? "#c9a84c" : "#2a2a2a"}`, background: shopType===val ? "#c9a84c18" : "transparent", color: shopType===val ? "#c9a84c" : "#555", transition:"all 0.15s" }}>
+                {label}
+              </button>
+            ))}
+          </div>
+          {shopType !== "both" && (
+            <div style={{ fontSize:"11px", color:"#555", marginTop:"8px", fontStyle:"italic" }}>
+              {shopType === "independent" ? "⬇ ~20% below average — independents have lower overhead and flexible pricing" : "⬆ ~18% above average — dealers charge more for factory-trained techs and OEM parts"}
+            </div>
+          )}
         </div>
 
         {/* Body */}
@@ -6464,7 +6483,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
           {tiers.map(([tier, vals]) => (
             <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"8px 0", borderBottom:"1px solid #1a1a1a", fontSize:"13px" }}>
               <span style={{ color:"#888" }}>{tier}</span>
-              <span style={{ color:"#c9a84c", fontWeight:"500" }}>${adj(vals.low, data, name).toLocaleString()} – ${adj(vals.high, data, name).toLocaleString()}</span>
+              <span style={{ color:"#c9a84c", fontWeight:"500" }}>${sadj(vals.low, data, name).toLocaleString()} – ${sadj(vals.high, data, name).toLocaleString()}</span>
             </div>
           ))}
 
