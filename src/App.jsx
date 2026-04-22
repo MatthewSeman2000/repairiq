@@ -6289,30 +6289,66 @@ const Stars = ({ rating }) => {
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
 
-function InspectionChecklist({ yearIssues, make, model, year, zip }) {
+function InspectionChecklist({ yearIssues, allModelIssues, make, model, year, zip }) {
 
-const vehicleWarnings = yearIssues.filter(i => i.severity === "High").map(issue => {
+const issuesForChecklist = allModelIssues.filter(i => i.severity === "High" || i.severity === "Medium");
+
+const vehicleWarnings = issuesForChecklist.map(issue => {
   const lower = issue.issue.toLowerCase();
+
+  // Determine if this issue applies to the selected year
+  let yearRelevant = true;
+  if (year !== "Any Year") {
+    const match = issue.years.match(/(\d{4})[–\-](\d{4})/);
+    if (match) {
+      const yr = parseInt(year);
+      yearRelevant = yr >= parseInt(match[1]) && yr <= parseInt(match[2]);
+    }
+  }
+
+  const prefix = yearRelevant ? "⚠️" : "ℹ️";
+  const yearNote = !yearRelevant ? ` (affects ${issue.years}, not your year — still worth checking)` : "";
+
+  let tip = "verify with a pre-purchase inspection";
   if (lower.includes("head gasket") || lower.includes("coolant"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — check for white exhaust smoke, milky oil on dipstick, coolant loss`, severity:"High" };
-  if (lower.includes("timing chain") || lower.includes("timing belt"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — listen for metallic rattle on cold start, ask for service records`, severity:"High" };
-  if (lower.includes("engine") || lower.includes("oil consumption") || lower.includes("lifter") || lower.includes("bearing"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — check oil level and color, listen for knocking or ticking`, severity:"High" };
-  if (lower.includes("transmission") || lower.includes("cvt") || lower.includes("gearbox"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — test all gears, feel for slipping or shudder`, severity:"High" };
-  if (lower.includes("air suspension"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — park on flat surface and inspect all four corners for level ride height`, severity:"High" };
-  if (lower.includes("turbo"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — listen for whining or lag, check for oil smoke on hard acceleration`, severity:"High" };
-  if (lower.includes("rust") || lower.includes("frame"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — inspect frame, underbody, and wheel wells carefully`, severity:"High" };
-  if (lower.includes("brake"))
-    return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — test brakes hard from 40mph, feel for pulsation or pulling`, severity:"High" };
-  if (lower.includes("recall"))
-    return { text: `⚠️ Known recall: ${issue.issue.split("—")[0].trim()} — verify recall was completed via NHTSA.gov VIN lookup`, severity:"High" };
-  return { text: `⚠️ Known issue: ${issue.issue.split("—")[0].trim()} — verify with a pre-purchase inspection`, severity:"High" };
-}).filter(Boolean);
+    tip = "check for white exhaust smoke, milky oil on dipstick, coolant loss";
+  else if (lower.includes("timing chain") || lower.includes("timing belt"))
+    tip = "listen for metallic rattle on cold start, ask for service records";
+  else if (lower.includes("oil consumption") || lower.includes("burns oil"))
+    tip = "check oil level — should not be more than 1 qt low between changes, look for blue smoke";
+  else if (lower.includes("lifter") || lower.includes("bearing") || lower.includes("engine failure") || lower.includes("engine fire") || lower.includes("engine seiz"))
+    tip = "check oil level and color, listen for knocking or ticking at idle";
+  else if (lower.includes("transmission") || lower.includes("cvt"))
+    tip = "test all gears, feel for slipping, hesitation, or shudder";
+  else if (lower.includes("air suspension"))
+    tip = "park on flat surface and check all four corners for level ride height";
+  else if (lower.includes("turbo"))
+    tip = "listen for whining or lag under boost, check for oil smoke";
+  else if (lower.includes("rust") || lower.includes("frame"))
+    tip = "inspect frame, underbody, and wheel wells carefully";
+  else if (lower.includes("brake"))
+    tip = "test brakes hard from 40mph, feel for pulsation or pulling";
+  else if (lower.includes("steering"))
+    tip = "check for play, pulling, or grinding when turning";
+  else if (lower.includes("recall") || lower.includes("nhtsa"))
+    tip = "verify recall was completed at NHTSA.gov/recalls using the VIN";
+  else if (lower.includes("battery") || lower.includes("charging") || lower.includes("electrical"))
+    tip = "test all electronics and have battery load-tested";
+  else if (lower.includes("infotainment") || lower.includes("touchscreen") || lower.includes("display"))
+    tip = "test the infotainment system thoroughly — look for ghost inputs, freezing, or dead spots";
+  else if (lower.includes("fuel") || lower.includes("injector"))
+    tip = "check for rough idle, hesitation, or check engine light";
+  else if (lower.includes("differential") || lower.includes("axle"))
+    tip = "listen for grinding or vibration on turns";
+
+  return {
+    text: `${prefix} ${issue.issue.split("—")[0].trim()} — ${tip}${yearNote}`,
+    severity: issue.severity,
+    yearRelevant,
+    source: issue.source,
+    years: issue.years,
+  };
+});
 
 const sections = [
   {
@@ -6430,13 +6466,21 @@ return (
     {/* Vehicle-specific warnings */}
     {vehicleWarnings.length > 0 && (
       <div style={{ marginBottom:"20px" }}>
-        <div style={{ fontSize:"11px", color:"#ef4444", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px" }}>Vehicle-Specific Warnings</div>
+        <div style={{ fontSize:"11px", color:"#ef4444", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px" }}>
+          Vehicle-Specific Warnings{year !== "Any Year" ? ` · ⚠️ = affects ${year} · ℹ️ = other years` : ""}
+        </div>
         {vehicleWarnings.map((w, i) => {
           const key = `warn-${i}`;
+          const borderColor = checked[key] ? "#22c55e33" : w.yearRelevant ? (w.severity === "High" ? "#ef444433" : "#f59e0b33") : "#2a2a2a";
+          const bgColor = checked[key] ? "#0a1a0a" : w.yearRelevant ? (w.severity === "High" ? "#1a0a0a" : "#1a150a") : "#111";
+          const textColor = checked[key] ? "#555" : w.yearRelevant ? (w.severity === "High" ? "#e88" : "#d49a4a") : "#666";
           return (
-            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"10px", padding:"10px 12px", background: checked[key] ? "#0a1a0a" : "#1a0a0a", borderRadius:"6px", marginBottom:"6px", border:`1px solid ${checked[key] ? "#22c55e33" : "#ef444433"}`, cursor:"pointer", transition:"all 0.15s" }}>
+            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"10px", padding:"10px 12px", background: bgColor, borderRadius:"6px", marginBottom:"6px", border:`1px solid ${borderColor}`, cursor:"pointer", transition:"all 0.15s" }}>
               <span style={{ fontSize:"16px", flexShrink:0, marginTop:"1px" }}>{checked[key] ? "✅" : "☐"}</span>
-              <span style={{ fontSize:"12px", color: checked[key] ? "#555" : "#e88", lineHeight:"1.5", textDecoration: checked[key] ? "line-through" : "none" }}>{w.text}</span>
+              <div style={{ flex:1 }}>
+                <span style={{ fontSize:"12px", color: textColor, lineHeight:"1.5", textDecoration: checked[key] ? "line-through" : "none" }}>{w.text}</span>
+                <div style={{ fontSize:"10px", color:"#444", marginTop:"3px" }}>{w.years} · {w.source}</div>
+              </div>
             </div>
           );
         })}
@@ -8010,7 +8054,7 @@ const modelYears = {
               )}
 
               {/* Inspection Checklist */}
-              <InspectionChecklist yearIssues={yearIssues} make={make} model={model} year={year} zip={zip} />
+              <InspectionChecklist yearIssues={yearIssues} allModelIssues={knownIssues[make]?.[model] || []} make={make} model={model} year={year} zip={zip} />
 
               {/* Disclaimer */}
               <div style={{ fontSize:"11px", color:"#444", textAlign:"center", fontStyle:"italic", padding:"0 8px" }}>
