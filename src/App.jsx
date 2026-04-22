@@ -6289,7 +6289,107 @@ const Stars = ({ rating }) => {
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
 
-// Renders either an emoji string or an inline SVG icon
+function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
+  const tiers = Object.entries(data.costs);
+  return (
+    <>
+      <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:998 }} />
+      <div style={{ position:"fixed", top: tierPicker.top, right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" }}>
+        <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
+          Choose service tier
+        </div>
+        {tiers.map(([tierName, vals]) => {
+          const lo = adj(vals.low,  data, tierPicker.name);
+          const hi = adj(vals.high, data, tierPicker.name);
+          return (
+            <button key={tierName} onClick={() => onPick(tierPicker.name, tierName)}
+              style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%", background:"#111", border:"1px solid #222", borderRadius:"6px", padding:"9px 12px", marginBottom:"6px", cursor:"pointer", fontFamily:"inherit", textAlign:"left" }}>
+              <span style={{ fontSize:"13px", color:"#ccc" }}>{tierName}</span>
+              <span style={{ fontSize:"13px", color:"#c9a84c", fontWeight:"500" }}>${lo.toLocaleString()} – ${hi.toLocaleString()}</span>
+            </button>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon }) {
+  const items = Array.from(basket.entries()).map(([name, tierName]) => {
+    const d = repairData[name];
+    if (!d) return null;
+    const tier = d.costs[tierName];
+    if (!tier) return null;
+    return { name, tierName, data: d, low: adj(tier.low, d, name), high: adj(tier.high, d, name) };
+  }).filter(Boolean);
+
+  const totalLow  = items.reduce((s, i) => s + i.low,  0);
+  const totalHigh = items.reduce((s, i) => s + i.high, 0);
+
+  return (
+    <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+
+        {/* Header */}
+        <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e", display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+          <div>
+            <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>Repair Estimate</div>
+            <div style={{ fontSize:"12px", color:"#555" }}>
+              {make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make}${model !== "Any Model" ? " " + model : ""}` : "All vehicles"}
+              {zip ? ` · ${zip}` : ""}
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
+        </div>
+
+        {/* Line items */}
+        <div style={{ padding:"16px 24px" }}>
+          {items.map(({ name, tierName, data, low: iLow, high: iHigh }) => {
+            const cc = catColor(data.category);
+            return (
+              <div key={name} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 0", borderBottom:"1px solid #1a1a1a" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                  <RepairIcon icon={data.icon} size={18} />
+                  <div>
+                    <div style={{ fontSize:"14px", fontWeight:"500" }}>{name}</div>
+                    <div style={{ display:"flex", gap:"4px", marginTop:"2px", flexWrap:"wrap" }}>
+                      <span style={{ fontSize:"10px", color:cc, background:`${cc}18`, padding:"2px 6px", borderRadius:"10px", letterSpacing:"0.06em", textTransform:"uppercase" }}>{data.category}</span>
+                      <span style={{ fontSize:"10px", color:"#666", background:"#1e1e1e", padding:"2px 6px", borderRadius:"10px" }}>{tierName}</span>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", gap:"12px", flexShrink:0 }}>
+                  <div style={{ fontSize:"14px", color:"#c9a84c", textAlign:"right" }}>
+                    ${iLow.toLocaleString()} – ${iHigh.toLocaleString()}
+                  </div>
+                  <button onClick={e => onRemove(e, name)} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"4px", width:"22px", height:"22px", cursor:"pointer", color:"#555", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Total */}
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 0 8px" }}>
+            <div style={{ fontWeight:"600", fontSize:"15px" }}>Total Estimate</div>
+            <div style={{ fontSize:"22px", fontWeight:"300", letterSpacing:"-0.02em", color:"#c9a84c" }}>
+              ${totalLow.toLocaleString()} – ${totalHigh.toLocaleString()}
+            </div>
+          </div>
+          <div style={{ fontSize:"11px", color:"#444", marginBottom:"20px" }}>Parts + labor · Adjusted for {zip || "national average"} · Actual quotes may vary</div>
+
+          <button style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+            Get Shop Quotes →
+          </button>
+          <button onClick={onClear} style={{ width:"100%", background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginTop:"8px" }}>
+            Clear All &amp; Start Over
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function RepairIcon({ icon, size = 20 }) {
   if (icon.startsWith("<svg")) {
     return (
@@ -7381,31 +7481,15 @@ const modelYears = {
       )} {/* end costs mode */}
 
       {/* ── TIER PICKER POPOVER ───────────────────────────────────────────── */}
-      {tierPicker && (() => {
-        const d = repairData[tierPicker.name];
-        const tiers = Object.entries(d.costs);
-        return (
-          <>
-            <div onClick={() => setTierPicker(null)} style={{ position:"fixed", inset:0, zIndex:998 }} />
-            <div style={{ position:"absolute", top: tierPicker.top, right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" }}>
-              <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
-                Choose service tier
-              </div>
-              {tiers.map(([tierName, vals]) => {
-                const lo = adj(vals.low,  d, tierPicker.name);
-                const hi = adj(vals.high, d, tierPicker.name);
-                return (
-                  <button key={tierName} onClick={() => pickTier(tierPicker.name, tierName)}
-                    style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%", background:"#111", border:"1px solid #222", borderRadius:"6px", padding:"9px 12px", marginBottom:"6px", cursor:"pointer", fontFamily:"inherit", textAlign:"left" }}>
-                    <span style={{ fontSize:"13px", color:"#ccc" }}>{tierName}</span>
-                    <span style={{ fontSize:"13px", color:"#c9a84c", fontWeight:"500" }}>${lo.toLocaleString()} – ${hi.toLocaleString()}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        );
-      })()}
+      {tierPicker && repairData[tierPicker.name] && (
+        <TierPickerPopover
+          tierPicker={tierPicker}
+          data={repairData[tierPicker.name]}
+          adj={adj}
+          onClose={() => setTierPicker(null)}
+          onPick={pickTier}
+        />
+      )}
 
       {/* ── BASKET BAR ────────────────────────────────────────────────────── */}
       {basket.size > 0 && (() => {
@@ -7434,81 +7518,22 @@ const modelYears = {
       })()}
 
       {/* ── BASKET MODAL ──────────────────────────────────────────────────── */}
-      {showBasket && (() => {
-        const { low, high } = basketTotal();
-        const items = Array.from(basket.entries()).map(([name, tierName]) => {
-          const d = repairData[name];
-          const tier = d.costs[tierName];
-          return {
-            name,
-            tierName,
-            data: d,
-            low:  adj(tier.low,  d, name),
-            high: adj(tier.high, d, name),
-          };
-        });
-        return (
-          <div onClick={() => setShowBasket(false)} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
-            <div onClick={e => e.stopPropagation()} style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
-
-              {/* Header */}
-              <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e", display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-                <div>
-                  <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>Repair Estimate</div>
-                  <div style={{ fontSize:"12px", color:"#555" }}>
-                    {make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make} ${model !== "Any Model" ? model : ""}` : "All vehicles"}
-                    {zip ? ` · ${zip}` : ""}
-                  </div>
-                </div>
-                <button onClick={() => setShowBasket(false)} style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
-              </div>
-
-              {/* Repair line items */}
-              <div style={{ padding:"16px 24px" }}>
-                {items.map(({ name, data, low: iLow, high: iHigh }) => {
-                  const cc = catColor(data.category);
-                  return (
-                    <div key={name} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 0", borderBottom:"1px solid #1a1a1a" }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                        <RepairIcon icon={data.icon} size={18} />
-                        <div>
-                          <div style={{ fontSize:"14px", fontWeight:"500" }}>{name}</div>
-                          <div style={{ display:"flex", gap:"4px", marginTop:"2px", flexWrap:"wrap" }}>
-                            <span style={{ fontSize:"10px", color:cc, background:`${cc}18`, padding:"2px 6px", borderRadius:"10px", letterSpacing:"0.06em", textTransform:"uppercase" }}>{data.category}</span>
-                            <span style={{ fontSize:"10px", color:"#666", background:"#1e1e1e", padding:"2px 6px", borderRadius:"10px" }}>{tierName}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{ display:"flex", alignItems:"center", gap:"12px", flexShrink:0 }}>
-                        <div style={{ fontSize:"14px", color:"#c9a84c", textAlign:"right" }}>
-                          ${iLow.toLocaleString()} – ${iHigh.toLocaleString()}
-                        </div>
-                        <button onClick={e => { e.stopPropagation(); removeFromBasket({ stopPropagation:()=>{} }, name); }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"4px", width:"22px", height:"22px", cursor:"pointer", color:"#555", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Total */}
-                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 0 8px" }}>
-                  <div style={{ fontWeight:"600", fontSize:"15px" }}>Total Estimate</div>
-                  <div style={{ fontSize:"22px", fontWeight:"300", letterSpacing:"-0.02em", color:"#c9a84c" }}>
-                    ${low.toLocaleString()} – ${high.toLocaleString()}
-                  </div>
-                </div>
-                <div style={{ fontSize:"11px", color:"#444", marginBottom:"20px" }}>Parts + labor · Adjusted for {zip || "national average"} · Actual quotes may vary</div>
-
-                <button style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
-                  Get Shop Quotes →
-                </button>
-                <button onClick={() => { setBasket(new Map()); setShowBasket(false); }} style={{ width:"100%", background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginTop:"8px" }}>
-                  Clear All &amp; Start Over
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
+      {showBasket && (
+        <BasketModal
+          basket={basket}
+          repairData={repairData}
+          adj={adj}
+          catColor={catColor}
+          make={make}
+          model={model}
+          year={year}
+          zip={zip}
+          onClose={() => setShowBasket(false)}
+          onRemove={removeFromBasket}
+          onClear={() => { setBasket(new Map()); setShowBasket(false); }}
+          RepairIcon={RepairIcon}
+        />
+      )}
 
       {/* ── REPAIR DETAIL MODAL ───────────────────────────────────────────── */}
       {selectedRepair && repairData[selectedRepair] && (
