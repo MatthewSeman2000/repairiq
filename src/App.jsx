@@ -25,7 +25,7 @@ const repairData = {
     notes: "KBB: conventional $35–$75, full synthetic $65–$125. Dealerships typically charge $100–$130 for synthetic.",
   },
   "Tire Rotation": {
-    icon: "⚙️", category: "Maintenance", trimSensitive: false,
+    icon: "🔄", category: "Maintenance", trimSensitive: false,
     costs: {
       "Standard": { low: 20, high: 50 },
       "With Balance": { low: 80, high: 130 },
@@ -43,7 +43,7 @@ const repairData = {
     notes: "National average ~$95 in 2026. Very DIY-friendly — often under 5 minutes on most vehicles.",
   },
   "Engine Air Filter": {
-    icon: "💨", category: "Maintenance", trimSensitive: false, iceOnly: true,
+    icon: "🌪️", category: "Maintenance", trimSensitive: false, iceOnly: true,
     costs: { "Standard": { low: 25, high: 60 }, "Performance": { low: 50, high: 85 } },
     labor: "0.25 hr",
     notes: "National average ~$83 in 2026. DIY-friendly on most vehicles. Replace every 15–30k miles.",
@@ -67,7 +67,7 @@ const repairData = {
     notes: "Many modern cars have in-tank filters changed with the fuel pump. Check your service manual.",
   },
   "Tire Replacement (each)": {
-    icon: "🔄", category: "Maintenance", trimSensitive: false,
+    icon: "🛞", category: "Maintenance", trimSensitive: false,
     costs: {
       "Economy": { low: 80, high: 130 },
       "Mid-range": { low: 120, high: 185 },
@@ -85,7 +85,7 @@ const repairData = {
 
   // ── BRAKES ───────────────────────────────────────────────────────────────
   "Brake Pads (Front)": {
-    icon: "🔧", category: "Brakes", trimSensitive: true,
+    icon: "🛑", category: "Brakes", trimSensitive: true,
     costs: {
       "Economy": { low: 100, high: 175 },
       "OEM": { low: 150, high: 300 },
@@ -95,7 +95,7 @@ const repairData = {
     notes: "KBB average ~$150/axle, up to $300 for premium pads. RepairPal: $320–$379 per axle avg.",
   },
   "Brake Pads (Rear)": {
-    icon: "🔧", category: "Brakes", trimSensitive: true,
+    icon: "🛑", category: "Brakes", trimSensitive: true,
     costs: {
       "Economy": { low: 90, high: 160 },
       "OEM": { low: 130, high: 250 },
@@ -132,7 +132,7 @@ const repairData = {
 
   // ── ENGINE ────────────────────────────────────────────────────────────────
   "Spark Plugs": {
-    icon: "🔥", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "⚡", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Copper (4-cyl)": { low: 80, high: 150 },
       "Iridium (4-cyl)": { low: 140, high: 250 },
@@ -142,7 +142,7 @@ const repairData = {
     notes: "RepairPal national average $150–$300. V8 trucks like F-150 average $328–$438.",
   },
   "Timing Belt": {
-    icon: "⏱️", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "🔁", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Belt Only": { low: 300, high: 500 },
       "With Water Pump": { low: 500, high: 900 },
@@ -157,7 +157,7 @@ const repairData = {
     notes: "Labor-intensive. Rattling on startup is a warning sign — don't ignore it.",
   },
   "Coolant Flush": {
-    icon: "🌡️", category: "Engine", trimSensitive: false,
+    icon: "🧊", category: "Engine", trimSensitive: false,
     costs: { "Standard": { low: 100, high: 200 } },
     labor: "1 hr",
     notes: "KBB average $131–$209. Recommended every 30k–50k miles or 2–5 years.",
@@ -169,7 +169,7 @@ const repairData = {
     notes: "Often replaced with coolant flush. Symptoms include overheating or no heat in cabin.",
   },
   "Water Pump": {
-    icon: "💦", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "💧", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Standard": { low: 300, high: 600 },
       "With Timing Belt": { low: 500, high: 900 },
@@ -199,7 +199,7 @@ const repairData = {
     notes: "Coolant or vacuum leaks often indicate this gasket is failing.",
   },
   "PCV Valve": {
-    icon: "🔧", category: "Engine", trimSensitive: false, iceOnly: true,
+    icon: "🔩", category: "Engine", trimSensitive: false, iceOnly: true,
     costs: { "Standard": { low: 40, high: 90 } },
     labor: "0.25–0.5 hr",
     notes: "Cheap and often overlooked. A clogged PCV can cause rough idle and oil leaks.",
@@ -234,7 +234,7 @@ const repairData = {
     notes: "Clicking sounds when turning the key are a common symptom of a failing starter.",
   },
   "Fuse Replacement": {
-    icon: "⚡", category: "Electrical", trimSensitive: false,
+    icon: "🔌", category: "Electrical", trimSensitive: false,
     costs: { "Standard": { low: 15, high: 50 } },
     labor: "0.25 hr",
     notes: "Often DIY-friendly. Fuse box locations vary — check your owner's manual.",
@@ -249,7 +249,7 @@ const repairData = {
     notes: "RepairPal average $434–$537 per sensor. P0130–P0167 codes are the most common trigger.",
   },
   "Mass Air Flow Sensor": {
-    icon: "💨", category: "Electrical", trimSensitive: true, iceOnly: true,
+    icon: "🌬️", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: { "Standard": { low: 150, high: 320 } },
     labor: "0.5–1 hr",
     notes: "Try cleaning with MAF cleaner spray ($10–$20) before replacing. Often resolves the issue.",
@@ -275,7 +275,7 @@ const repairData = {
     notes: "Jiffy Lube: 2-wheel $50–$75, 4-wheel $100–$168. RepairPal certified shops $189–$277.",
   },
   "Shock Absorbers (pair)": {
-    icon: "🏎️", category: "Suspension", trimSensitive: true,
+    icon: "🌀", category: "Suspension", trimSensitive: true,
     costs: {
       "Economy": { low: 250, high: 450 },
       "OEM/Performance": { low: 400, high: 700 },
@@ -284,7 +284,7 @@ const repairData = {
     notes: "RepairPal average $1,057–$1,260 for all four. Per-axle pair shown here.",
   },
   "Strut Assembly (pair)": {
-    icon: "🏎️", category: "Suspension", trimSensitive: true,
+    icon: "🌀", category: "Suspension", trimSensitive: true,
     costs: {
       "Economy": { low: 350, high: 600 },
       "OEM": { low: 550, high: 950 },
@@ -299,7 +299,7 @@ const repairData = {
     notes: "RepairPal average $103–$143 per side. Clunking over bumps is the main symptom.",
   },
   "Ball Joint": {
-    icon: "⚙️", category: "Suspension", trimSensitive: true,
+    icon: "🎱", category: "Suspension", trimSensitive: true,
     costs: {
       "Per joint": { low: 150, high: 300 },
       "Both sides": { low: 280, high: 560 },
@@ -308,13 +308,13 @@ const repairData = {
     notes: "RepairPal average $248–$339 per joint. Alignment required after replacement.",
   },
   "Power Steering Fluid Flush": {
-    icon: "🔄", category: "Suspension", trimSensitive: false,
+    icon: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"9\"/><line x1=\"3.5\" y1=\"17\" x2=\"9.5\" y2=\"13.5\"/><line x1=\"20.5\" y1=\"17\" x2=\"14.5\" y2=\"13.5\"/></svg>", category: "Suspension", trimSensitive: false,
     costs: { "Standard": { low: 80, high: 140 } },
     labor: "0.5 hr",
     notes: "Not all vehicles have hydraulic power steering — electric systems don't need this service.",
   },
   "Tie Rod End": {
-    icon: "🔩", category: "Suspension", trimSensitive: false,
+    icon: "↔️", category: "Suspension", trimSensitive: false,
     costs: {
       "Inner or outer (each)": { low: 100, high: 220 },
       "Both sides": { low: 200, high: 400 },
@@ -325,7 +325,7 @@ const repairData = {
 
   // ── DRIVETRAIN ────────────────────────────────────────────────────────────
   "Transmission Fluid": {
-    icon: "🔩", category: "Drivetrain", trimSensitive: false,
+    icon: "🔄", category: "Drivetrain", trimSensitive: false,
     costs: {
       "Drain & Fill": { low: 80, high: 175 },
       "Full Flush": { low: 150, high: 290 },
@@ -334,7 +334,7 @@ const repairData = {
     notes: "KBB: drain & fill $150–$175, flush $165–$290. CVT fluid services run 20–30% higher.",
   },
   "CV Axle/Halfshaft": {
-    icon: "🔗", category: "Drivetrain", trimSensitive: true,
+    icon: "↔️", category: "Drivetrain", trimSensitive: true,
     costs: {
       "Remanufactured (each)": { low: 200, high: 380 },
       "OEM New (each)": { low: 350, high: 600 },
@@ -352,7 +352,7 @@ const repairData = {
     notes: "AWD and 4WD vehicles often have multiple differentials. Check your service schedule.",
   },
   "Transfer Case Service": {
-    icon: "🔩", category: "Drivetrain", trimSensitive: false,
+    icon: "⚙️", category: "Drivetrain", trimSensitive: false,
     costs: { "Standard": { low: 100, high: 190 } },
     labor: "0.5–1 hr",
     notes: "Applies to 4WD and AWD vehicles only. Often overlooked in routine maintenance.",
@@ -407,7 +407,7 @@ const repairData = {
 
   // ── ENGINE ────────────────────────────────────────────────────────────────
   "Serpentine Belt": {
-    icon: "⏱️", category: "Engine", trimSensitive: false, iceOnly: true,
+    icon: "🔁", category: "Engine", trimSensitive: false, iceOnly: true,
     costs: {
       "Belt Only":          { low: 100, high: 200 },
       "Belt + Tensioner":   { low: 200, high: 380 },
@@ -416,7 +416,7 @@ const repairData = {
     notes: "RepairPal average $84–$231 depending on vehicle. Replace every 60–100k miles. A snapping belt leaves you stranded instantly — replace at first signs of cracking or squealing.",
   },
   "Radiator Replacement": {
-    icon: "🌡️", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "♨️", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Economy/Import":   { low: 700,  high: 1200 },
       "Domestic/Truck":   { low: 900,  high: 1500 },
@@ -435,7 +435,7 @@ const repairData = {
     notes: "RepairPal average $1,247–$1,506. Symptoms: hard starts, sputtering at speed, sudden stall. Replace fuel filter at same time. Diagnosis is important — similar symptoms can come from a fuel relay or clogged filter.",
   },
   "Catalytic Converter": {
-    icon: "🔧", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "🏭", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Economy/Direct-fit":   { low: 800,  high: 1800 },
       "V6/V8 or Dual":        { low: 1500, high: 3500 },
@@ -466,7 +466,7 @@ const repairData = {
 
   // ── SUSPENSION & STEERING ─────────────────────────────────────────────────
   "Wheel Bearing / Hub Assembly": {
-    icon: "🎯", category: "Suspension", trimSensitive: false,
+    icon: "⭕", category: "Suspension", trimSensitive: false,
     costs: {
       "Standard (bolt-on hub)":   { low: 300, high: 550 },
       "Press-fit / AWD / Truck":  { low: 450, high: 750 },
@@ -475,7 +475,7 @@ const repairData = {
     notes: "RepairPal average $343–$504. Symptom: humming or rumbling noise that changes pitch when swerving. Front bearings typically cost 15–20% more than rear. ABS relearn may be required after replacement ($50–$150 extra at some shops).",
   },
   "Control Arm Replacement": {
-    icon: "🔧", category: "Suspension", trimSensitive: false,
+    icon: "🦾", category: "Suspension", trimSensitive: false,
     costs: {
       "Single arm (aftermarket)": { low: 350, high: 600  },
       "Single arm (OEM)":         { low: 500, high: 900  },
@@ -485,7 +485,7 @@ const repairData = {
     notes: "Wheel alignment ($100–$175) is always required after control arm replacement. Symptoms include clunking over bumps, pulling, or uneven tire wear. Often combined with ball joint or bushing replacement.",
   },
   "Power Steering Rack (Rack & Pinion)": {
-    icon: "🎯", category: "Suspension", trimSensitive: true,
+    icon: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"9\"/><line x1=\"3.5\" y1=\"17\" x2=\"9.5\" y2=\"13.5\"/><line x1=\"20.5\" y1=\"17\" x2=\"14.5\" y2=\"13.5\"/></svg>", category: "Suspension", trimSensitive: true,
     costs: {
       "Remanufactured":   { low: 1200, high: 2000 },
       "OEM New":          { low: 1800, high: 3000 },
@@ -494,7 +494,7 @@ const repairData = {
     notes: "RepairPal average $2,027–$2,452. Symptoms: stiff steering, fluid leak, clunking while turning. Many modern vehicles require sub-frame removal — verify diagnosis before committing. Alignment required after replacement.",
   },
   "Power Steering Pump": {
-    icon: "💧", category: "Suspension", trimSensitive: false, iceOnly: true,
+    icon: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/><line x1=\"12\" y1=\"2\" x2=\"12\" y2=\"9\"/><line x1=\"3.5\" y1=\"17\" x2=\"9.5\" y2=\"13.5\"/><line x1=\"20.5\" y1=\"17\" x2=\"14.5\" y2=\"13.5\"/></svg>", category: "Suspension", trimSensitive: false, iceOnly: true,
     costs: {
       "Remanufactured":   { low: 500, high: 800  },
       "OEM New":          { low: 700, high: 1000 },
@@ -505,13 +505,13 @@ const repairData = {
 
   // ── ELECTRICAL ────────────────────────────────────────────────────────────
   "Wheel Speed Sensor (ABS)": {
-    icon: "📡", category: "Electrical", trimSensitive: false,
+    icon: "🔄", category: "Electrical", trimSensitive: false,
     costs: { "Standard (per sensor)": { low: 200, high: 400 } },
     labor: "0.5–1.5 hrs",
     notes: "ABS warning light and traction control light are the main symptoms. Diagnosis important — tone ring damage or wiring issues can mimic a bad sensor at lower cost. YourMechanic average $150–$350 per sensor.",
   },
   "TPMS Sensor (per tire)": {
-    icon: "🔋", category: "Electrical", trimSensitive: false,
+    icon: "🛞", category: "Electrical", trimSensitive: false,
     costs: {
       "Aftermarket (each)": { low: 50,  high: 150 },
       "OEM (each)":         { low: 100, high: 250 },
@@ -521,7 +521,7 @@ const repairData = {
     notes: "KBB average $314–$368 for all 4. Sensors last 5–7 years (battery-limited). Programming/relearn required after replacement ($25–$50 per sensor at most shops). Required on all US vehicles since 2007.",
   },
   "Crankshaft Position Sensor": {
-    icon: "⚡", category: "Electrical", trimSensitive: false, iceOnly: true,
+    icon: "⚙️", category: "Electrical", trimSensitive: false, iceOnly: true,
     costs: { "Standard": { low: 175, high: 350 } },
     labor: "0.5–2 hrs",
     notes: "P0335/P0336 are the most common codes. Symptoms: no-start, intermittent stall, rough running. Location varies widely — some are a 15-minute job, others require intake manifold removal.",
@@ -540,13 +540,13 @@ const repairData = {
 
   // ── BRAKES ───────────────────────────────────────────────────────────────
   "Brake Master Cylinder": {
-    icon: "🔧", category: "Brakes", trimSensitive: true,
+    icon: "🔩", category: "Brakes", trimSensitive: true,
     costs: { "Standard": { low: 400, high: 750 } },
     labor: "1.5–3 hrs",
     notes: "RepairPal average $586–$721. Symptoms: spongy pedal, pedal sinking to floor, no external leaks. Safety-critical — don't drive. Brake system flush recommended at same time.",
   },
   "Brake Lines / Hose": {
-    icon: "💧", category: "Brakes", trimSensitive: false,
+    icon: "〰️", category: "Brakes", trimSensitive: false,
     costs: {
       "Single rubber hose": { low: 150, high: 300 },
       "Steel line section":  { low: 200, high: 500 },
@@ -556,7 +556,7 @@ const repairData = {
     notes: "Rubber hoses swell and collapse internally — can cause dragging brakes. Steel lines rust from inside out. Common in salt-belt states on vehicles over 10 years old. System flush required after any line work.",
   },
   "ABS Module / Pump": {
-    icon: "📡", category: "Brakes", trimSensitive: true,
+    icon: "🖥️", category: "Brakes", trimSensitive: true,
     costs: {
       "Refurbished module": { low: 600,  high: 1200 },
       "New OEM module":     { low: 1000, high: 1800 },
@@ -583,7 +583,7 @@ const repairData = {
     notes: "Jerry avg $487–$535 per standard mount. Symptoms: excessive vibration, clunking on acceleration, engine movement. Often replaced in sets. Oil leaks can accelerate mount deterioration.",
   },
   "Turbocharger Replacement": {
-    icon: "🔥", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Rebuilt / remanufactured": { low: 1000, high: 2500 },
       "New aftermarket":          { low: 1500, high: 3500 },
@@ -593,7 +593,7 @@ const repairData = {
     notes: "Labor adds $700–$1,500+. Total replacement $2,000–$4,000 for most vehicles, up to $7,000+ for twin-turbo or performance cars. Symptoms: blue/black smoke, whine, power loss. Always fix root cause (oil starvation, carbon buildup) or new turbo will fail again.",
   },
   "Exhaust Manifold": {
-    icon: "🔧", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Gasket only":       { low: 350,  high: 600  },
       "Full replacement":  { low: 900,  high: 1800 },
@@ -608,7 +608,7 @@ const repairData = {
     notes: "RepairPal average $553–$759. Oil spot on driveway is main symptom. Some vehicles require subframe removal — adds significant labor. Replace drain plug and inspect motor mounts while accessible.",
   },
   "Fuel Injector Replacement": {
-    icon: "⛽", category: "Engine", trimSensitive: true, iceOnly: true,
+    icon: "💉", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
       "Single injector":    { low: 250, high: 500  },
       "Full set (4-cyl)":   { low: 600, high: 1000 },
@@ -636,7 +636,7 @@ const repairData = {
 
   // ── EXHAUST ───────────────────────────────────────────────────────────────
   "Muffler Replacement": {
-    icon: "🔧", category: "Engine", trimSensitive: false, iceOnly: true,
+    icon: "🔇", category: "Engine", trimSensitive: false, iceOnly: true,
     costs: {
       "Aftermarket weld-on": { low: 150, high: 400  },
       "OEM bolt-on":         { low: 400, high: 800  },
@@ -648,7 +648,7 @@ const repairData = {
 
   // ── DRIVETRAIN ────────────────────────────────────────────────────────────
   "Driveshaft Replacement": {
-    icon: "⚙️", category: "Drivetrain", trimSensitive: true,
+    icon: "↔️", category: "Drivetrain", trimSensitive: true,
     costs: {
       "Remanufactured": { low: 400, high: 800  },
       "New OEM":        { low: 700, high: 1500 },
@@ -657,7 +657,7 @@ const repairData = {
     notes: "Vibration at highway speed, clunking on acceleration or deceleration are main symptoms. Front or rear depending on drivetrain layout. U-joints often replaced at same time. Alignment recommended after.",
   },
   "U-Joint Replacement": {
-    icon: "🔧", category: "Drivetrain", trimSensitive: false,
+    icon: "🔗", category: "Drivetrain", trimSensitive: false,
     costs: { "Standard (per joint)": { low: 200, high: 450 } },
     labor: "1–2 hrs",
     notes: "Clunking or vibration from under the vehicle, worse under load. Often multiple joints replaced at once. Common on trucks and RWD/4WD vehicles. Greaseable U-joints last longer if maintained.",
@@ -671,7 +671,7 @@ const repairData = {
 
   // ── ELECTRICAL ────────────────────────────────────────────────────────────
   "Fuel Injector Cleaning (Service)": {
-    icon: "⛽", category: "Electrical", trimSensitive: false, iceOnly: true,
+    icon: "🧹", category: "Electrical", trimSensitive: false, iceOnly: true,
     costs: {
       "On-car induction clean": { low: 80,  high: 200 },
       "Off-car bench clean":    { low: 150, high: 350 },
@@ -686,7 +686,7 @@ const repairData = {
     notes: "Manifold Absolute Pressure sensor. P0105–P0108 codes. Symptoms: rough idle, poor fuel economy, black smoke, hard start. Often confused with MAF sensor — confirm which system your vehicle uses before replacing.",
   },
   "EGR Valve Replacement": {
-    icon: "💨", category: "Electrical", trimSensitive: false, iceOnly: true,
+    icon: "🔧", category: "Electrical", trimSensitive: false, iceOnly: true,
     costs: {
       "Cleaning only":  { low: 100, high: 200 },
       "Replacement":    { low: 300, high: 700 },
@@ -697,7 +697,7 @@ const repairData = {
 
   // ── HVAC ─────────────────────────────────────────────────────────────────
   "AC Condenser Replacement": {
-    icon: "❄️", category: "HVAC", trimSensitive: true,
+    icon: "🧊", category: "HVAC", trimSensitive: true,
     costs: {
       "Condenser only":           { low: 400, high: 900  },
       "With receiver-drier/flush": { low: 600, high: 1200 },
@@ -706,7 +706,7 @@ const repairData = {
     notes: "AC system must be evacuated and recharged after replacement ($100–$200 extra). Condenser is in front of radiator — vulnerable to road debris. If condenser leaked, replace receiver-drier at same time to avoid contaminating new parts.",
   },
   "Blower Motor Replacement": {
-    icon: "🌬️", category: "HVAC", trimSensitive: false,
+    icon: "💨", category: "HVAC", trimSensitive: false,
     costs: {
       "Motor only":              { low: 200, high: 450 },
       "Motor + resistor/module": { low: 300, high: 650 },
@@ -6289,6 +6289,20 @@ const Stars = ({ rating }) => {
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
 
+// Renders either an emoji string or an inline SVG icon
+function RepairIcon({ icon, size = 20 }) {
+  if (icon.startsWith("<svg")) {
+    return (
+      <span
+        style={{ display:"inline-flex", width:size, height:size, alignItems:"center", justifyContent:"center" }}
+        dangerouslySetInnerHTML={{ __html: icon }}
+      />
+    );
+  }
+  return <span style={{ fontSize: size }}>{icon}</span>;
+}
+
+
 function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars }) {
   const tiers = Object.entries(data.costs);
   const cc = catColor(data.category);
@@ -6307,7 +6321,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
         <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
             <div>
-              <div style={{ fontSize:"24px", marginBottom:"6px" }}>{data.icon}</div>
+              <div style={{ marginBottom:"6px" }}><RepairIcon icon={data.icon} size={24} /></div>
               <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>{name}</div>
               <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px" }}>{data.category}</span>
             </div>
@@ -7295,7 +7309,7 @@ const modelYears = {
 
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"12px" }}>
                 <div>
-                  <div style={{ fontSize:"20px", marginBottom:"4px" }}>{data.icon}</div>
+                  <div style={{ marginBottom:"4px" }}><RepairIcon icon={data.icon} size={20} /></div>
                   <div style={{ fontWeight:"600", fontSize:"15px", letterSpacing:"-0.01em" }}>{name}</div>
                 </div>
                 <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px", whiteSpace:"nowrap" }}>{data.category}</span>
