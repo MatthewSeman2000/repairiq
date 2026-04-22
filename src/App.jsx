@@ -6315,12 +6315,19 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
 }
 
 function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare, handlePrint, buildPrintHTML }) {
+  const [shopType, setShopType] = useState("both");
+  const shopMult = shopType === "dealer" ? 1.18 : shopType === "independent" ? 0.80 : 1.0;
+
   const items = Array.from(basket.entries()).map(([name, tierName]) => {
     const d = repairData[name];
     if (!d) return null;
     const tier = d.costs[tierName];
     if (!tier) return null;
-    return { name, tierName, data: d, low: adj(tier.low, d, name), high: adj(tier.high, d, name) };
+    return {
+      name, tierName, data: d,
+      low:  Math.round(adj(tier.low,  d, name) * shopMult),
+      high: Math.round(adj(tier.high, d, name) * shopMult),
+    };
   }).filter(Boolean);
 
   const totalLow  = items.reduce((s, i) => s + i.low,  0);
@@ -6331,15 +6338,32 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
       <div onClick={e => e.stopPropagation()} className="basket-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Header */}
-        <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e", display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-          <div>
-            <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>Repair Estimate</div>
-            <div style={{ fontSize:"12px", color:"#555" }}>
-              {make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make}${model !== "Any Model" ? " " + model : ""}` : "All vehicles"}
-              {zip ? ` · ${zip}` : ""}
+        <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e" }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"14px" }}>
+            <div>
+              <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>Repair Estimate</div>
+              <div style={{ fontSize:"12px", color:"#555" }}>
+                {make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make}${model !== "Any Model" ? " " + model : ""}` : "All vehicles"}
+                {zip ? ` · ${zip}` : ""}
+              </div>
             </div>
+            <button onClick={onClose} style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
           </div>
-          <button onClick={onClose} style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
+
+          {/* Shop type toggle */}
+          <div style={{ display:"flex", gap:"6px" }}>
+            {[["both","Both"], ["independent","Independent"], ["dealer","Dealer"]].map(([val, label]) => (
+              <button key={val} onClick={() => setShopType(val)}
+                style={{ flex:1, padding:"6px 0", fontSize:"11px", fontWeight:"500", fontFamily:"inherit", borderRadius:"6px", cursor:"pointer", letterSpacing:"0.04em", border:`1px solid ${shopType===val ? "#c9a84c" : "#2a2a2a"}`, background: shopType===val ? "#c9a84c18" : "transparent", color: shopType===val ? "#c9a84c" : "#555", transition:"all 0.15s" }}>
+                {label}
+              </button>
+            ))}
+          </div>
+          {shopType !== "both" && (
+            <div style={{ fontSize:"11px", color:"#555", marginTop:"8px", fontStyle:"italic" }}>
+              {shopType === "independent" ? "⬇ ~20% below average — independents have lower overhead and flexible pricing" : "⬆ ~18% above average — dealers charge more for factory-trained techs and OEM parts"}
+            </div>
+          )}
         </div>
 
         {/* Line items */}
@@ -6390,7 +6414,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
                 items,
                 totalLow,
                 totalHigh,
-                footerNote: "Parts + labor · Adjusted for your location · Actual quotes may vary"
+                footerNote: `Parts + labor · ${shopType === "dealer" ? "Dealer estimate (~18% above avg)" : shopType === "independent" ? "Independent shop estimate (~20% below avg)" : "Blended average"} · Actual quotes may vary`
               }))} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🖨️ Print
             </button>
