@@ -6314,7 +6314,7 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   );
 }
 
-function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare }) {
+function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare, handlePrint }) {
   const items = Array.from(basket.entries()).map(([name, tierName]) => {
     const d = repairData[name];
     if (!d) return null;
@@ -6328,7 +6328,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
 
   return (
     <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
-      <div onClick={e => e.stopPropagation()} className="print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+      <div onClick={e => e.stopPropagation()} className="basket-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Header */}
         <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e", display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
@@ -6384,7 +6384,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
             <button onClick={() => handleShare(shareURL, "RepairIQ Estimate")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🔗 Share
             </button>
-            <button onClick={() => window.print()} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+            <button onClick={() => handlePrint("basket-print-target")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🖨️ Print
             </button>
           </div>
@@ -6411,7 +6411,7 @@ function RepairIcon({ icon, size = 20 }) {
 }
 
 
-function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare }) {
+function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint }) {
   const tiers = Object.entries(data.costs);
   const cc = catColor(data.category);
   const loLow  = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
@@ -6420,7 +6420,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
     <div onClick={onClose}
       style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
       <div onClick={e => e.stopPropagation()}
-        className="print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"520px", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+        className="modal-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"520px", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Color bar */}
         <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, borderRadius:"14px 14px 0 0" }} />
@@ -6522,7 +6522,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             <button onClick={() => handleShare(shareURL, `${name} — RepairIQ Estimate`)} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🔗 Share
             </button>
-            <button onClick={() => window.print()} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+            <button onClick={() => handlePrint("modal-print-target")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🖨️ Print
             </button>
           </div>
@@ -7250,13 +7250,37 @@ const modelYears = {
         return;
       } catch {}
     }
-    // Fallback: copy to clipboard
     try {
       await navigator.clipboard.writeText(url);
       alert("Link copied to clipboard!");
     } catch {
       prompt("Copy this link:", url);
     }
+  };
+
+  const handlePrint = (targetClass) => {
+    const el = document.querySelector("." + targetClass);
+    if (!el) return;
+    const clone = el.cloneNode(true);
+    // Remove no-print children
+    clone.querySelectorAll(".no-print").forEach(n => n.remove());
+    const printDiv = document.createElement("div");
+    printDiv.id = "repairiq-print-root";
+    printDiv.appendChild(clone);
+    const style = document.createElement("style");
+    style.textContent = `
+      @media print {
+        body > *:not(#repairiq-print-root) { display: none !important; }
+        #repairiq-print-root { display: block !important; }
+        #repairiq-print-root * { color: black !important; background: white !important; border-color: #ddd !important; box-shadow: none !important; }
+        #repairiq-print-root { position: static; max-height: none; overflow: visible; border-radius: 0; border: none; width: 100%; max-width: 100%; }
+      }
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(printDiv);
+    window.print();
+    document.body.removeChild(printDiv);
+    document.head.removeChild(style);
   };
 
   const isEV = make === "Tesla" || (model !== "Any Model" && evModels.has(model));
@@ -7611,6 +7635,7 @@ const modelYears = {
           RepairIcon={RepairIcon}
           shareURL={buildShareURL({ basket })}
           handleShare={handleShare}
+          handlePrint={handlePrint}
         />
       )}
 
@@ -7630,6 +7655,7 @@ const modelYears = {
           Stars={Stars}
           shareURL={buildShareURL({ repair: selectedRepair })}
           handleShare={handleShare}
+          handlePrint={handlePrint}
         />
       )}
 
@@ -7875,9 +7901,7 @@ const modelYears = {
       <style>{`
         select option { background: #1a1a1a; }
         @media print {
-          body > * { display: none !important; }
-          .print-target { display: block !important; position: static !important; background: white !important; color: black !important; box-shadow: none !important; border: none !important; max-height: none !important; overflow: visible !important; }
-          .print-target * { color: black !important; background: white !important; border-color: #ccc !important; }
+          body > *:not(#repairiq-print-root) { display: none !important; }
           .no-print { display: none !important; }
         }
       `}</style>
