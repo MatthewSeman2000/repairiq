@@ -6314,7 +6314,7 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   );
 }
 
-function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare, handlePrint }) {
+function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare, handlePrint, buildPrintHTML }) {
   const items = Array.from(basket.entries()).map(([name, tierName]) => {
     const d = repairData[name];
     if (!d) return null;
@@ -6384,7 +6384,14 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
             <button onClick={() => handleShare(shareURL, "RepairIQ Estimate")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🔗 Share
             </button>
-            <button onClick={() => handlePrint("basket-print-target")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+            <button onClick={() => handlePrint(buildPrintHTML({
+                title: "Repair Estimate",
+                subtitle: [make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make}${model !== "Any Model" ? " " + model : ""}` : "All vehicles", zip ? `ZIP ${zip}` : ""].filter(Boolean).join(" · "),
+                items,
+                totalLow,
+                totalHigh,
+                footerNote: "Parts + labor · Adjusted for your location · Actual quotes may vary"
+              }))} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🖨️ Print
             </button>
           </div>
@@ -6411,7 +6418,7 @@ function RepairIcon({ icon, size = 20 }) {
 }
 
 
-function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint }) {
+function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML }) {
   const tiers = Object.entries(data.costs);
   const cc = catColor(data.category);
   const loLow  = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
@@ -6522,7 +6529,17 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             <button onClick={() => handleShare(shareURL, `${name} — RepairIQ Estimate`)} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🔗 Share
             </button>
-            <button onClick={() => handlePrint("modal-print-target")} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+            <button onClick={() => {
+                const tiers = Object.entries(data.costs);
+                handlePrint(buildPrintHTML({
+                  title: name,
+                  subtitle: zip ? `Near ${zip}` : "National average estimate",
+                  items: tiers.map(([tier, vals]) => ({ name: tier, tierName: tier, low: adj(vals.low, data, name), high: adj(vals.high, data, name) })),
+                  totalLow: adj(Math.min(...tiers.map(([,v]) => v.low)), data, name),
+                  totalHigh: adj(Math.max(...tiers.map(([,v]) => v.high)), data, name),
+                  footerNote: "Parts + labor · Prices vary by location and shop"
+                }));
+              }} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🖨️ Print
             </button>
           </div>
@@ -7258,29 +7275,55 @@ const modelYears = {
     }
   };
 
-  const handlePrint = (targetClass) => {
-    const el = document.querySelector("." + targetClass);
-    if (!el) return;
-    const clone = el.cloneNode(true);
-    // Remove no-print children
-    clone.querySelectorAll(".no-print").forEach(n => n.remove());
-    const printDiv = document.createElement("div");
-    printDiv.id = "repairiq-print-root";
-    printDiv.appendChild(clone);
-    const style = document.createElement("style");
-    style.textContent = `
-      @media print {
-        body > *:not(#repairiq-print-root) { display: none !important; }
-        #repairiq-print-root { display: block !important; }
-        #repairiq-print-root * { color: black !important; background: white !important; border-color: #ddd !important; box-shadow: none !important; }
-        #repairiq-print-root { position: static; max-height: none; overflow: visible; border-radius: 0; border: none; width: 100%; max-width: 100%; }
-      }
-    `;
-    document.head.appendChild(style);
-    document.body.appendChild(printDiv);
-    window.print();
-    document.body.removeChild(printDiv);
-    document.head.removeChild(style);
+  const handlePrint = (html) => {
+    const w = window.open("", "_blank", "width=800,height=600");
+    if (!w) { alert("Please allow popups for repairiqhq.com to print."); return; }
+    w.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <title>RepairIQ Estimate</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111; background: white; padding: 32px; max-width: 600px; margin: 0 auto; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; }
+    .item { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #eee; gap: 16px; }
+    .item-name { font-size: 15px; font-weight: 500; }
+    .item-tier { font-size: 11px; color: #888; margin-top: 2px; }
+    .item-cost { font-size: 15px; font-weight: 600; color: #b8860b; white-space: nowrap; }
+    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 8px; }
+    .total-label { font-size: 16px; font-weight: 600; }
+    .total-cost { font-size: 24px; font-weight: 300; color: #b8860b; }
+    .footer { font-size: 11px; color: #aaa; margin-top: 8px; }
+    .logo { font-size: 13px; color: #aaa; margin-top: 24px; border-top: 1px solid #eee; padding-top: 12px; }
+    @media print { body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  ${html}
+  <div class="logo">Generated by RepairIQ · repairiqhq.com</div>
+</body>
+</html>`);
+    w.document.close();
+    w.focus();
+    setTimeout(() => { w.print(); w.close(); }, 500);
+  };
+
+  const buildPrintHTML = ({ title, subtitle, items, totalLow, totalHigh, footerNote }) => {
+    const rows = items.map(({ name, tierName, low, high }) => `
+      <div class="item">
+        <div><div class="item-name">${name}</div><div class="item-tier">${tierName}</div></div>
+        <div class="item-cost">$${low.toLocaleString()} – $${high.toLocaleString()}</div>
+      </div>`).join("");
+    return `
+      <h1>${title}</h1>
+      <div class="subtitle">${subtitle}</div>
+      ${rows}
+      <div class="total-row">
+        <div class="total-label">Total Estimate</div>
+        <div class="total-cost">$${totalLow.toLocaleString()} – $${totalHigh.toLocaleString()}</div>
+      </div>
+      <div class="footer">${footerNote}</div>`;
   };
 
   const isEV = make === "Tesla" || (model !== "Any Model" && evModels.has(model));
@@ -7636,6 +7679,7 @@ const modelYears = {
           shareURL={buildShareURL({ basket })}
           handleShare={handleShare}
           handlePrint={handlePrint}
+          buildPrintHTML={buildPrintHTML}
         />
       )}
 
@@ -7656,6 +7700,7 @@ const modelYears = {
           shareURL={buildShareURL({ repair: selectedRepair })}
           handleShare={handleShare}
           handlePrint={handlePrint}
+          buildPrintHTML={buildPrintHTML}
         />
       )}
 
