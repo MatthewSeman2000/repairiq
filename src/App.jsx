@@ -6434,6 +6434,8 @@ export default function RepairIQ() {
   const [submitting, setSubmitting]       = useState(false);
   const [submitError, setSubmitError]     = useState(null);
   const [votes, setVotes]                 = useState({});
+  const [basket, setBasket]               = useState(new Set());
+  const [showBasket, setShowBasket]       = useState(false);
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside"
 
 // Production year ranges — verified manufacturer data (start year, end year)
@@ -7045,6 +7047,27 @@ const modelYears = {
     }
   };
 
+  const toggleBasket = (e, name) => {
+    e.stopPropagation();
+    setBasket(prev => {
+      const next = new Set(prev);
+      next.has(name) ? next.delete(name) : next.add(name);
+      return next;
+    });
+  };
+
+  const basketTotal = () => {
+    let low = 0, high = 0;
+    basket.forEach(name => {
+      const d = repairData[name];
+      if (!d) return;
+      const tiers = Object.values(d.costs);
+      low  += adj(Math.min(...tiers.map(v => v.low)),  d, name);
+      high += adj(Math.max(...tiers.map(v => v.high)), d, name);
+    });
+    return { low, high };
+  };
+
   const isEV = make === "Tesla" || (model !== "Any Model" && evModels.has(model));
 
   const filtered = useMemo(() =>
@@ -7295,7 +7318,7 @@ const modelYears = {
 
       {/* ── REPAIR COSTS MODE ─────────────────────────────────────────────── */}
       {appMode === "costs" && (
-      <main style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px", alignItems:"start" }}>
+      <main style={{ maxWidth:"900px", margin:"20px auto", padding:`0 24px ${basket.size > 0 ? "100px" : "20px"}`, display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px", alignItems:"start" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
           const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
@@ -7312,7 +7335,15 @@ const modelYears = {
                   <div style={{ marginBottom:"4px" }}><RepairIcon icon={data.icon} size={20} /></div>
                   <div style={{ fontWeight:"600", fontSize:"15px", letterSpacing:"-0.01em" }}>{name}</div>
                 </div>
-                <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px", whiteSpace:"nowrap" }}>{data.category}</span>
+                <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:"6px" }}>
+                  <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px", whiteSpace:"nowrap" }}>{data.category}</span>
+                  <button
+                    onClick={e => toggleBasket(e, name)}
+                    title={basket.has(name) ? "Remove from estimate" : "Add to estimate"}
+                    style={{ background: basket.has(name) ? "#c9a84c" : "#1e1e1e", border:`1px solid ${basket.has(name) ? "#c9a84c" : "#2a2a2a"}`, borderRadius:"6px", width:"24px", height:"24px", cursor:"pointer", color: basket.has(name) ? "#0f0f0f" : "#555", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:1, fontFamily:"inherit", flexShrink:0 }}>
+                    {basket.has(name) ? "✓" : "+"}
+                  </button>
+                </div>
               </div>
 
               <div style={{ fontSize:"22px", fontWeight:"300", letterSpacing:"-0.02em", marginBottom:"4px" }}>
@@ -7334,6 +7365,105 @@ const modelYears = {
       </main>
 
       )} {/* end costs mode */}
+
+      {/* ── BASKET BAR ────────────────────────────────────────────────────── */}
+      {basket.size > 0 && (() => {
+        const { low, high } = basketTotal();
+        return (
+          <div style={{ position:"fixed", bottom:0, left:0, right:0, zIndex:900, background:"#111", borderTop:"1px solid #2a2a2a", padding:"14px 24px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"16px", backdropFilter:"blur(8px)" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:"16px" }}>
+              <div style={{ background:"#c9a84c", color:"#0f0f0f", borderRadius:"20px", padding:"2px 10px", fontSize:"12px", fontWeight:"700" }}>
+                {basket.size} repair{basket.size > 1 ? "s" : ""}
+              </div>
+              <div style={{ fontSize:"20px", fontWeight:"300", letterSpacing:"-0.02em" }}>
+                ${low.toLocaleString()} – ${high.toLocaleString()}
+              </div>
+              <div style={{ fontSize:"11px", color:"#444" }}>combined estimate</div>
+            </div>
+            <div style={{ display:"flex", gap:"8px" }}>
+              <button onClick={() => setBasket(new Set())} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"8px 14px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit" }}>
+                Clear
+              </button>
+              <button onClick={() => setShowBasket(true)} style={{ background:"#c9a84c", border:"none", borderRadius:"6px", padding:"8px 18px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.06em", textTransform:"uppercase" }}>
+                View Estimate →
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── BASKET MODAL ──────────────────────────────────────────────────── */}
+      {showBasket && (() => {
+        const { low, high } = basketTotal();
+        const items = Array.from(basket).map(name => {
+          const d = repairData[name];
+          const tiers = Object.values(d.costs);
+          return {
+            name,
+            data: d,
+            low:  adj(Math.min(...tiers.map(v => v.low)),  d, name),
+            high: adj(Math.max(...tiers.map(v => v.high)), d, name),
+          };
+        });
+        return (
+          <div onClick={() => setShowBasket(false)} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
+            <div onClick={e => e.stopPropagation()} style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+
+              {/* Header */}
+              <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e", display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                <div>
+                  <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>Repair Estimate</div>
+                  <div style={{ fontSize:"12px", color:"#555" }}>
+                    {make !== "Any Make" ? `${year !== "Any Year" ? year + " " : ""}${make} ${model !== "Any Model" ? model : ""}` : "All vehicles"}
+                    {zip ? ` · ${zip}` : ""}
+                  </div>
+                </div>
+                <button onClick={() => setShowBasket(false)} style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
+              </div>
+
+              {/* Repair line items */}
+              <div style={{ padding:"16px 24px" }}>
+                {items.map(({ name, data, low: iLow, high: iHigh }) => {
+                  const cc = catColor(data.category);
+                  return (
+                    <div key={name} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 0", borderBottom:"1px solid #1a1a1a" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                        <RepairIcon icon={data.icon} size={18} />
+                        <div>
+                          <div style={{ fontSize:"14px", fontWeight:"500" }}>{name}</div>
+                          <span style={{ fontSize:"10px", color:cc, background:`${cc}18`, padding:"2px 6px", borderRadius:"10px", letterSpacing:"0.06em", textTransform:"uppercase" }}>{data.category}</span>
+                        </div>
+                      </div>
+                      <div style={{ display:"flex", alignItems:"center", gap:"12px", flexShrink:0 }}>
+                        <div style={{ fontSize:"14px", color:"#c9a84c", textAlign:"right" }}>
+                          ${iLow.toLocaleString()} – ${iHigh.toLocaleString()}
+                        </div>
+                        <button onClick={() => toggleBasket({ stopPropagation:()=>{} }, name)} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"4px", width:"22px", height:"22px", cursor:"pointer", color:"#555", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Total */}
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 0 8px" }}>
+                  <div style={{ fontWeight:"600", fontSize:"15px" }}>Total Estimate</div>
+                  <div style={{ fontSize:"22px", fontWeight:"300", letterSpacing:"-0.02em", color:"#c9a84c" }}>
+                    ${low.toLocaleString()} – ${high.toLocaleString()}
+                  </div>
+                </div>
+                <div style={{ fontSize:"11px", color:"#444", marginBottom:"20px" }}>Parts + labor · Adjusted for {zip || "national average"} · Actual quotes may vary</div>
+
+                <button style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+                  Get Shop Quotes →
+                </button>
+                <button onClick={() => { setBasket(new Set()); setShowBasket(false); }} style={{ width:"100%", background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginTop:"8px" }}>
+                  Clear All &amp; Start Over
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── REPAIR DETAIL MODAL ───────────────────────────────────────────── */}
       {selectedRepair && repairData[selectedRepair] && (
