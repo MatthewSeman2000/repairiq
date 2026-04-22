@@ -6434,8 +6434,9 @@ export default function RepairIQ() {
   const [submitting, setSubmitting]       = useState(false);
   const [submitError, setSubmitError]     = useState(null);
   const [votes, setVotes]                 = useState({});
-  const [basket, setBasket]               = useState(new Set());
+  const [basket, setBasket]               = useState(new Map()); // name → tierName
   const [showBasket, setShowBasket]       = useState(false);
+  const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside"
 
 // Production year ranges — verified manufacturer data (start year, end year)
@@ -7047,23 +7048,36 @@ const modelYears = {
     }
   };
 
-  const toggleBasket = (e, name) => {
+  const openTierPicker = (e, name) => {
     e.stopPropagation();
-    setBasket(prev => {
-      const next = new Set(prev);
-      next.has(name) ? next.delete(name) : next.add(name);
-      return next;
-    });
+    if (basket.has(name)) {
+      // Already in basket — remove it
+      setBasket(prev => { const next = new Map(prev); next.delete(name); return next; });
+      return;
+    }
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTierPicker({ name, top: rect.bottom + window.scrollY + 6, right: window.innerWidth - rect.right });
+  };
+
+  const pickTier = (repairName, tierName) => {
+    setBasket(prev => { const next = new Map(prev); next.set(repairName, tierName); return next; });
+    setTierPicker(null);
+  };
+
+  const removeFromBasket = (e, name) => {
+    e.stopPropagation();
+    setBasket(prev => { const next = new Map(prev); next.delete(name); return next; });
   };
 
   const basketTotal = () => {
     let low = 0, high = 0;
-    basket.forEach(name => {
+    basket.forEach((tierName, name) => {
       const d = repairData[name];
       if (!d) return;
-      const tiers = Object.values(d.costs);
-      low  += adj(Math.min(...tiers.map(v => v.low)),  d, name);
-      high += adj(Math.max(...tiers.map(v => v.high)), d, name);
+      const tier = d.costs[tierName];
+      if (!tier) return;
+      low  += adj(tier.low,  d, name);
+      high += adj(tier.high, d, name);
     });
     return { low, high };
   };
@@ -7338,7 +7352,7 @@ const modelYears = {
                 <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:"6px" }}>
                   <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px", whiteSpace:"nowrap" }}>{data.category}</span>
                   <button
-                    onClick={e => toggleBasket(e, name)}
+                    onClick={e => openTierPicker(e, name)}
                     title={basket.has(name) ? "Remove from estimate" : "Add to estimate"}
                     style={{ background: basket.has(name) ? "#c9a84c" : "#1e1e1e", border:`1px solid ${basket.has(name) ? "#c9a84c" : "#2a2a2a"}`, borderRadius:"6px", width:"24px", height:"24px", cursor:"pointer", color: basket.has(name) ? "#0f0f0f" : "#555", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", lineHeight:1, fontFamily:"inherit", flexShrink:0 }}>
                     {basket.has(name) ? "✓" : "+"}
@@ -7366,6 +7380,33 @@ const modelYears = {
 
       )} {/* end costs mode */}
 
+      {/* ── TIER PICKER POPOVER ───────────────────────────────────────────── */}
+      {tierPicker && (() => {
+        const d = repairData[tierPicker.name];
+        const tiers = Object.entries(d.costs);
+        return (
+          <>
+            <div onClick={() => setTierPicker(null)} style={{ position:"fixed", inset:0, zIndex:998 }} />
+            <div style={{ position:"absolute", top: tierPicker.top, right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" }}>
+              <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
+                Choose service tier
+              </div>
+              {tiers.map(([tierName, vals]) => {
+                const lo = adj(vals.low,  d, tierPicker.name);
+                const hi = adj(vals.high, d, tierPicker.name);
+                return (
+                  <button key={tierName} onClick={() => pickTier(tierPicker.name, tierName)}
+                    style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%", background:"#111", border:"1px solid #222", borderRadius:"6px", padding:"9px 12px", marginBottom:"6px", cursor:"pointer", fontFamily:"inherit", textAlign:"left" }}>
+                    <span style={{ fontSize:"13px", color:"#ccc" }}>{tierName}</span>
+                    <span style={{ fontSize:"13px", color:"#c9a84c", fontWeight:"500" }}>${lo.toLocaleString()} – ${hi.toLocaleString()}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        );
+      })()}
+
       {/* ── BASKET BAR ────────────────────────────────────────────────────── */}
       {basket.size > 0 && (() => {
         const { low, high } = basketTotal();
@@ -7381,7 +7422,7 @@ const modelYears = {
               <div style={{ fontSize:"11px", color:"#444" }}>combined estimate</div>
             </div>
             <div style={{ display:"flex", gap:"8px" }}>
-              <button onClick={() => setBasket(new Set())} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"8px 14px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit" }}>
+              <button onClick={() => setBasket(new Map())} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"8px 14px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit" }}>
                 Clear
               </button>
               <button onClick={() => setShowBasket(true)} style={{ background:"#c9a84c", border:"none", borderRadius:"6px", padding:"8px 18px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.06em", textTransform:"uppercase" }}>
@@ -7395,14 +7436,15 @@ const modelYears = {
       {/* ── BASKET MODAL ──────────────────────────────────────────────────── */}
       {showBasket && (() => {
         const { low, high } = basketTotal();
-        const items = Array.from(basket).map(name => {
+        const items = Array.from(basket.entries()).map(([name, tierName]) => {
           const d = repairData[name];
-          const tiers = Object.values(d.costs);
+          const tier = d.costs[tierName];
           return {
             name,
+            tierName,
             data: d,
-            low:  adj(Math.min(...tiers.map(v => v.low)),  d, name),
-            high: adj(Math.max(...tiers.map(v => v.high)), d, name),
+            low:  adj(tier.low,  d, name),
+            high: adj(tier.high, d, name),
           };
         });
         return (
@@ -7431,14 +7473,17 @@ const modelYears = {
                         <RepairIcon icon={data.icon} size={18} />
                         <div>
                           <div style={{ fontSize:"14px", fontWeight:"500" }}>{name}</div>
-                          <span style={{ fontSize:"10px", color:cc, background:`${cc}18`, padding:"2px 6px", borderRadius:"10px", letterSpacing:"0.06em", textTransform:"uppercase" }}>{data.category}</span>
+                          <div style={{ display:"flex", gap:"4px", marginTop:"2px", flexWrap:"wrap" }}>
+                            <span style={{ fontSize:"10px", color:cc, background:`${cc}18`, padding:"2px 6px", borderRadius:"10px", letterSpacing:"0.06em", textTransform:"uppercase" }}>{data.category}</span>
+                            <span style={{ fontSize:"10px", color:"#666", background:"#1e1e1e", padding:"2px 6px", borderRadius:"10px" }}>{tierName}</span>
+                          </div>
                         </div>
                       </div>
                       <div style={{ display:"flex", alignItems:"center", gap:"12px", flexShrink:0 }}>
                         <div style={{ fontSize:"14px", color:"#c9a84c", textAlign:"right" }}>
                           ${iLow.toLocaleString()} – ${iHigh.toLocaleString()}
                         </div>
-                        <button onClick={() => toggleBasket({ stopPropagation:()=>{} }, name)} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"4px", width:"22px", height:"22px", cursor:"pointer", color:"#555", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
+                        <button onClick={e => { e.stopPropagation(); removeFromBasket({ stopPropagation:()=>{} }, name); }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"4px", width:"22px", height:"22px", cursor:"pointer", color:"#555", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}>✕</button>
                       </div>
                     </div>
                   );
@@ -7456,7 +7501,7 @@ const modelYears = {
                 <button style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
                   Get Shop Quotes →
                 </button>
-                <button onClick={() => { setBasket(new Set()); setShowBasket(false); }} style={{ width:"100%", background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginTop:"8px" }}>
+                <button onClick={() => { setBasket(new Map()); setShowBasket(false); }} style={{ width:"100%", background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginTop:"8px" }}>
                   Clear All &amp; Start Over
                 </button>
               </div>
