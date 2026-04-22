@@ -537,6 +537,185 @@ const repairData = {
   },
 
 
+
+  // ── BRAKES ───────────────────────────────────────────────────────────────
+  "Brake Master Cylinder": {
+    icon: "🔧", category: "Brakes", trimSensitive: true,
+    costs: { "Standard": { low: 400, high: 750 } },
+    labor: "1.5–3 hrs",
+    notes: "RepairPal average $586–$721. Symptoms: spongy pedal, pedal sinking to floor, no external leaks. Safety-critical — don't drive. Brake system flush recommended at same time.",
+  },
+  "Brake Lines / Hose": {
+    icon: "💧", category: "Brakes", trimSensitive: false,
+    costs: {
+      "Single rubber hose": { low: 150, high: 300 },
+      "Steel line section":  { low: 200, high: 500 },
+      "Full system reline":  { low: 600, high: 1500 },
+    },
+    labor: "1–4 hrs",
+    notes: "Rubber hoses swell and collapse internally — can cause dragging brakes. Steel lines rust from inside out. Common in salt-belt states on vehicles over 10 years old. System flush required after any line work.",
+  },
+  "ABS Module / Pump": {
+    icon: "📡", category: "Brakes", trimSensitive: true,
+    costs: {
+      "Refurbished module": { low: 600,  high: 1200 },
+      "New OEM module":     { low: 1000, high: 1800 },
+    },
+    labor: "1.5–3 hrs",
+    notes: "RepairPal parts avg $1,033–$1,052 + $150–$223 labor. ABS and traction control lights are main symptoms. Confirm diagnosis — wheel speed sensors and wiring issues are cheaper and often the real cause.",
+  },
+
+  // ── ENGINE ────────────────────────────────────────────────────────────────
+  "Camshaft Position Sensor": {
+    icon: "📡", category: "Engine", trimSensitive: false, iceOnly: true,
+    costs: { "Standard": { low: 175, high: 350 } },
+    labor: "0.5–1.5 hrs",
+    notes: "RepairPal average $214–$321. P0340–P0349 are the common codes. Symptoms: rough start, stall, misfires. Location varies — some are a 15-min job, others require more disassembly. Computer relearn after replacement.",
+  },
+  "Engine Mount Replacement": {
+    icon: "🔩", category: "Engine", trimSensitive: true,
+    costs: {
+      "Single standard mount":    { low: 300,  high: 600  },
+      "Hydraulic / active mount": { low: 400,  high: 900  },
+      "All mounts (set)":         { low: 700,  high: 1500 },
+    },
+    labor: "1–3 hrs per mount",
+    notes: "Jerry avg $487–$535 per standard mount. Symptoms: excessive vibration, clunking on acceleration, engine movement. Often replaced in sets. Oil leaks can accelerate mount deterioration.",
+  },
+  "Turbocharger Replacement": {
+    icon: "🔥", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Rebuilt / remanufactured": { low: 1000, high: 2500 },
+      "New aftermarket":          { low: 1500, high: 3500 },
+      "New OEM / performance":    { low: 2500, high: 6000 },
+    },
+    labor: "4–10 hrs",
+    notes: "Labor adds $700–$1,500+. Total replacement $2,000–$4,000 for most vehicles, up to $7,000+ for twin-turbo or performance cars. Symptoms: blue/black smoke, whine, power loss. Always fix root cause (oil starvation, carbon buildup) or new turbo will fail again.",
+  },
+  "Exhaust Manifold": {
+    icon: "🔧", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Gasket only":       { low: 350,  high: 600  },
+      "Full replacement":  { low: 900,  high: 1800 },
+    },
+    labor: "2–5 hrs",
+    notes: "RepairPal gasket avg $386–$551; full manifold $1,430–$1,639. Ticking noise on cold start that fades when warm is the classic symptom. Exhaust smell in cabin is a safety concern — address promptly.",
+  },
+  "Oil Pan Gasket": {
+    icon: "🛢️", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: { "Standard": { low: 400, high: 800 } },
+    labor: "2–5 hrs",
+    notes: "RepairPal average $553–$759. Oil spot on driveway is main symptom. Some vehicles require subframe removal — adds significant labor. Replace drain plug and inspect motor mounts while accessible.",
+  },
+  "Fuel Injector Replacement": {
+    icon: "⛽", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Single injector":    { low: 250, high: 500  },
+      "Full set (4-cyl)":   { low: 600, high: 1000 },
+      "Full set (V6/V8)":   { low: 900, high: 1600 },
+    },
+    labor: "1–4 hrs",
+    notes: "RepairPal average $741–$927 for single. Symptoms: rough idle, misfire, poor fuel economy, P0200-series codes. Try professional injector cleaning ($100–$200) first — often resolves partial blockage without replacement.",
+  },
+  "EVAP System (Purge Valve / Canister)": {
+    icon: "💨", category: "Engine", trimSensitive: false, iceOnly: true,
+    costs: {
+      "Purge valve only": { low: 180, high: 320 },
+      "EVAP canister":    { low: 450, high: 650 },
+      "Full system":      { low: 500, high: 900 },
+    },
+    labor: "0.5–2 hrs",
+    notes: "P0440–P0457 codes. Gas cap is the cheapest fix — check it first ($10–$25). Purge valve $180–$320, EVAP canister $450–$650 per RepairPal. Smoke test required to pinpoint the actual leak location.",
+  },
+  "VVT Solenoid (Variable Valve Timing)": {
+    icon: "⚙️", category: "Engine", trimSensitive: false, iceOnly: true,
+    costs: { "Standard (per solenoid)": { low: 200, high: 600 } },
+    labor: "0.5–1.5 hrs",
+    notes: "RepairPal average $441–$559. P0010–P0025 codes, rough idle, poor fuel economy are main symptoms. Keep up with oil changes — dirty oil is the #1 cause of VVT solenoid failure.",
+  },
+
+  // ── EXHAUST ───────────────────────────────────────────────────────────────
+  "Muffler Replacement": {
+    icon: "🔧", category: "Engine", trimSensitive: false, iceOnly: true,
+    costs: {
+      "Aftermarket weld-on": { low: 150, high: 400  },
+      "OEM bolt-on":         { low: 400, high: 800  },
+      "Full rear section":   { low: 600, high: 1200 },
+    },
+    labor: "1–2 hrs",
+    notes: "RepairPal average $1,077–$1,143 for full OEM system. Loud drone, visible rust holes, dragging exhaust are main symptoms. Aftermarket weld-on mufflers are cheaper but may have shorter lifespan. Replace hangers at same time.",
+  },
+
+  // ── DRIVETRAIN ────────────────────────────────────────────────────────────
+  "Driveshaft Replacement": {
+    icon: "⚙️", category: "Drivetrain", trimSensitive: true,
+    costs: {
+      "Remanufactured": { low: 400, high: 800  },
+      "New OEM":        { low: 700, high: 1500 },
+    },
+    labor: "1–3 hrs",
+    notes: "Vibration at highway speed, clunking on acceleration or deceleration are main symptoms. Front or rear depending on drivetrain layout. U-joints often replaced at same time. Alignment recommended after.",
+  },
+  "U-Joint Replacement": {
+    icon: "🔧", category: "Drivetrain", trimSensitive: false,
+    costs: { "Standard (per joint)": { low: 200, high: 450 } },
+    labor: "1–2 hrs",
+    notes: "Clunking or vibration from under the vehicle, worse under load. Often multiple joints replaced at once. Common on trucks and RWD/4WD vehicles. Greaseable U-joints last longer if maintained.",
+  },
+  "Axle Seal Replacement": {
+    icon: "💧", category: "Drivetrain", trimSensitive: false,
+    costs: { "Standard (per seal)": { low: 150, high: 350 } },
+    labor: "1–2 hrs",
+    notes: "Oil leak from differential or transmission end of axle. Often found during brake or bearing inspection. Relatively inexpensive if caught early — ignored leaks lead to differential damage.",
+  },
+
+  // ── ELECTRICAL ────────────────────────────────────────────────────────────
+  "Fuel Injector Cleaning (Service)": {
+    icon: "⛽", category: "Electrical", trimSensitive: false, iceOnly: true,
+    costs: {
+      "On-car induction clean": { low: 80,  high: 200 },
+      "Off-car bench clean":    { low: 150, high: 350 },
+    },
+    labor: "0.5–1 hr",
+    notes: "Try this before replacing injectors — often resolves rough idle, hesitation, and poor fuel economy caused by partial blockage. Recommended every 30k miles on direct injection engines prone to carbon buildup.",
+  },
+  "MAP Sensor Replacement": {
+    icon: "📡", category: "Electrical", trimSensitive: false, iceOnly: true,
+    costs: { "Standard": { low: 150, high: 320 } },
+    labor: "0.5–1 hr",
+    notes: "Manifold Absolute Pressure sensor. P0105–P0108 codes. Symptoms: rough idle, poor fuel economy, black smoke, hard start. Often confused with MAF sensor — confirm which system your vehicle uses before replacing.",
+  },
+  "EGR Valve Replacement": {
+    icon: "💨", category: "Electrical", trimSensitive: false, iceOnly: true,
+    costs: {
+      "Cleaning only":  { low: 100, high: 200 },
+      "Replacement":    { low: 300, high: 700 },
+    },
+    labor: "1–2 hrs",
+    notes: "Exhaust Gas Recirculation valve. P0400–P0409 codes. Rough idle, check engine light, hesitation. Cleaning often fixes it before full replacement is needed. Common on diesels and older GDI engines.",
+  },
+
+  // ── HVAC ─────────────────────────────────────────────────────────────────
+  "AC Condenser Replacement": {
+    icon: "❄️", category: "HVAC", trimSensitive: true,
+    costs: {
+      "Condenser only":           { low: 400, high: 900  },
+      "With receiver-drier/flush": { low: 600, high: 1200 },
+    },
+    labor: "2–4 hrs",
+    notes: "AC system must be evacuated and recharged after replacement ($100–$200 extra). Condenser is in front of radiator — vulnerable to road debris. If condenser leaked, replace receiver-drier at same time to avoid contaminating new parts.",
+  },
+  "Blower Motor Replacement": {
+    icon: "🌬️", category: "HVAC", trimSensitive: false,
+    costs: {
+      "Motor only":              { low: 200, high: 450 },
+      "Motor + resistor/module": { low: 300, high: 650 },
+    },
+    labor: "1–3 hrs",
+    notes: "Symptoms: no airflow at one or more fan speeds, loud squealing from vents, or complete loss of cabin airflow. Blower motor resistor ($50–$150) often fails before the motor itself — diagnose this first.",
+  },
+
+
   "Blend Door Actuator": {
     icon: "🌡️", category: "HVAC", trimSensitive: false,
     costs: { "Standard": { low: 150, high: 350 } },
