@@ -7437,6 +7437,24 @@ const modelYears = {
   const regMult    = region ? region.multiplier : 1;
   const baseMult   = makeMult * modelMult * regMult;
   const totalMult  = makeMult * modelMult * trimMult * regMult;
+
+  // Pre-compute estimates label to avoid nested template literal issues in JSX
+  const estimatesLabel = (() => {
+    const parts = [];
+    if (make !== "Any Make") {
+      let v = make;
+      if (model !== "Any Model") v += " " + model;
+      if (effectiveTrim !== "Any Trim") v += " " + effectiveTrim;
+      if (year !== "Any Year") v += " " + year;
+      parts.push(v);
+    } else if (year !== "Any Year") {
+      parts.push(year);
+    }
+    if (zip && region) parts.push(region.name.split(",")[0] + " labor rates");
+    const base = `base modifier: ${totalMult > 1 ? "+" : ""}${Math.round((totalMult - 1) * 100)}%`;
+    const yearNote = year !== "Any Year" && yearMult !== 1 ? `, year: +${Math.round((yearMult - 1) * 100)}% on applicable repairs` : "";
+    return `📊 Estimates adjusted for ${parts.join(" + ")} — ${base}${yearNote}`;
+  })();
   // adj applies trim multiplier only for trim-sensitive repairs
   // adj applies year multiplier only for year-sensitive repairs
   const adj = (v, data, repairName) => {
@@ -7748,8 +7766,9 @@ const modelYears = {
         )}
 
         {/* Search + Make + Model + Trim + Year + Category */}
-        <div style={{ display:"grid", gridTemplateColumns:"1fr auto auto auto auto auto", gap:"10px" }}>
+        <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
           <input placeholder="Search repairs…" value={search} onChange={e => setSearch(e.target.value)} style={IS} />
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(140px, 1fr))", gap:"8px" }}>
           <select value={make} onChange={e => { setMake(e.target.value); setModel("Any Model"); setTrim("Any Trim"); setYear("Any Year"); }} style={IS}>
             {makes.map(m => <option key={m}>{m}</option>)}
           </select>
@@ -7770,9 +7789,8 @@ const modelYears = {
                     const [start, end] = trimYears[make][model][t];
                     return yr >= start && yr <= end;
                   }
-                  return true; // no trimYears data = always show
+                  return true;
                 });
-                // If filtering removed everything except Any Trim, show all trims instead
                 const toShow = filtered.length <= 1 ? allTrims : filtered;
                 return toShow.map(([t]) => <option key={t}>{t}</option>);
               })()}
@@ -7792,12 +7810,13 @@ const modelYears = {
           <select value={category} onChange={e => setCategory(e.target.value)} style={IS}>
             {categories.map(c => <option key={c}>{c}</option>)}
           </select>
+          </div>
         </div>
 
         {/* Combined modifier callout */}
         {(make !== "Any Make" || zip || year !== "Any Year") && (
           <div style={{ marginTop:"10px", background:"#1a1a0a", border:"1px solid #3a3010", borderRadius:"6px", padding:"9px 14px", fontSize:"12px", color:"#c9a84c" }}>
-            📊 Estimates adjusted for{make !== "Any Make" ? ` ${make}${model !== "Any Model" ? ` ${model}` : ""}${effectiveTrim !== "Any Trim" ? ` ${effectiveTrim}` : ""}` : ""}${year !== "Any Year" ? ` ${year}` : ""}{zip && region ? ` + ${region.name.split(",")[0]} labor rates` : ""} — base modifier: {totalMult>1?"+":""}{Math.round((totalMult-1)*100)}%{year !== "Any Year" && yearMult !== 1 ? `, year: +${Math.round((yearMult-1)*100)}% on applicable repairs` : ""}
+            {estimatesLabel}
           </div>
         )}
       </div>
