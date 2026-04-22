@@ -6419,7 +6419,7 @@ function RepairIcon({ icon, size = 20 }) {
 
 
 function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML }) {
-  const [shopType, setShopType] = React.useState("both"); // "both" | "dealer" | "independent"
+  const [shopType, setShopType] = useState("both"); // "both" | "dealer" | "independent"
   const shopMult = shopType === "dealer" ? 1.18 : shopType === "independent" ? 0.80 : 1.0;
   const sadj = (v, d, n) => Math.round(adj(v, d, n) * shopMult);
 
