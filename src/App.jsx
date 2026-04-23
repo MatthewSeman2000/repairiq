@@ -6904,7 +6904,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
       <div onClick={e => e.stopPropagation()} className="basket-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"clamp(320px, 90vw, 900px)", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Header */}
-        <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e" }}>
+        <div style={{ padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px) clamp(16px, 2vw, 28px)", borderBottom:"1px solid #1e1e1e" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"14px" }}>
             <div>
               <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>Repair Estimate</div>
@@ -6920,7 +6920,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
           <div style={{ display:"flex", gap:"6px" }}>
             {[["both","Both"], ["independent","Independent"], ["dealer","Dealer"]].map(([val, label]) => (
               <button key={val} onClick={() => setShopType(val)}
-                style={{ flex:1, padding:"6px 0", fontSize:"11px", fontWeight:"500", fontFamily:"inherit", borderRadius:"6px", cursor:"pointer", letterSpacing:"0.04em", border:`1px solid ${shopType===val ? "#c9a84c" : "#2a2a2a"}`, background: shopType===val ? "#c9a84c18" : "transparent", color: shopType===val ? "#c9a84c" : "#555", transition:"all 0.15s" }}>
+                style={{ flex:1, padding:"clamp(6px, 0.8vw, 12px) 0", fontSize:"clamp(11px, 1vw, 14px)", fontWeight:"500", fontFamily:"inherit", borderRadius:"6px", cursor:"pointer", letterSpacing:"0.04em", border:`1px solid ${shopType===val ? "#c9a84c" : "#2a2a2a"}`, background: shopType===val ? "#c9a84c18" : "transparent", color: shopType===val ? "#c9a84c" : "#555", transition:"all 0.15s" }}>
                 {label}
               </button>
             ))}
@@ -7021,29 +7021,29 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
     <div onClick={onClose}
       style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
       <div onClick={e => e.stopPropagation()}
-        className="modal-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"clamp(320px, 90vw, 860px)", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+        className="modal-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"clamp(320px, min(90vw, 40vw + 400px), 1200px)", maxHeight:"90vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Color bar */}
         <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, borderRadius:"14px 14px 0 0" }} />
 
         {/* Header */}
-        <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e" }}>
+        <div style={{ padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px) clamp(16px, 2vw, 28px)", borderBottom:"1px solid #1e1e1e" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
             <div>
-              <div style={{ marginBottom:"6px" }}><RepairIcon icon={data.icon} size={24} /></div>
-              <div style={{ fontWeight:"600", fontSize:"18px", letterSpacing:"-0.02em", marginBottom:"4px" }}>{name}</div>
+              <div style={{ marginBottom:"8px" }}><RepairIcon icon={data.icon} size={32} /></div>
+              <div style={{ fontWeight:"600", fontSize:"clamp(18px, 1.6vw, 26px)", letterSpacing:"-0.02em", marginBottom:"4px" }}>{name}</div>
               <span style={{ fontSize:"10px", letterSpacing:"0.1em", textTransform:"uppercase", color:cc, background:`${cc}18`, padding:"3px 8px", borderRadius:"20px" }}>{data.category}</span>
             </div>
             <button onClick={onClose}
-              style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, fontFamily:"inherit" }}>
+              style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"clamp(30px, 2.5vw, 42px)", height:"clamp(30px, 2.5vw, 42px)", cursor:"pointer", color:"#888", fontSize:"clamp(16px, 1.4vw, 22px)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, fontFamily:"inherit" }}>
               ✕
             </button>
           </div>
           <div style={{ marginTop:"16px" }}>
-            <div style={{ fontSize:"28px", fontWeight:"300", letterSpacing:"-0.03em" }}>
+            <div style={{ fontSize:"clamp(28px, 3vw, 48px)", fontWeight:"300", letterSpacing:"-0.03em" }}>
               ${loLow.toLocaleString()} – ${hiHigh.toLocaleString()}
             </div>
-            <div style={{ fontSize:"12px", color:"#444", display:"flex", gap:"12px", marginTop:"4px" }}>
+            <div style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:"#444", display:"flex", gap:"12px", marginTop:"6px" }}>
               <span>⏱ {data.labor}</span>
               <span style={{ color:"#333" }}>parts + labor</span>
             </div>
@@ -7053,7 +7053,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
           <div style={{ display:"flex", gap:"6px", marginTop:"14px" }}>
             {[["both","Both"], ["independent","Independent"], ["dealer","Dealer"]].map(([val, label]) => (
               <button key={val} onClick={() => setShopType(val)}
-                style={{ flex:1, padding:"6px 0", fontSize:"11px", fontWeight:"500", fontFamily:"inherit", borderRadius:"6px", cursor:"pointer", letterSpacing:"0.04em", border:`1px solid ${shopType===val ? "#c9a84c" : "#2a2a2a"}`, background: shopType===val ? "#c9a84c18" : "transparent", color: shopType===val ? "#c9a84c" : "#555", transition:"all 0.15s" }}>
+                style={{ flex:1, padding:"clamp(6px, 0.8vw, 12px) 0", fontSize:"clamp(11px, 1vw, 14px)", fontWeight:"500", fontFamily:"inherit", borderRadius:"6px", cursor:"pointer", letterSpacing:"0.04em", border:`1px solid ${shopType===val ? "#c9a84c" : "#2a2a2a"}`, background: shopType===val ? "#c9a84c18" : "transparent", color: shopType===val ? "#c9a84c" : "#555", transition:"all 0.15s" }}>
                 {label}
               </button>
             ))}
@@ -7066,12 +7066,12 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
         </div>
 
         {/* Body */}
-        <div style={{ padding:"20px clamp(24px, 4vw, 80px)" }}>
+        <div style={{ padding:"clamp(16px, 2vw, 32px) clamp(24px, 3vw, 48px)" }}>
 
           {/* Tier breakdown */}
-          <div style={{ fontSize:"11px", color:"#555", marginBottom:"10px", textTransform:"uppercase", letterSpacing:"0.08em" }}>By Service Tier</div>
+          <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", marginBottom:"10px", textTransform:"uppercase", letterSpacing:"0.08em" }}>By Service Tier</div>
           {tiers.map(([tier, vals]) => (
-            <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"8px 0", borderBottom:"1px solid #1a1a1a", fontSize:"13px" }}>
+            <div key={tier} style={{ display:"flex", justifyContent:"space-between", padding:"clamp(8px, 0.9vw, 14px) 0", borderBottom:"1px solid #1a1a1a", fontSize:"clamp(13px, 1.2vw, 17px)" }}>
               <span style={{ color:"#888" }}>{tier}</span>
               <span style={{ color:"#c9a84c", fontWeight:"500" }}>${sadj(vals.low, data, name).toLocaleString()} – ${sadj(vals.high, data, name).toLocaleString()}</span>
             </div>
@@ -7122,7 +7122,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
 
           {/* Vote */}
           <div style={{ marginTop:"20px", display:"flex", alignItems:"center", gap:"10px" }}>
-            <span style={{ fontSize:"12px", color:"#555" }}>Were these prices helpful?</span>
+            <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:"#555" }}>Were these prices helpful?</span>
             <button onClick={e => handleVote(e, name, "up")} style={{ background: votes[name]==="up" ? "#22c55e22" : "transparent", border:`1px solid ${votes[name]==="up" ? "#22c55e" : "#2a2a2a"}`, borderRadius:"6px", padding:"5px 12px", fontSize:"13px", color: votes[name]==="up" ? "#22c55e" : "#555", cursor: votes[name] ? "default" : "pointer", fontFamily:"inherit" }}>
               👍 {votes[name]==="up" ? "Thanks!" : "Yes"}
             </button>
@@ -7131,7 +7131,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             </button>
           </div>
 
-          <button style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+          <button style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 18px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
             Get Free Quotes →
           </button>
           <div className="no-print" style={{ display:"flex", gap:"8px", marginTop:"8px" }}>
