@@ -6330,7 +6330,7 @@ const maintenanceScheduleData = {
     { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Annually or every 15k miles.", repairKey:"Cabin Air Filter" },
     { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"Subaru recommends platinum plugs at 60k. Some models 100k+ with iridium.", repairKey:"Spark Plugs", severity:"major" },
     { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Subaru Super Coolant: first change at 11 years or 137,500 miles, then every 30k.", repairKey:"Coolant Flush" },
-    { id:"transfluid", task:"CVT / AT Fluid", icon:"⚙️", intervalMiles:25000, intervalMonths:null, notes:"CVT fluid every 25k. Lifetime fluid claim is misleading — change it.", repairKey:"Transmission Fluid", severity:"major" },
+    { id:"transfluid", task:"CVT / AT Fluid", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"Subaru of America lists no normal-use interval, but SOA severe-duty schedule is 25k and global markets recommend 60k. Community consensus: first change at 60k, then every 30k drain-and-fill. CVT failure costs $6,000–$8,000.", repairKey:"Transmission Fluid", severity:"major" },
     { id:"difffluid", task:"Differential Fluid (AWD)", icon:"⚙️", intervalMiles:30000, intervalMonths:null, notes:"Front/rear differential and transfer case every 30k. Critical for AWD health.", repairKey:"Differential Fluid" },
     { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check annually. AWD systems are sensitive to alignment.", repairKey:"Wheel Alignment" },
   ],
