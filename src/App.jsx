@@ -6289,6 +6289,348 @@ const Stars = ({ rating }) => {
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
 
+
+// ── MAINTENANCE SCHEDULE DATA ─────────────────────────────────────────────
+// Sourced from manufacturer owner's manuals and verified service documentation
+const maintenanceScheduleData = {
+  // Each item: { id, task, icon, intervalMiles, intervalMonths, notes, repairKey, severity }
+  // intervalMiles: primary mileage interval (repeating)
+  // intervalMonths: time-based interval (whichever comes first)
+  // onceAt: array of specific mileage milestones (non-repeating)
+
+  "Toyota": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:5000, intervalMonths:6, notes:"Toyota recommends full synthetic every 5k mi or 6 months. Newer models with 0W-20 may allow 10k mi with oil life monitor.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:5000, intervalMonths:6, notes:"Rotate every oil change for even wear.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Toyota recommends every 3 years regardless of mileage.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Replace sooner in dusty conditions.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Replace annually or every 15k miles.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:120000, intervalMonths:null, notes:"Iridium plugs last 120k miles on most modern Toyotas.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:100000, intervalMonths:null, notes:"First change at 100k, then every 50k miles.", repairKey:"Coolant Flush", severity:"major" },
+    { id:"transfluid", task:"Transmission Fluid", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"Every 60k for towing/severe use; inspect at every major service.", repairKey:"Transmission Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check at 30k and when replacing tires or after hitting curbs.", repairKey:"Wheel Alignment" },
+    { id:"difffluid", task:"Differential Fluid (AWD/4WD)", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"AWD/4WD models only. Check owner's manual.", repairKey:"Differential Fluid" },
+  ],
+  "Honda": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:7500, intervalMonths:12, notes:"Honda Maintenance Minder system. Conventional every 5k, full synthetic up to 7.5k.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every oil change or when Maintenance Minder code 1 appears.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Honda recommends every 3 years. Minder code 7.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Minder code 2. Every 30k in normal conditions.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:30000, intervalMonths:null, notes:"Also Minder code 2. Dusty areas replace more often.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs (Iridium)", icon:"⚡", intervalMiles:100000, intervalMonths:null, notes:"Minder code 4. Most modern Hondas use long-life iridium plugs.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"transfluid", task:"Transmission Fluid", icon:"⚙️", intervalMiles:50000, intervalMonths:null, notes:"Minder code 3. Push-button/9-10 speed: every 50k.", repairKey:"Transmission Fluid" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:120000, intervalMonths:null, notes:"Minder code 5. First at 120k, then every 60k.", repairKey:"Coolant Flush", severity:"major" },
+    { id:"timingbelt", task:"Timing Belt & Water Pump", icon:"🔁", intervalMiles:105000, intervalMonths:null, notes:"V6 models with timing belt (Pilot, older Accord V6). Interference engine — critical.", repairKey:"Timing Belt", severity:"critical" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check at 30k and when replacing tires.", repairKey:"Wheel Alignment" },
+  ],
+  "Subaru": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:6000, intervalMonths:6, notes:"Subaru recommends every 6k miles or 6 months. Turbo models (WRX, Forester XT, Outback XT): every 5k.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:6000, intervalMonths:6, notes:"Critical for AWD symmetrical system — uneven wear can damage center differential.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:30000, intervalMonths:null, notes:"Every 30k miles or 2 years.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k under normal conditions.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Annually or every 15k miles.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"Subaru recommends platinum plugs at 60k. Some models 100k+ with iridium.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Subaru Super Coolant: first change at 11 years or 137,500 miles, then every 30k.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"CVT / AT Fluid", icon:"⚙️", intervalMiles:25000, intervalMonths:null, notes:"CVT fluid every 25k. Lifetime fluid claim is misleading — change it.", repairKey:"Transmission Fluid", severity:"major" },
+    { id:"difffluid", task:"Differential Fluid (AWD)", icon:"⚙️", intervalMiles:30000, intervalMonths:null, notes:"Front/rear differential and transfer case every 30k. Critical for AWD health.", repairKey:"Differential Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check annually. AWD systems are sensitive to alignment.", repairKey:"Wheel Alignment" },
+  ],
+  "Ford": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:7500, intervalMonths:12, notes:"Full synthetic every 7.5k or with Intelligent Oil-Life Monitor alert. F-150 EcoBoost: 10k with synthetic.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every 7.5k or with oil change.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Every 3 years regardless of mileage.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k or sooner if oil life monitor suggests.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:20000, intervalMonths:null, notes:"Every 15–20k miles.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"EcoBoost engines: 60k. Older V8: 100k with iridium. F-150 4.6L/5.4L: notorious plug issues — follow strictly.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:100000, intervalMonths:null, notes:"Every 100k miles or 10 years initially, then every 50k.", repairKey:"Coolant Flush", severity:"major" },
+    { id:"transfluid", task:"Transmission Fluid", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"Every 60k for towing/severe. Ford may say 'lifetime' but that's for light-duty only.", repairKey:"Transmission Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check annually especially on F-150 and trucks.", repairKey:"Wheel Alignment" },
+  ],
+  "Chevrolet": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:7500, intervalMonths:12, notes:"GM Oil Life Monitor. Full synthetic every 7.5k or per monitor. Some V8s: up to 10k.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every oil change or when tire monitor alerts.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Every 3 years or 45k miles.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Inspect annually, replace every 30k.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Every 15k or annually.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:100000, intervalMonths:null, notes:"GM iridium plugs: 100k miles. AFM/DFM engines — change oil frequently to protect lifters.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:150000, intervalMonths:null, notes:"Dex-Cool extended life: first change at 150k or 5 years, then every 50k.", repairKey:"Coolant Flush", severity:"major" },
+    { id:"transfluid", task:"Transmission Fluid", icon:"⚙️", intervalMiles:45000, intervalMonths:null, notes:"Every 45k for severe use. GM may say 'lifetime' — replace at 60–75k for longevity.", repairKey:"Transmission Fluid" },
+    { id:"difffluid", task:"Differential Fluid (4WD/AWD)", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"Transfer case and differential fluid every 60k on trucks and SUVs.", repairKey:"Differential Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check annually, especially after tire replacement.", repairKey:"Wheel Alignment" },
+  ],
+  "BMW": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:10000, intervalMonths:12, notes:"BMW Condition Based Service (CBS). Full synthetic only. Some models up to 15k — follow CBS, not dealers pushing shorter intervals.", repairKey:"Oil Change" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:24, notes:"BMW recommends every 2 years. CBS will alert. Do not skip — brake fluid moisture causes failures.", repairKey:"Brake Fluid Flush", severity:"major" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k or per CBS alert.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter / Microfilter", icon:"🌬️", intervalMiles:20000, intervalMonths:12, notes:"Microfilter replacement annually or 20k.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"BMW recommends 60k. N52/N54/N55/B58 engines — follow CBS.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Every 60k miles. BMW coolant is specific — use BMW-approved blue coolant.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"Transmission Fluid (ZF 8HP)", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"BMW calls it 'lifetime' but industry consensus is every 60k for reliability. Critical on sport modes.", repairKey:"Transmission Fluid", severity:"major" },
+    { id:"dscoolant", task:"DSC / Power Steering Fluid", icon:"💧", intervalMiles:60000, intervalMonths:null, notes:"Hydraulic steering fluid (older models) every 60k.", repairKey:"Power Steering Fluid Flush" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:10000, intervalMonths:null, notes:"Note: many BMWs have staggered fitments (different front/rear widths) and cannot be rotated.", repairKey:"Tire Rotation" },
+  ],
+  "Mercedes-Benz": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:10000, intervalMonths:12, notes:"ASSYST Plus service indicator. AMG models: every 10k. Full synthetic only — MB 229.5 or 229.51 approved.", repairKey:"Oil Change" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:24, notes:"Every 2 years. Critical — do not skip. Moisture causes brake system corrosion.", repairKey:"Brake Fluid Flush", severity:"major" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k or per ASSYST service.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter / Dust Filter", icon:"🌬️", intervalMiles:20000, intervalMonths:12, notes:"Replace annually.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"M274/M276/M177 engines: 60k miles.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Every 60k. Use MB-approved coolant only.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"Transmission Fluid (7G/9G-Tronic)", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"'Lifetime' claim is not realistic. Every 60k for reliability.", repairKey:"Transmission Fluid", severity:"major" },
+    { id:"airmatic", task:"Airmatic Air Suspension Check", icon:"🌀", intervalMiles:50000, intervalMonths:null, notes:"Inspect struts, compressor, and lines. Failures are expensive — catch early.", repairKey:"Shock Absorbers (pair)" },
+  ],
+  "Audi": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:10000, intervalMonths:12, notes:"Oil Life Monitor (OLM). Full synthetic VW 502/504/507 spec required. Turbo models: some run every 5k for extra protection.", repairKey:"Oil Change" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:24, notes:"Every 2 years regardless of mileage. Audi factory recommendation.", repairKey:"Brake Fluid Flush", severity:"major" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k or per OLM alert.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin / Pollen Filter", icon:"🌬️", intervalMiles:20000, intervalMonths:12, notes:"Annually or 20k.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"2.0T / 3.0T engines: 60k miles. Use NGK or approved equivalent.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"G13 coolant every 60k or 2 years.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"DSG / S Tronic Fluid", icon:"⚙️", intervalMiles:40000, intervalMonths:null, notes:"Audi says 'lifetime' but VW/Audi community strongly recommends every 40k for DSG longevity.", repairKey:"Transmission Fluid", severity:"major" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:10000, intervalMonths:null, notes:"Every oil change on Quattro AWD models.", repairKey:"Tire Rotation" },
+  ],
+  "Nissan": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:5000, intervalMonths:6, notes:"Nissan recommends every 5k mi / 6 months with conventional; 7.5k with synthetic. CVT vehicles: do NOT go past 5k.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every 7.5k miles.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Every 3 years.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Every 15k or annually.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:105000, intervalMonths:null, notes:"Platinum/iridium: 105k. VQ engines: follow strictly.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:105000, intervalMonths:null, notes:"First change at 105k, then every 52.5k.", repairKey:"Coolant Flush", severity:"major" },
+    { id:"cvtfluid", task:"CVT Fluid", icon:"⚙️", intervalMiles:25000, intervalMonths:null, notes:"Nissan CVT fluid every 25k is strongly recommended — CVT failures are expensive ($3,000–$5,000).", repairKey:"Transmission Fluid", severity:"critical" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check annually.", repairKey:"Wheel Alignment" },
+  ],
+  "Hyundai": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:7500, intervalMonths:12, notes:"Full synthetic every 7.5k. Theta II engines (2011–2019): strict 5k oil changes help prevent bearing wear.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every 7.5k.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Every 3 years.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Every 15k or annually.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:100000, intervalMonths:null, notes:"Iridium plugs: 100k. Older GDI engines prone to carbon — consider earlier cleaning.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Every 60k then every 30k.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"Transmission Fluid (DCT/AT)", icon:"⚙️", intervalMiles:40000, intervalMonths:null, notes:"DCT: every 40k. AT: every 60k for severe use.", repairKey:"Transmission Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Especially important for Theta II engine vehicles to reduce strain.", repairKey:"Wheel Alignment" },
+  ],
+  "Kia": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:7500, intervalMonths:12, notes:"Same platform as Hyundai. Theta II models: 5k recommended.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every 7.5k miles.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Every 3 years.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 30k miles.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Every 15k or annually.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:100000, intervalMonths:null, notes:"Iridium: 100k miles.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Every 60k then every 30k.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"Transmission Fluid", icon:"⚙️", intervalMiles:40000, intervalMonths:null, notes:"DCT: every 40k. AT: 60k severe use.", repairKey:"Transmission Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Check annually.", repairKey:"Wheel Alignment" },
+  ],
+  "default": [
+    { id:"oil", task:"Oil & Filter Change", icon:"🛢️", intervalMiles:5000, intervalMonths:6, notes:"Conventional: every 5k / 6 months. Full synthetic: up to 7.5k–10k depending on manufacturer.", repairKey:"Oil Change" },
+    { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:7500, intervalMonths:6, notes:"Every 5k–7.5k miles for even wear.", repairKey:"Tire Rotation" },
+    { id:"brakefluid", task:"Brake Fluid Flush", icon:"💧", intervalMiles:null, intervalMonths:36, notes:"Every 2–3 years regardless of mileage.", repairKey:"Brake Fluid Flush" },
+    { id:"airfilter", task:"Engine Air Filter", icon:"🌪️", intervalMiles:30000, intervalMonths:null, notes:"Every 15k–30k depending on driving conditions.", repairKey:"Engine Air Filter" },
+    { id:"cabinfilter", task:"Cabin Air Filter", icon:"🌬️", intervalMiles:15000, intervalMonths:12, notes:"Annually or every 15k miles.", repairKey:"Cabin Air Filter" },
+    { id:"sparkplugs", task:"Spark Plugs", icon:"⚡", intervalMiles:60000, intervalMonths:null, notes:"Copper: 30k, Platinum: 60k, Iridium: 100k–120k.", repairKey:"Spark Plugs", severity:"major" },
+    { id:"coolant", task:"Coolant Flush", icon:"🧊", intervalMiles:60000, intervalMonths:null, notes:"Every 60k or per manufacturer spec.", repairKey:"Coolant Flush" },
+    { id:"transfluid", task:"Transmission Fluid", icon:"⚙️", intervalMiles:60000, intervalMonths:null, notes:"Every 30k–60k depending on type. Do not rely on 'lifetime' fluid claims.", repairKey:"Transmission Fluid" },
+    { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:30000, intervalMonths:null, notes:"Annually or when new tires are installed.", repairKey:"Wheel Alignment" },
+  ],
+};
+// Aliases
+maintenanceScheduleData["GMC"]           = maintenanceScheduleData["Chevrolet"];
+maintenanceScheduleData["Buick"]         = maintenanceScheduleData["Chevrolet"];
+maintenanceScheduleData["Cadillac"]      = maintenanceScheduleData["Chevrolet"];
+maintenanceScheduleData["Dodge"]         = maintenanceScheduleData["default"];
+maintenanceScheduleData["Jeep"]          = maintenanceScheduleData["default"];
+maintenanceScheduleData["RAM"]           = maintenanceScheduleData["default"];
+maintenanceScheduleData["Chrysler"]      = maintenanceScheduleData["default"];
+maintenanceScheduleData["Acura"]         = maintenanceScheduleData["Honda"];
+maintenanceScheduleData["Infiniti"]      = maintenanceScheduleData["Nissan"];
+maintenanceScheduleData["Lexus"]         = maintenanceScheduleData["Toyota"];
+maintenanceScheduleData["Mazda"]         = maintenanceScheduleData["default"];
+maintenanceScheduleData["Mitsubishi"]    = maintenanceScheduleData["default"];
+maintenanceScheduleData["Volkswagen"]    = maintenanceScheduleData["Audi"];
+maintenanceScheduleData["Volvo"]         = maintenanceScheduleData["default"];
+maintenanceScheduleData["Lincoln"]       = maintenanceScheduleData["Ford"];
+maintenanceScheduleData["Tesla"]         = [
+  { id:"tirerot", task:"Tire Rotation", icon:"🛞", intervalMiles:6250, intervalMonths:6, notes:"Tesla recommends every 6,250 miles or when tread depth difference exceeds 2/32\".", repairKey:"Tire Rotation" },
+  { id:"brakefluid", task:"Brake Fluid Test", icon:"💧", intervalMiles:null, intervalMonths:24, notes:"Tesla recommends testing every 2 years. Replace if moisture content is high.", repairKey:"Brake Fluid Flush" },
+  { id:"cabinfilter", task:"Cabin Air Filter (HEPA)", icon:"🌬️", intervalMiles:null, intervalMonths:24, notes:"Model 3/Y: every 2 years. Model S/X with HEPA: every 3 years.", repairKey:"Cabin Air Filter" },
+  { id:"12vbattery", task:"12V Battery Inspection", icon:"🔋", intervalMiles:null, intervalMonths:12, notes:"Inspect annually. Tesla 12V batteries can fail without warning.", repairKey:"EV: 12V Battery", severity:"major" },
+  { id:"alignment", task:"Wheel Alignment Check", icon:"🎯", intervalMiles:12500, intervalMonths:null, notes:"Tesla recommends checking every 12,500 miles or annually.", repairKey:"Wheel Alignment" },
+  { id:"acservice", task:"AC Desiccant Bag", icon:"❄️", intervalMiles:null, intervalMonths:48, notes:"Model S/X: every 4 years. Model 3/Y: every 6 years.", repairKey:"AC Compressor" },
+];
+
+function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMileageInput, setMileage, maintDone, setMaintDone, repairData, adj }) {
+  const schedule = maintenanceScheduleData[make] || maintenanceScheduleData["default"];
+
+  const computeStatus = (item) => {
+    if (!mileage) return null;
+    if (!item.intervalMiles) return null; // time-based only
+    const nextDue = Math.ceil(mileage / item.intervalMiles) * item.intervalMiles;
+    const lastDone = nextDue - item.intervalMiles;
+    const overdue = mileage >= nextDue;
+    const dueSoon = !overdue && (nextDue - mileage) <= Math.round(item.intervalMiles * 0.15);
+    return { nextDue, lastDone, overdue, dueSoon, milesAway: nextDue - mileage };
+  };
+
+  const getStatusColor = (status, done) => {
+    if (done) return "#22c55e";
+    if (!status) return "#555";
+    if (status.overdue) return "#ef4444";
+    if (status.dueSoon) return "#f59e0b";
+    return "#22c55e";
+  };
+
+  const getStatusLabel = (status, done) => {
+    if (done) return "✅ Done";
+    if (!status) return "Time-based";
+    if (status.overdue) return `⚠️ Overdue by ${(mileage - status.nextDue + status.intervalMiles > 0 ? mileage - (status.nextDue - status.intervalMiles) : 0).toLocaleString()} mi`;
+    if (status.dueSoon) return `⏰ Due in ${status.milesAway.toLocaleString()} mi`;
+    return `✓ ${status.milesAway.toLocaleString()} mi away`;
+  };
+
+  const toggleDone = (id) => setMaintDone(prev => ({ ...prev, [id]: !prev[id] }));
+
+  // Group by status
+  const withStatus = schedule.map(item => ({
+    ...item,
+    status: computeStatus(item),
+    done: !!maintDone[item.id],
+  }));
+  const overdue  = withStatus.filter(i => !i.done && i.status?.overdue);
+  const dueSoon  = withStatus.filter(i => !i.done && i.status?.dueSoon);
+  const upcoming = withStatus.filter(i => !i.done && i.status && !i.status.overdue && !i.status.dueSoon);
+  const timeBased = withStatus.filter(i => !i.done && !i.status);
+  const done     = withStatus.filter(i => i.done);
+
+  const hasVehicle = make !== "Any Make";
+  const hasMileage = mileage !== null;
+
+  return (
+    <section style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px" }}>
+      {/* Mileage input */}
+      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px", marginBottom:"16px" }}>
+        <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"12px" }}>
+          Maintenance Schedule{hasVehicle ? ` — ${make}${model !== "Any Model" ? " " + model : ""}${year !== "Any Year" ? " " + year : ""}` : ""}
+        </div>
+        {!hasVehicle && (
+          <div style={{ fontSize:"13px", color:"#555", fontStyle:"italic", marginBottom:"12px" }}>Select a make above to see manufacturer-specific intervals.</div>
+        )}
+        <div style={{ display:"flex", gap:"10px", alignItems:"center", flexWrap:"wrap" }}>
+          <input
+            type="number"
+            placeholder="Enter current mileage (e.g. 47500)"
+            value={mileageInput}
+            onChange={e => setMileageInput(e.target.value)}
+            style={{ flex:1, minWidth:"200px", background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"10px 14px", color:"#f0ede6", fontSize:"13px", outline:"none", fontFamily:"inherit" }}
+          />
+          <button onClick={() => { const v = parseInt(mileageInput.replace(/,/g,"")); if (!isNaN(v) && v > 0) setMileage(v); }}
+            style={{ background:"#c9a84c", border:"none", borderRadius:"6px", padding:"10px 20px", fontSize:"13px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+            Show Schedule
+          </button>
+          {hasMileage && (
+            <button onClick={() => { setMileage(null); setMileageInput(""); }}
+              style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"10px 14px", fontSize:"13px", color:"#555", cursor:"pointer", fontFamily:"inherit" }}>
+              Clear
+            </button>
+          )}
+        </div>
+        {hasMileage && (
+          <div style={{ fontSize:"12px", color:"#555", marginTop:"8px" }}>
+            Showing intervals for <strong style={{ color:"#c9a84c" }}>{mileage.toLocaleString()} miles</strong>
+            {make !== "Any Make" ? ` · ${make} factory schedule` : " · General schedule"}
+          </div>
+        )}
+      </div>
+
+      {hasVehicle && (
+        <div style={{ display:"grid", gap:"12px" }}>
+
+          {/* Overdue */}
+          {overdue.length > 0 && (
+            <div style={{ background:"#161616", border:"1px solid #ef444433", borderRadius:"10px", padding:"20px 24px" }}>
+              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#ef4444", marginBottom:"12px" }}>⚠️ Overdue</div>
+              {overdue.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
+            </div>
+          )}
+
+          {/* Due Soon */}
+          {dueSoon.length > 0 && (
+            <div style={{ background:"#161616", border:"1px solid #f59e0b33", borderRadius:"10px", padding:"20px 24px" }}>
+              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#f59e0b", marginBottom:"12px" }}>⏰ Due Soon</div>
+              {dueSoon.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
+            </div>
+          )}
+
+          {/* Upcoming */}
+          {(upcoming.length > 0 || timeBased.length > 0) && (
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px" }}>
+              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"12px" }}>✓ Good For Now</div>
+              {[...upcoming, ...timeBased].map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
+            </div>
+          )}
+
+          {/* Done */}
+          {done.length > 0 && (
+            <div style={{ background:"#0a120a", border:"1px solid #22c55e22", borderRadius:"10px", padding:"20px 24px" }}>
+              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"12px" }}>✅ Marked Complete</div>
+              {done.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
+            </div>
+          )}
+
+          {!hasMileage && (
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px" }}>
+              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#555", marginBottom:"12px" }}>Full Schedule</div>
+              {schedule.map(item => (
+                <MaintenanceItem key={item.id} item={{ ...item, status:null, done:!!maintDone[item.id] }} onToggle={toggleDone} repairData={repairData} adj={adj} />
+              ))}
+            </div>
+          )}
+
+          <div style={{ fontSize:"11px", color:"#333", textAlign:"center", fontStyle:"italic" }}>
+            Intervals based on {make !== "Any Make" ? `${make} owner's manual and factory service documentation` : "general manufacturer guidelines"}. Always check your owner's manual for model-specific requirements.
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function MaintenanceItem({ item, onToggle, repairData, adj }) {
+  const severityColor = item.severity === "critical" ? "#ef4444" : item.severity === "major" ? "#f59e0b" : null;
+  const statusColor = item.done ? "#22c55e" : item.status?.overdue ? "#ef4444" : item.status?.dueSoon ? "#f59e0b" : "#555";
+
+  const repData = item.repairKey ? repairData[item.repairKey] : null;
+  const costLow = repData ? adj(Math.min(...Object.values(repData.costs).map(v => v.low)), repData, item.repairKey) : null;
+  const costHigh = repData ? adj(Math.max(...Object.values(repData.costs).map(v => v.high)), repData, item.repairKey) : null;
+
+  const statusLabel = item.done ? "✅ Done" :
+    !item.status ? (item.intervalMonths ? `Every ${item.intervalMonths} months` : "See notes") :
+    item.status.overdue ? `⚠️ Overdue` :
+    item.status.dueSoon ? `⏰ ${item.status.milesAway.toLocaleString()} mi away` :
+    `✓ Next: ${item.status.nextDue.toLocaleString()} mi`;
+
+  return (
+    <div onClick={() => onToggle(item.id)} style={{ display:"flex", gap:"12px", alignItems:"flex-start", padding:"12px 0", borderBottom:"1px solid #1a1a1a", cursor:"pointer" }}>
+      <span style={{ fontSize:"18px", flexShrink:0, marginTop:"1px" }}>{item.icon}</span>
+      <div style={{ flex:1 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:"8px", flexWrap:"wrap" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:"6px", flexWrap:"wrap" }}>
+            <span style={{ fontSize:"14px", fontWeight:"500", color: item.done ? "#555" : "#f0ede6", textDecoration: item.done ? "line-through" : "none" }}>{item.task}</span>
+            {severityColor && !item.done && <span style={{ fontSize:"10px", padding:"1px 6px", borderRadius:"10px", background:`${severityColor}18`, color:severityColor, letterSpacing:"0.04em" }}>{item.severity}</span>}
+          </div>
+          <div style={{ display:"flex", gap:"8px", alignItems:"center", flexShrink:0 }}>
+            {costLow && <span style={{ fontSize:"12px", color:"#c9a84c" }}>${costLow.toLocaleString()}–${costHigh.toLocaleString()}</span>}
+            <span style={{ fontSize:"11px", color:statusColor, whiteSpace:"nowrap" }}>{statusLabel}</span>
+          </div>
+        </div>
+        <div style={{ fontSize:"11px", color:"#444", marginTop:"3px", lineHeight:"1.5" }}>
+          {item.intervalMiles ? `Every ${item.intervalMiles.toLocaleString()} miles` : ""}{item.intervalMiles && item.intervalMonths ? " or " : ""}{item.intervalMonths ? `every ${item.intervalMonths} months` : ""} · {item.notes}
+        </div>
+      </div>
+      <span style={{ fontSize:"16px", flexShrink:0, color: item.done ? "#22c55e" : "#333" }}>{item.done ? "✅" : "☐"}</span>
+    </div>
+  );
+}
+
 function InspectionChecklist({ yearIssues, allModelIssues, make, model, year, zip }) {
 
 const issuesForChecklist = allModelIssues.filter(i => i.severity === "High" || i.severity === "Medium");
@@ -6837,7 +7179,10 @@ export default function RepairIQ() {
   const [basket, setBasket]               = useState(new Map()); // name → tierName
   const [showBasket, setShowBasket]       = useState(false);
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
-  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside"
+  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance"
+  const [mileageInput, setMileageInput]   = useState("");
+  const [mileage, setMileage]             = useState(null);
+  const [maintDone, setMaintDone]         = useState({});
 
 // ── URL STATE SYNC ────────────────────────────────────────────────────────
   // Parse URL params on first render to restore shared state
@@ -7718,12 +8063,15 @@ const modelYears = {
             </h1>
             <p style={{ color:"#555", fontSize:"14px", margin:0, fontStyle:"italic" }}>Real-world cost ranges — adjusted for your location &amp; vehicle.</p>
           </div>
-          <div style={{ display:"flex", gap:"4px", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"4px" }}>
+          <div style={{ display:"flex", gap:"4px", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"4px", flexWrap:"wrap" }}>
             <button onClick={() => setAppMode("costs")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "costs" ? "#c9a84c" : "transparent", color: appMode === "costs" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               💰 Repair Costs
             </button>
             <button onClick={() => setAppMode("buyside")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "buyside" ? "#c9a84c" : "transparent", color: appMode === "buyside" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               🔍 Before You Buy
+            </button>
+            <button onClick={() => setAppMode("maintenance")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "maintenance" ? "#c9a84c" : "transparent", color: appMode === "maintenance" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+              🔧 Maintenance
             </button>
           </div>
         </div>
@@ -8084,6 +8432,17 @@ const modelYears = {
           )}
         </section>
       )} {/* end buyside mode */}
+
+      {/* ── MAINTENANCE MODE ──────────────────────────────────────────────────── */}
+      {appMode === "maintenance" && (
+        <MaintenanceSchedule
+          make={make} model={model} year={year}
+          mileage={mileage} mileageInput={mileageInput}
+          setMileageInput={setMileageInput} setMileage={setMileage}
+          maintDone={maintDone} setMaintDone={setMaintDone}
+          repairData={repairData} adj={adj}
+        />
+      )}
       {appMode === "costs" && (
       <div style={{ maxWidth:"900px", margin:"0 auto 40px", padding:"0 24px" }}>
         <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"28px" }}>
