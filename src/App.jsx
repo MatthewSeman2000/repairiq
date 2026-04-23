@@ -6901,7 +6901,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
 
   return (
     <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
-      <div onClick={e => e.stopPropagation()} className="basket-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"560px", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+      <div onClick={e => e.stopPropagation()} className="basket-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"clamp(320px, 90vw, 900px)", maxHeight:"85vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Header */}
         <div style={{ padding:"24px 24px 16px", borderBottom:"1px solid #1e1e1e" }}>
@@ -7021,7 +7021,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
     <div onClick={onClose}
       style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
       <div onClick={e => e.stopPropagation()}
-        className="modal-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"100%", maxWidth:"520px", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
+        className="modal-print-target" style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"clamp(320px, 90vw, 860px)", maxHeight:"85vh", overflowY:"auto", position:"relative", boxShadow:"0 24px 80px rgba(0,0,0,0.6)" }}>
 
         {/* Color bar */}
         <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, borderRadius:"14px 14px 0 0" }} />
