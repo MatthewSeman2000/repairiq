@@ -8086,13 +8086,13 @@ const modelYears = {
             <span style={{ position:"absolute", left:"11px", top:"50%", transform:"translateY(-50%)", fontSize:"14px" }}>📍</span>
             <input maxLength={5} placeholder="ZIP code" value={zipInput}
               onChange={e => setZipInput(e.target.value.replace(/\D/g,""))}
-              style={{ ...IS, paddingLeft:"32px", width:"140px" }} />
+              style={{ ...IS, paddingLeft:"clamp(32px, 3vw, 44px)", width:"clamp(140px, 12vw, 220px)" }} />
           </div>
-          <button type="submit" style={{ background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"6px", padding:"11px 18px", fontSize:"12px", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+          <button type="submit" style={{ background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"6px", padding:"clamp(11px, 1vw, 16px) clamp(18px, 1.5vw, 28px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
             Set Location
           </button>
           {zip && (
-            <button onClick={() => { setZip(""); setZipInput(""); setShops([]); }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"10px 14px", fontSize:"12px", color:"#555", fontFamily:"inherit", cursor:"pointer" }}>
+            <button onClick={() => { setZip(""); setZipInput(""); setShops([]); }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"clamp(10px, 1vw, 16px) clamp(14px, 1.2vw, 20px)", fontSize:"clamp(12px, 1.1vw, 16px)", color:"#555", fontFamily:"inherit", cursor:"pointer" }}>
               Clear
             </button>
           )}
@@ -8100,12 +8100,12 @@ const modelYears = {
 
         {/* Region banner */}
         {zip && (
-          <div style={{ background:"#111", border:`1px solid ${region ? labelColor(region.label)+"33" : "#222"}`, borderLeft:`3px solid ${region ? labelColor(region.label) : "#333"}`, borderRadius:"6px", padding:"10px 16px", marginBottom:"12px", display:"flex", alignItems:"center", gap:"14px", flexWrap:"wrap" }}>
+          <div style={{ background:"#111", border:`1px solid ${region ? labelColor(region.label)+"33" : "#222"}`, borderLeft:`3px solid ${region ? labelColor(region.label) : "#333"}`, borderRadius:"6px", padding:"clamp(10px, 1vw, 16px) clamp(16px, 1.5vw, 24px)", marginBottom:"12px", display:"flex", alignItems:"center", gap:"14px", flexWrap:"wrap" }}>
             {region ? (
               <>
-                <span style={{ fontSize:"13px", color:"#bbb" }}>📍 <strong style={{ color:"#f0ede6" }}>{region.name}</strong></span>
-                <span style={{ fontSize:"11px", color:labelColor(region.label), background:labelColor(region.label)+"18", padding:"2px 10px", borderRadius:"20px" }}>{region.label}</span>
-                <span style={{ fontSize:"12px", color:"#555" }}>Labor index: <span style={{ color:labelColor(region.label) }}>{region.multiplier>1?"+":""}{Math.round((region.multiplier-1)*100)}% vs national avg</span></span>
+                <span style={{ fontSize:"clamp(13px, 1.2vw, 17px)", color:"#bbb" }}>📍 <strong style={{ color:"#f0ede6" }}>{region.name}</strong></span>
+                <span style={{ fontSize:"clamp(11px, 1vw, 14px)", color:labelColor(region.label), background:labelColor(region.label)+"18", padding:"3px 12px", borderRadius:"20px" }}>{region.label}</span>
+                <span style={{ fontSize:"clamp(12px, 1.1vw, 16px)", color:"#555" }}>Labor index: <span style={{ color:labelColor(region.label) }}>{region.multiplier>1?"+":""}{Math.round((region.multiplier-1)*100)}% vs national avg</span></span>
               </>
             ) : (
               <span style={{ fontSize:"13px", color:"#555", fontStyle:"italic" }}>ZIP {zip} — no regional data yet, showing national averages</span>
@@ -8116,7 +8116,7 @@ const modelYears = {
         {/* Search + Make + Model + Trim + Year + Category */}
         <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
           <input placeholder="Search repairs…" value={search} onChange={e => setSearch(e.target.value)} style={IS} />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(140px, 1fr))", gap:"8px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(clamp(140px, 12vw, 200px), 1fr))", gap:"clamp(8px, 0.8vw, 14px)" }}>
           <select value={make} onChange={e => { setMake(e.target.value); setModel("Any Model"); setTrim("Any Trim"); setYear("Any Year"); }} style={IS}>
             {makes.map(m => <option key={m}>{m}</option>)}
           </select>
@@ -8163,7 +8163,7 @@ const modelYears = {
 
         {/* Combined modifier callout */}
         {(make !== "Any Make" || zip || year !== "Any Year") && (
-          <div style={{ marginTop:"10px", background:"#1a1a0a", border:"1px solid #3a3010", borderRadius:"6px", padding:"9px 14px", fontSize:"12px", color:"#c9a84c" }}>
+          <div style={{ marginTop:"10px", background:"#1a1a0a", border:"1px solid #3a3010", borderRadius:"8px", padding:"clamp(9px, 1vw, 14px) clamp(14px, 1.4vw, 22px)", fontSize:"clamp(12px, 1.1vw, 16px)", color:"#c9a84c" }}>
             {estimatesLabel}
           </div>
         )}
@@ -8342,10 +8342,10 @@ const modelYears = {
       {appMode === "buyside" && (
         <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)" }}>
           {make === "Any Make" || model === "Any Model" ? (
-            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"48px 24px", textAlign:"center" }}>
-              <div style={{ fontSize:"40px", marginBottom:"16px" }}>🔍</div>
-              <div style={{ fontSize:"18px", fontWeight:"400", marginBottom:"8px", letterSpacing:"-0.01em" }}>Select a Make &amp; Model to Begin</div>
-              <div style={{ color:"#555", fontSize:"13px", fontStyle:"italic" }}>Choose a vehicle above to see known issues, risk profile, and what to inspect before buying.</div>
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(48px, 5vw, 80px) clamp(24px, 3vw, 48px)", textAlign:"center" }}>
+              <div style={{ fontSize:"clamp(40px, 4vw, 64px)", marginBottom:"20px" }}>🔍</div>
+              <div style={{ fontSize:"clamp(18px, 1.8vw, 28px)", fontWeight:"400", marginBottom:"10px", letterSpacing:"-0.01em" }}>Select a Make &amp; Model to Begin</div>
+              <div style={{ color:"#555", fontSize:"clamp(13px, 1.2vw, 17px)", fontStyle:"italic" }}>Choose a vehicle above to see known issues, risk profile, and what to inspect before buying.</div>
             </div>
           ) : (
             <div style={{ display:"grid", gap:"16px" }}>
@@ -8484,7 +8484,7 @@ const modelYears = {
               <button
                 onClick={handleSubmission}
                 disabled={submitting || !formRepair || !formAmount}
-                style={{ gridColumn:"1/-1", background:"transparent", border:"1px solid #c9a84c", color: (submitting || !formRepair || !formAmount) ? "#555" : "#c9a84c", borderRadius:"6px", padding:"11px", fontSize:"12px", fontFamily:"inherit", cursor: (submitting || !formRepair || !formAmount) ? "not-allowed" : "pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}
+                style={{ gridColumn:"1/-1", background:"transparent", border:"1px solid #c9a84c", color: (submitting || !formRepair || !formAmount) ? "#555" : "#c9a84c", borderRadius:"6px", padding:"clamp(11px, 1vw, 16px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontFamily:"inherit", cursor: (submitting || !formRepair || !formAmount) ? "not-allowed" : "pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}
               >
                 {submitting ? "Saving..." : "Submit My Data →"}
               </button>
@@ -8499,11 +8499,11 @@ const modelYears = {
       )} {/* end costs mode submit form */}
 
       {/* ── FEEDBACK SECTION ─────────────────────────────────────────────── */}
-      <div style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", maxWidth:"700px", margin:"0 auto" }}>
-        <div style={{ fontSize:"13px", fontWeight:"500", color:"#c9a84c", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>
+      <div style={{ borderTop:"1px solid #1a1a1a", padding:"clamp(32px, 3vw, 56px) clamp(24px, 5vw, 100px)" }}>
+        <div style={{ fontSize:"clamp(13px, 1.2vw, 18px)", fontWeight:"500", color:"#c9a84c", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"10px" }}>
           Suggest a Change
         </div>
-        <p style={{ fontSize:"13px", color:"#666", margin:"0 0 16px", lineHeight:"1.5" }}>
+        <p style={{ fontSize:"clamp(13px, 1.2vw, 17px)", color:"#666", margin:"0 0 20px", lineHeight:"1.6" }}>
           Missing a repair? Wrong price range? Incorrect trim or year data? Let us know — every suggestion helps.
         </p>
         {!feedbackSent ? (
@@ -8527,26 +8527,26 @@ const modelYears = {
             <button
               onClick={handleFeedback}
               disabled={feedbackSending || !feedbackText.trim()}
-              style={{ background:"transparent", border:"1px solid #c9a84c", color: (feedbackSending || !feedbackText.trim()) ? "#555" : "#c9a84c", borderRadius:"6px", padding:"11px", fontSize:"12px", fontFamily:"inherit", cursor: (feedbackSending || !feedbackText.trim()) ? "not-allowed" : "pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}
+              style={{ background:"transparent", border:"1px solid #c9a84c", color: (feedbackSending || !feedbackText.trim()) ? "#555" : "#c9a84c", borderRadius:"6px", padding:"clamp(11px, 1vw, 16px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontFamily:"inherit", cursor: (feedbackSending || !feedbackText.trim()) ? "not-allowed" : "pointer", letterSpacing:"0.1em", textTransform:"uppercase" }}
             >
               {feedbackSending ? "Sending..." : "Send Feedback →"}
             </button>
           </div>
         ) : (
-          <div style={{ textAlign:"center", padding:"20px", color:"#22c55e", fontSize:"14px" }}>
+          <div style={{ textAlign:"center", padding:"20px", color:"#22c55e", fontSize:"clamp(14px, 1.3vw, 18px)" }}>
             ✓ Got it — thanks for helping make RepairIQ better.
           </div>
         )}
       </div>
 
-      <footer style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", textAlign:"center" }}>
-        <div style={{ fontSize:"16px", fontWeight:"400", color:"#f0ede6", letterSpacing:"-0.01em", marginBottom:"8px" }}>
+      <footer style={{ borderTop:"1px solid #1a1a1a", padding:"clamp(32px, 3vw, 56px) clamp(24px, 5vw, 100px)", textAlign:"center" }}>
+        <div style={{ fontSize:"clamp(16px, 1.5vw, 24px)", fontWeight:"400", color:"#f0ede6", letterSpacing:"-0.01em", marginBottom:"10px" }}>
           Repair<span style={{ color:"#c9a84c", fontStyle:"italic" }}>IQ</span>
         </div>
-        <div style={{ fontSize:"12px", color:"#444", marginBottom:"6px" }}>
+        <div style={{ fontSize:"clamp(12px, 1.1vw, 16px)", color:"#444", marginBottom:"8px" }}>
           Cost estimates are based on researched national averages and are updated periodically — not real-time data.
         </div>
-        <div style={{ fontSize:"11px", color:"#2a2a2a" }}>
+        <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#2a2a2a" }}>
           Not affiliated with any repair facility · Always get multiple quotes · © 2026 RepairIQ
         </div>
       </footer>
@@ -8564,7 +8564,8 @@ const modelYears = {
 
 // Shared input style
 const IS = {
-  background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"6px",
-  padding:"10px 14px", color:"#f0ede6", fontSize:"13px", outline:"none",
+  background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"8px",
+  padding:"clamp(10px, 1vw, 16px) clamp(14px, 1.2vw, 20px)", color:"#f0ede6",
+  fontSize:"clamp(13px, 1.1vw, 17px)", outline:"none",
   fontFamily:"inherit", width:"100%", boxSizing:"border-box",
 };
