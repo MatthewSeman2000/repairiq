@@ -8167,6 +8167,7 @@ const modelYears = {
             {estimatesLabel}
           </div>
         )}
+        <div style={{ paddingBottom:"clamp(16px, 2vw, 32px)" }} />
       </div>
 
       {/* Known Issues Section — costs mode only */}
