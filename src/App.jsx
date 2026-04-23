@@ -6776,13 +6776,13 @@ const totalItems = sections.reduce((s, sec) => s + sec.items.length, 0) + vehicl
 const checkedCount = Object.values(checked).filter(Boolean).length;
 
 return (
-  <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px" }}>
-    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"16px", flexWrap:"wrap", gap:"10px" }}>
-      <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c" }}>
+  <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px)" }}>
+    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"clamp(16px, 1.5vw, 24px)", flexWrap:"wrap", gap:"10px" }}>
+      <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c" }}>
         Pre-Purchase Inspection Checklist
       </div>
       <div style={{ display:"flex", gap:"8px", alignItems:"center" }}>
-        <span style={{ fontSize:"12px", color:"#555" }}>{checkedCount}/{totalItems} checked</span>
+        <span style={{ fontSize:"clamp(12px, 1.1vw, 16px)", color:"#555" }}>{checkedCount}/{totalItems} checked</span>
         <button onClick={() => {
           const html = `
             <h1>Pre-Purchase Checklist — ${make} ${model}${year !== "Any Year" ? " " + year : ""}</h1>
@@ -6799,7 +6799,7 @@ return (
           w.document.close();
           w.focus();
           setTimeout(() => { w.print(); w.close(); }, 400);
-        }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"5px 12px", fontSize:"11px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
+        }} style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"clamp(6px, 0.7vw, 10px) clamp(12px, 1.2vw, 20px)", fontSize:"clamp(11px, 1vw, 14px)", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
           🖨️ Print
         </button>
       </div>
@@ -6808,7 +6808,7 @@ return (
     {/* Vehicle-specific warnings */}
     {vehicleWarnings.length > 0 && (
       <div style={{ marginBottom:"20px" }}>
-        <div style={{ fontSize:"11px", color:"#ef4444", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px" }}>
+        <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#ef4444", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
           Vehicle-Specific Warnings{year !== "Any Year" ? ` · ⚠️ = affects ${year} · ℹ️ = other years` : ""}
         </div>
         {vehicleWarnings.map((w, i) => {
@@ -6817,11 +6817,11 @@ return (
           const bgColor = checked[key] ? "#0a1a0a" : w.yearRelevant ? (w.severity === "High" ? "#1a0a0a" : "#1a150a") : "#111";
           const textColor = checked[key] ? "#555" : w.yearRelevant ? (w.severity === "High" ? "#e88" : "#d49a4a") : "#666";
           return (
-            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"10px", padding:"10px 12px", background: bgColor, borderRadius:"6px", marginBottom:"6px", border:`1px solid ${borderColor}`, cursor:"pointer", transition:"all 0.15s" }}>
-              <span style={{ fontSize:"16px", flexShrink:0, marginTop:"1px" }}>{checked[key] ? "✅" : "☐"}</span>
+            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"12px", padding:"clamp(10px, 1vw, 16px) clamp(12px, 1.2vw, 20px)", background: bgColor, borderRadius:"8px", marginBottom:"8px", border:`1px solid ${borderColor}`, cursor:"pointer", transition:"all 0.15s" }}>
+              <span style={{ fontSize:"clamp(16px, 1.5vw, 22px)", flexShrink:0, marginTop:"1px" }}>{checked[key] ? "✅" : "☐"}</span>
               <div style={{ flex:1 }}>
-                <span style={{ fontSize:"12px", color: textColor, lineHeight:"1.5", textDecoration: checked[key] ? "line-through" : "none" }}>{w.text}</span>
-                <div style={{ fontSize:"10px", color:"#444", marginTop:"3px" }}>{w.years} · {w.source}</div>
+                <span style={{ fontSize:"clamp(13px, 1.2vw, 17px)", color: textColor, lineHeight:"1.6", textDecoration: checked[key] ? "line-through" : "none" }}>{w.text}</span>
+                <div style={{ fontSize:"clamp(10px, 0.9vw, 13px)", color:"#444", marginTop:"4px" }}>{w.years} · {w.source}</div>
               </div>
             </div>
           );
@@ -6832,22 +6832,22 @@ return (
     {/* Sectioned checklist */}
     {sections.map(sec => (
       <div key={sec.title} style={{ marginBottom:"20px" }}>
-        <div style={{ fontSize:"12px", fontWeight:"500", color:"#888", marginBottom:"8px", display:"flex", alignItems:"center", gap:"6px" }}>
+        <div style={{ fontSize:"clamp(13px, 1.2vw, 18px)", fontWeight:"600", color:"#aaa", marginBottom:"10px", display:"flex", alignItems:"center", gap:"8px" }}>
           <span>{sec.icon}</span> {sec.title}
         </div>
         {sec.items.map((item, j) => {
           const key = `${sec.title}-${j}`;
           return (
-            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"10px", padding:"8px 10px", background: checked[key] ? "#0a120a" : "#0e0e0e", borderRadius:"6px", marginBottom:"4px", cursor:"pointer", border:`1px solid ${checked[key] ? "#22c55e22" : "transparent"}`, transition:"all 0.15s" }}>
-              <span style={{ fontSize:"15px", flexShrink:0, marginTop:"1px", color: checked[key] ? "#22c55e" : "#444" }}>{checked[key] ? "✅" : "☐"}</span>
-              <span style={{ fontSize:"12px", color: checked[key] ? "#555" : "#bbb", lineHeight:"1.5", textDecoration: checked[key] ? "line-through" : "none" }}>{item}</span>
+            <div key={key} onClick={() => toggleCheck(key)} style={{ display:"flex", gap:"12px", padding:"clamp(10px, 1vw, 16px) clamp(10px, 1.2vw, 18px)", background: checked[key] ? "#0a120a" : "#0e0e0e", borderRadius:"8px", marginBottom:"6px", cursor:"pointer", border:`1px solid ${checked[key] ? "#22c55e22" : "transparent"}`, transition:"all 0.15s" }}>
+              <span style={{ fontSize:"clamp(15px, 1.4vw, 22px)", flexShrink:0, marginTop:"1px", color: checked[key] ? "#22c55e" : "#444" }}>{checked[key] ? "✅" : "☐"}</span>
+              <span style={{ fontSize:"clamp(13px, 1.2vw, 17px)", color: checked[key] ? "#555" : "#bbb", lineHeight:"1.6", textDecoration: checked[key] ? "line-through" : "none" }}>{item}</span>
             </div>
           );
         })}
       </div>
     ))}
 
-    <div style={{ fontSize:"11px", color:"#444", fontStyle:"italic", marginTop:"8px" }}>
+    <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#444", fontStyle:"italic", marginTop:"12px" }}>
       Tap any item to check it off during your inspection.
     </div>
   </div>
@@ -8194,9 +8194,9 @@ const modelYears = {
                     <div style={{ flex:1, minWidth:0 }}>
                       <div style={{ fontSize:"13px", lineHeight:"1.5", color:"#ccc" }}>{item.issue}</div>
                       <div style={{ display:"flex", gap:"8px", marginTop:"6px", flexWrap:"wrap" }}>
-                        <span style={{ fontSize:"11px", color:"#777" }}>📅 {item.years}</span>
-                        <span style={{ fontSize:"11px", padding:"1px 7px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity} severity</span>
-                        <span style={{ fontSize:"11px", color:"#555" }}>{item.source}</span>
+                        <span style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#777" }}>📅 {item.years}</span>
+                        <span style={{ fontSize:"clamp(11px, 1vw, 14px)", padding:"2px 9px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity} severity</span>
+                        <span style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555" }}>{item.source}</span>
                         {item.trims && <span style={{ fontSize:"11px", color:"#3b82f6", background:"#3b82f618", padding:"1px 7px", borderRadius:"20px" }}>⚙️ {item.trims.slice(0,3).join(", ")}{item.trims.length > 3 ? "…" : ""} only</span>}
                       </div>
                     </div>
@@ -8351,16 +8351,16 @@ const modelYears = {
             <div style={{ display:"grid", gap:"16px" }}>
 
               {/* Risk Summary Card */}
-              <div style={{ background:"#161616", border:`1px solid ${riskColor}33`, borderRadius:"10px", padding:"24px" }}>
+              <div style={{ background:"#161616", border:`1px solid ${riskColor}33`, borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px)" }}>
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:"12px" }}>
                   <div>
-                    <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#555", marginBottom:"6px" }}>Pre-Purchase Risk Assessment</div>
-                    <div style={{ fontSize:"22px", fontWeight:"400", letterSpacing:"-0.02em" }}>
+                    <div style={{ fontSize:"clamp(11px, 1vw, 14px)", letterSpacing:"0.25em", textTransform:"uppercase", color:"#555", marginBottom:"8px" }}>Pre-Purchase Risk Assessment</div>
+                    <div style={{ fontSize:"clamp(22px, 2.2vw, 34px)", fontWeight:"400", letterSpacing:"-0.02em" }}>
                       {make} {model}{year !== "Any Year" ? ` — ${year}` : ""}
                     </div>
                   </div>
                   <div style={{ textAlign:"right" }}>
-                    <div style={{ fontSize:"24px", fontWeight:"600", color:riskColor }}>{riskLabel}</div>
+                    <div style={{ fontSize:"clamp(24px, 2.5vw, 40px)", fontWeight:"600", color:riskColor }}>{riskLabel}</div>
                     <div style={{ fontSize:"12px", color:"#555", marginTop:"2px" }}>
                       {yearIssues.length === 0 ? "No documented issues" : `${yearIssues.length} known issue${yearIssues.length !== 1 ? "s" : ""} · ${highCount} high severity`}
                     </div>
@@ -8368,9 +8368,9 @@ const modelYears = {
                 </div>
                 {yearIssues.length > 0 && (
                   <div style={{ marginTop:"16px", display:"flex", gap:"8px", flexWrap:"wrap" }}>
-                    {highCount > 0 && <span style={{ fontSize:"12px", padding:"3px 10px", borderRadius:"20px", background:"#ef444418", color:"#ef4444" }}>⚠️ {highCount} High Severity</span>}
-                    {medCount > 0 && <span style={{ fontSize:"12px", padding:"3px 10px", borderRadius:"20px", background:"#f59e0b18", color:"#f59e0b" }}>⚡ {medCount} Medium Severity</span>}
-                    {yearIssues.filter(i => i.severity === "Low").length > 0 && <span style={{ fontSize:"12px", padding:"3px 10px", borderRadius:"20px", background:"#22c55e18", color:"#22c55e" }}>ℹ️ {yearIssues.filter(i => i.severity === "Low").length} Low Severity</span>}
+                    {highCount > 0 && <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", padding:"4px 12px", borderRadius:"20px", background:"#ef444418", color:"#ef4444" }}>⚠️ {highCount} High Severity</span>}
+                    {medCount > 0 && <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", padding:"4px 12px", borderRadius:"20px", background:"#f59e0b18", color:"#f59e0b" }}>⚡ {medCount} Medium Severity</span>}
+                    {yearIssues.filter(i => i.severity === "Low").length > 0 && <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", padding:"4px 12px", borderRadius:"20px", background:"#22c55e18", color:"#22c55e" }}>ℹ️ {yearIssues.filter(i => i.severity === "Low").length} Low Severity</span>}
                     {year === "Any Year" && <span style={{ fontSize:"12px", color:"#555", fontStyle:"italic" }}>Select a year to filter issues by model year</span>}
                   </div>
                 )}
@@ -8378,8 +8378,8 @@ const modelYears = {
 
               {/* Known Issues with Cost Links */}
               {yearIssues.length > 0 ? (
-                <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px" }}>
-                  <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"16px" }}>Known Issues &amp; Repair Costs</div>
+                <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px)" }}>
+                  <div style={{ fontSize:"clamp(11px, 1vw, 14px)", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"16px" }}>Known Issues &amp; Repair Costs</div>
                   <div style={{ display:"grid", gap:"12px" }}>
                     {yearIssues.map((item, i) => {
                       const severityColor = item.severity === "High" ? "#ef4444" : item.severity === "Medium" ? "#f59e0b" : "#22c55e";
@@ -8391,16 +8391,16 @@ const modelYears = {
                       return (
                         <div key={i} style={{ padding:"16px", background:"#0e0e0e", borderRadius:"8px", border:`1px solid ${severityColor}22` }}>
                           <div style={{ display:"flex", gap:"10px", alignItems:"flex-start" }}>
-                            <span style={{ display:"inline-block", width:"8px", height:"8px", borderRadius:"50%", background:severityColor, flexShrink:0, marginTop:"5px" }} />
+                            <span style={{ display:"inline-block", width:"clamp(8px, 0.8vw, 12px)", height:"clamp(8px, 0.8vw, 12px)", borderRadius:"50%", background:severityColor, flexShrink:0, marginTop:"5px" }} />
                             <div style={{ flex:1 }}>
-                              <div style={{ fontSize:"13px", lineHeight:"1.5", color:"#ccc", marginBottom:"8px" }}>{item.issue}</div>
+                              <div style={{ fontSize:"clamp(13px, 1.2vw, 17px)", lineHeight:"1.6", color:"#ccc", marginBottom:"10px" }}>{item.issue}</div>
                               <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", alignItems:"center" }}>
-                                <span style={{ fontSize:"11px", color:"#777" }}>📅 {item.years}</span>
-                                <span style={{ fontSize:"11px", padding:"1px 7px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity}</span>
-                                <span style={{ fontSize:"11px", color:"#555" }}>{item.source}</span>
+                                <span style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#777" }}>📅 {item.years}</span>
+                                <span style={{ fontSize:"clamp(11px, 1vw, 14px)", padding:"2px 9px", borderRadius:"20px", background:severityBg, color:severityColor }}>{item.severity}</span>
+                                <span style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555" }}>{item.source}</span>
                                 {item.trims && <span style={{ fontSize:"11px", color:"#3b82f6", background:"#3b82f618", padding:"1px 7px", borderRadius:"20px" }}>⚙️ {item.trims.slice(0,3).join(", ")}{item.trims.length > 3 ? "…" : ""} only</span>}
                                 {costLow && (
-                                  <span style={{ fontSize:"12px", color:"#c9a84c", marginLeft:"auto", fontWeight:"500" }}>
+                                  <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:"#c9a84c", marginLeft:"auto", fontWeight:"500" }}>
                                     Est. repair: ${costLow.toLocaleString()}–${costHigh.toLocaleString()}
                                   </span>
                                 )}
@@ -8414,9 +8414,9 @@ const modelYears = {
                 </div>
               ) : (
                 <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"24px", textAlign:"center" }}>
-                  <div style={{ fontSize:"24px", marginBottom:"8px" }}>✅</div>
-                  <div style={{ fontSize:"15px", color:"#ccc" }}>No documented issues{year !== "Any Year" ? ` for the ${year} model year` : ""}</div>
-                  <div style={{ fontSize:"13px", color:"#555", marginTop:"4px", fontStyle:"italic" }}>This doesn't guarantee a problem-free vehicle — always get a pre-purchase inspection.</div>
+                  <div style={{ fontSize:"clamp(32px, 3vw, 52px)", marginBottom:"12px" }}>✅</div>
+                  <div style={{ fontSize:"clamp(15px, 1.4vw, 22px)", color:"#ccc" }}>No documented issues{year !== "Any Year" ? ` for the ${year} model year` : ""}</div>
+                  <div style={{ fontSize:"clamp(13px, 1.2vw, 17px)", color:"#555", marginTop:"6px", fontStyle:"italic" }}>This doesn't guarantee a problem-free vehicle — always get a pre-purchase inspection.</div>
                 </div>
               )}
 
@@ -8424,7 +8424,7 @@ const modelYears = {
               <InspectionChecklist yearIssues={yearIssues} allModelIssues={knownIssues[make]?.[model] || []} make={make} model={model} year={year} zip={zip} />
 
               {/* Disclaimer */}
-              <div style={{ fontSize:"11px", color:"#444", textAlign:"center", fontStyle:"italic", padding:"0 8px" }}>
+              <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#444", textAlign:"center", fontStyle:"italic", padding:"0 8px" }}>
                 Issues sourced from RepairPal, CarComplaints.com, and NHTSA complaint database. Always get a pre-purchase inspection from a licensed mechanic.
               </div>
 
