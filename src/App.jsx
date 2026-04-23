@@ -6505,9 +6505,9 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
   const hasMileage = mileage !== null;
 
   return (
-    <section style={{ maxWidth:"1400px", margin:"20px auto", padding:"0 48px" }}>
+    <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)" }}>
       {/* Mileage input */}
-      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px", marginBottom:"16px" }}>
+      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)", marginBottom:"16px" }}>
         <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"12px" }}>
           Maintenance Schedule{hasVehicle ? ` — ${make}${model !== "Any Model" ? " " + model : ""}${year !== "Any Year" ? " " + year : ""}` : ""}
         </div>
@@ -6546,7 +6546,7 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
 
           {/* Overdue */}
           {overdue.length > 0 && (
-            <div style={{ background:"#161616", border:"1px solid #ef444433", borderRadius:"10px", padding:"20px 24px" }}>
+            <div style={{ background:"#161616", border:"1px solid #ef444433", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
               <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#ef4444", marginBottom:"12px" }}>⚠️ Overdue</div>
               {overdue.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
@@ -6554,7 +6554,7 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
 
           {/* Due Soon */}
           {dueSoon.length > 0 && (
-            <div style={{ background:"#161616", border:"1px solid #f59e0b33", borderRadius:"10px", padding:"20px 24px" }}>
+            <div style={{ background:"#161616", border:"1px solid #f59e0b33", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
               <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#f59e0b", marginBottom:"12px" }}>⏰ Due Soon</div>
               {dueSoon.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
@@ -6562,7 +6562,7 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
 
           {/* Upcoming */}
           {(upcoming.length > 0 || timeBased.length > 0) && (
-            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px" }}>
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
               <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"12px" }}>✓ Good For Now</div>
               {[...upcoming, ...timeBased].map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
@@ -6570,14 +6570,14 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
 
           {/* Done */}
           {done.length > 0 && (
-            <div style={{ background:"#0a120a", border:"1px solid #22c55e22", borderRadius:"10px", padding:"20px 24px" }}>
+            <div style={{ background:"#0a120a", border:"1px solid #22c55e22", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
               <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"12px" }}>✅ Marked Complete</div>
               {done.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
           )}
 
           {!hasMileage && (
-            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px" }}>
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
               <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#555", marginBottom:"12px" }}>Full Schedule</div>
               {schedule.map(item => (
                 <MaintenanceItem key={item.id} item={{ ...item, status:null, done:!!maintDone[item.id] }} onToggle={toggleDone} repairData={repairData} adj={adj} />
@@ -7066,7 +7066,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
         </div>
 
         {/* Body */}
-        <div style={{ padding:"20px 24px" }}>
+        <div style={{ padding:"20px clamp(24px, 4vw, 80px)" }}>
 
           {/* Tier breakdown */}
           <div style={{ fontSize:"11px", color:"#555", marginBottom:"10px", textTransform:"uppercase", letterSpacing:"0.08em" }}>By Service Tier</div>
@@ -8055,7 +8055,7 @@ const modelYears = {
 
       {/* Header */}
       <header style={{ borderBottom:"1px solid #1a1a1a" }}>
-        <div style={{ maxWidth:"1400px", margin:"0 auto", padding:"40px 48px 28px" }}>
+        <div style={{ width:"100%", boxSizing:"border-box", padding:"40px clamp(20px, 5vw, 100px) 28px" }}>
         <div style={{ fontSize:"11px", letterSpacing:"0.3em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"6px" }}>Repair Cost Intelligence</div>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", flexWrap:"wrap", gap:"16px" }}>
           <div>
@@ -8080,7 +8080,7 @@ const modelYears = {
       </header>
 
       {/* Controls */}
-      <div style={{ maxWidth:"1400px", margin:"0 auto", padding:"24px 48px 0" }}>
+      <div style={{ width:"100%", boxSizing:"border-box", padding:"24px clamp(20px, 5vw, 100px) 0" }}>
 
         {/* ZIP row */}
         <form onSubmit={handleZip} style={{ display:"flex", gap:"10px", marginBottom:"12px", alignItems:"center" }}>
@@ -8173,7 +8173,7 @@ const modelYears = {
 
       {/* Known Issues Section — costs mode only */}
       {appMode === "costs" && make !== "Any Make" && model !== "Any Model" && knownIssues[make] && knownIssues[make][model] && (
-        <section style={{ maxWidth:"1400px", margin:"20px auto 0", padding:"0 48px" }}>
+        <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)" }}>
           <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px" }}>
             <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"16px" }}>
               <span style={{ fontSize:"18px" }}>⚠️</span>
@@ -8212,7 +8212,7 @@ const modelYears = {
 
       {/* ── REPAIR COSTS MODE ─────────────────────────────────────────────── */}
       {appMode === "costs" && (
-      <main style={{ maxWidth:"1400px", margin:"20px auto", padding:`0 48px ${basket.size > 0 ? "100px" : "20px"}`, display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:"14px", alignItems:"start" }}>
+      <main style={{ width:"100%", boxSizing:"border-box", padding:`0 clamp(20px, 5vw, 100px) ${basket.size > 0 ? "100px" : "20px"}`, marginTop:"20px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:"14px", alignItems:"start" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
           const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
@@ -8342,7 +8342,7 @@ const modelYears = {
 
       {/* ── BEFORE YOU BUY MODE ───────────────────────────────────────────── */}
       {appMode === "buyside" && (
-        <section style={{ maxWidth:"1400px", margin:"20px auto", padding:"0 48px" }}>
+        <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)" }}>
           {make === "Any Make" || model === "Any Model" ? (
             <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"48px 24px", textAlign:"center" }}>
               <div style={{ fontSize:"40px", marginBottom:"16px" }}>🔍</div>
@@ -8446,7 +8446,7 @@ const modelYears = {
         />
       )}
       {appMode === "costs" && (
-      <div style={{ maxWidth:"1400px", margin:"0 auto 40px", padding:"0 48px" }}>
+      <div style={{ width:"100%", boxSizing:"border-box", marginBottom:"40px", padding:"0 clamp(20px, 5vw, 100px)" }}>
         <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"28px" }}>
           <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"8px" }}>Help the Community</div>
           <h2 style={{ fontSize:"20px", fontWeight:"400", margin:"0 0 8px", letterSpacing:"-0.02em" }}>Submit What You Paid</h2>
@@ -8501,7 +8501,7 @@ const modelYears = {
       )} {/* end costs mode submit form */}
 
       {/* ── FEEDBACK SECTION ─────────────────────────────────────────────── */}
-      <div style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", maxWidth:"600px", margin:"0 auto" }}>
+      <div style={{ borderTop:"1px solid #1a1a1a", padding:"32px 24px", maxWidth:"700px", margin:"0 auto" }}>
         <div style={{ fontSize:"13px", fontWeight:"500", color:"#c9a84c", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>
           Suggest a Change
         </div>
