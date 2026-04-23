@@ -7082,16 +7082,13 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             💡 {data.notes}
           </div>
 
-          {/* Nearby shops */}
+          {/* Nearby shops - only show when we have results */}
+          {zip && (loadingShops || shops.length > 0) && (
           <div style={{ marginTop:"20px" }}>
-            <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
-              {zip ? `Shops Near ${zip}` : "Nearby Shops"}
+            <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
+              Shops Near {zip}
             </div>
-            {!zip ? (
-              <div style={{ background:"#111", border:"1px dashed #222", borderRadius:"8px", padding:"16px", textAlign:"center", fontSize:"12px", color:"#444" }}>
-                📍 Enter your ZIP above to see nearby shops
-              </div>
-            ) : loadingShops ? (
+            {loadingShops ? (
               <div style={{ textAlign:"center", padding:"20px", color:"#444", fontSize:"13px" }}>
                 🔍 Finding shops near you…
               </div>
@@ -7119,6 +7116,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
               </div>
             )}
           </div>
+          )}
 
           {/* Vote */}
           <div style={{ marginTop:"20px", display:"flex", alignItems:"center", gap:"10px" }}>
