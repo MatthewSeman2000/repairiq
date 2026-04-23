@@ -6505,7 +6505,7 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
   const hasMileage = mileage !== null;
 
   return (
-    <section style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px" }}>
+    <section style={{ maxWidth:"1400px", margin:"20px auto", padding:"0 48px" }}>
       {/* Mileage input */}
       <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px 24px", marginBottom:"16px" }}>
         <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"12px" }}>
@@ -8054,7 +8054,8 @@ const modelYears = {
 
 
       {/* Header */}
-      <header style={{ maxWidth:"900px", margin:"0 auto", padding:"40px 24px 28px", borderBottom:"1px solid #1a1a1a" }}>
+      <header style={{ borderBottom:"1px solid #1a1a1a" }}>
+        <div style={{ maxWidth:"1400px", margin:"0 auto", padding:"40px 48px 28px" }}>
         <div style={{ fontSize:"11px", letterSpacing:"0.3em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"6px" }}>Repair Cost Intelligence</div>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", flexWrap:"wrap", gap:"16px" }}>
           <div>
@@ -8064,21 +8065,22 @@ const modelYears = {
             <p style={{ color:"#555", fontSize:"14px", margin:0, fontStyle:"italic" }}>Real-world cost ranges — adjusted for your location &amp; vehicle.</p>
           </div>
           <div style={{ display:"flex", gap:"4px", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"4px", flexWrap:"wrap" }}>
-            <button onClick={() => setAppMode("costs")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "costs" ? "#c9a84c" : "transparent", color: appMode === "costs" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+            <button onClick={() => setAppMode("costs")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "costs" ? "#c9a84c" : "transparent", color: appMode === "costs" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               💰 Repair Costs
             </button>
-            <button onClick={() => setAppMode("buyside")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "buyside" ? "#c9a84c" : "transparent", color: appMode === "buyside" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+            <button onClick={() => setAppMode("buyside")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "buyside" ? "#c9a84c" : "transparent", color: appMode === "buyside" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               🔍 Before You Buy
             </button>
-            <button onClick={() => setAppMode("maintenance")} style={{ padding:"8px 16px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "maintenance" ? "#c9a84c" : "transparent", color: appMode === "maintenance" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+            <button onClick={() => setAppMode("maintenance")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "maintenance" ? "#c9a84c" : "transparent", color: appMode === "maintenance" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               🔧 Maintenance
             </button>
           </div>
         </div>
+        </div>
       </header>
 
       {/* Controls */}
-      <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 24px 0" }}>
+      <div style={{ maxWidth:"1400px", margin:"0 auto", padding:"24px 48px 0" }}>
 
         {/* ZIP row */}
         <form onSubmit={handleZip} style={{ display:"flex", gap:"10px", marginBottom:"12px", alignItems:"center" }}>
@@ -8171,7 +8173,7 @@ const modelYears = {
 
       {/* Known Issues Section — costs mode only */}
       {appMode === "costs" && make !== "Any Make" && model !== "Any Model" && knownIssues[make] && knownIssues[make][model] && (
-        <section style={{ maxWidth:"900px", margin:"20px auto 0", padding:"0 24px" }}>
+        <section style={{ maxWidth:"1400px", margin:"20px auto 0", padding:"0 48px" }}>
           <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px" }}>
             <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"16px" }}>
               <span style={{ fontSize:"18px" }}>⚠️</span>
@@ -8210,7 +8212,7 @@ const modelYears = {
 
       {/* ── REPAIR COSTS MODE ─────────────────────────────────────────────── */}
       {appMode === "costs" && (
-      <main style={{ maxWidth:"900px", margin:"20px auto", padding:`0 24px ${basket.size > 0 ? "100px" : "20px"}`, display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"14px", alignItems:"start" }}>
+      <main style={{ maxWidth:"1400px", margin:"20px auto", padding:`0 48px ${basket.size > 0 ? "100px" : "20px"}`, display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:"14px", alignItems:"start" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
           const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
@@ -8340,7 +8342,7 @@ const modelYears = {
 
       {/* ── BEFORE YOU BUY MODE ───────────────────────────────────────────── */}
       {appMode === "buyside" && (
-        <section style={{ maxWidth:"900px", margin:"20px auto", padding:"0 24px" }}>
+        <section style={{ maxWidth:"1400px", margin:"20px auto", padding:"0 48px" }}>
           {make === "Any Make" || model === "Any Model" ? (
             <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"48px 24px", textAlign:"center" }}>
               <div style={{ fontSize:"40px", marginBottom:"16px" }}>🔍</div>
@@ -8444,7 +8446,7 @@ const modelYears = {
         />
       )}
       {appMode === "costs" && (
-      <div style={{ maxWidth:"900px", margin:"0 auto 40px", padding:"0 24px" }}>
+      <div style={{ maxWidth:"1400px", margin:"0 auto 40px", padding:"0 48px" }}>
         <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"28px" }}>
           <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"8px" }}>Help the Community</div>
           <h2 style={{ fontSize:"20px", fontWeight:"400", margin:"0 0 8px", letterSpacing:"-0.02em" }}>Submit What You Paid</h2>
