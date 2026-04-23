@@ -6857,10 +6857,13 @@ return (
 
 function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   const tiers = Object.entries(data.costs);
+  const popoverStyle = tierPicker.centered
+    ? { position:"fixed", top:"50%", left:"50%", transform:"translate(-50%,-50%)", zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"16px", minWidth:"260px", width:"85vw", maxWidth:"340px", boxShadow:"0 12px 40px rgba(0,0,0,0.8)" }
+    : { position:"fixed", top: tierPicker.top, right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" };
   return (
     <>
-      <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:998 }} />
-      <div style={{ position:"fixed", top: tierPicker.top, right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" }}>
+      <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:998, background: tierPicker.centered ? "rgba(0,0,0,0.5)" : "transparent" }} />
+      <div style={popoverStyle}>
         <div style={{ fontSize:"11px", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"10px" }}>
           Choose service tier
         </div>
@@ -6869,9 +6872,9 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
           const hi = adj(vals.high, data, tierPicker.name);
           return (
             <button key={tierName} onClick={() => onPick(tierPicker.name, tierName)}
-              style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%", background:"#111", border:"1px solid #222", borderRadius:"6px", padding:"9px 12px", marginBottom:"6px", cursor:"pointer", fontFamily:"inherit", textAlign:"left" }}>
-              <span style={{ fontSize:"13px", color:"#ccc" }}>{tierName}</span>
-              <span style={{ fontSize:"13px", color:"#c9a84c", fontWeight:"500" }}>${lo.toLocaleString()} – ${hi.toLocaleString()}</span>
+              style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%", background:"#111", border:"1px solid #222", borderRadius:"6px", padding:"11px 14px", marginBottom:"6px", cursor:"pointer", fontFamily:"inherit", textAlign:"left" }}>
+              <span style={{ fontSize:"14px", color:"#ccc" }}>{tierName}</span>
+              <span style={{ fontSize:"14px", color:"#c9a84c", fontWeight:"500" }}>${lo.toLocaleString()} – ${hi.toLocaleString()}</span>
             </button>
           );
         })}
@@ -7834,12 +7837,19 @@ const modelYears = {
   const openTierPicker = (e, name) => {
     e.stopPropagation();
     if (basket.has(name)) {
-      // Already in basket — remove it
       setBasket(prev => { const next = new Map(prev); next.delete(name); return next; });
       return;
     }
     const rect = e.currentTarget.getBoundingClientRect();
-    setTierPicker({ name, top: rect.bottom + window.scrollY + 6, right: window.innerWidth - rect.right });
+    const isMobile = window.innerWidth < 640;
+    if (isMobile) {
+      // Center in viewport on mobile
+      setTierPicker({ name, centered: true });
+    } else {
+      const rightOffset = window.innerWidth - rect.right;
+      const safeRight = Math.max(8, Math.min(rightOffset, window.innerWidth - 240));
+      setTierPicker({ name, top: rect.bottom + window.scrollY + 6, right: safeRight });
+    }
   };
 
   const pickTier = (repairName, tierName) => {
