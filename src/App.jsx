@@ -6855,6 +6855,234 @@ return (
 }
 
 
+
+// ── OBD CODE DATABASE ─────────────────────────────────────────────────────
+// Sourced from SAE J2012 standard, NHTSA TSB data, OBD-II specification
+// severity: "safe" | "caution" | "stop"
+const obdCodes = [
+  // ── P0 POWERTRAIN — FUEL & AIR ──────────────────────────────────────────
+  { code:"P0100", name:"Mass Air Flow Sensor Circuit Malfunction", category:"Engine", severity:"caution", desc:"The MAF sensor isn't sending a proper signal to the ECU. The engine can't accurately meter fuel.", causes:["Dirty or contaminated MAF sensor","Failed MAF sensor","Vacuum leak near MAF","Wiring harness damage"], drive:"Drive with caution — may run rough or hesitate. Don't ignore long-term.", repairKey:"Mass Air Flow Sensor" },
+  { code:"P0101", name:"MAF Sensor Range/Performance", category:"Engine", severity:"caution", desc:"MAF sensor is working but reading out of expected range. Often a dirty sensor before full failure.", causes:["Dirty MAF sensor (try cleaning first)","Air filter clogged","Intake boot cracked or loose","Failing MAF sensor"], drive:"Usually driveable. Clean the MAF sensor first — often fixes it for free.", repairKey:"Mass Air Flow Sensor" },
+  { code:"P0110", name:"Intake Air Temperature Sensor Circuit", category:"Engine", severity:"caution", desc:"IAT sensor circuit fault. Engine may run rich or have poor fuel economy.", causes:["Failed IAT sensor","Wiring fault","Loose connector"], drive:"Driveable. Fuel economy may suffer.", repairKey:null },
+  { code:"P0115", name:"Engine Coolant Temperature Sensor Circuit", category:"Engine", severity:"caution", desc:"ECT sensor circuit malfunction. Engine may run rich, overheat, or idle poorly.", causes:["Failed ECT sensor","Corroded connector","Wiring damage","Low coolant level"], drive:"Caution — monitor temperature gauge. Can cause overheating if ignored.", repairKey:"Thermostat Replacement" },
+  { code:"P0128", name:"Coolant Temperature Below Thermostat Regulating Temperature", category:"Engine", severity:"caution", desc:"Engine isn't reaching normal operating temperature. Almost always a stuck-open thermostat.", causes:["Stuck-open thermostat (most common)","Faulty ECT sensor","Low coolant"], drive:"Driveable but fix soon. Poor fuel economy and heater may blow cold.", repairKey:"Thermostat Replacement" },
+  { code:"P0171", name:"System Too Lean (Bank 1)", category:"Engine", severity:"caution", desc:"Too much air or not enough fuel in the mixture on Bank 1. Common and has many causes.", causes:["Vacuum leak (intake manifold, brake booster hose)","Dirty/failing MAF sensor","Clogged fuel injectors","Weak fuel pump","Failing O2 sensor"], drive:"Usually driveable. Can cause misfires and damage catalytic converter over time.", repairKey:"Mass Air Flow Sensor" },
+  { code:"P0172", name:"System Too Rich (Bank 1)", category:"Engine", severity:"caution", desc:"Too much fuel in the mixture on Bank 1. Can foul spark plugs and damage the catalytic converter.", causes:["Failing O2 sensor","Leaking fuel injector","High fuel pressure","Faulty coolant temp sensor","MAF sensor issue"], drive:"Driveable short-term. Fix promptly to avoid catalytic converter damage.", repairKey:"Oxygen Sensor" },
+  { code:"P0174", name:"System Too Lean (Bank 2)", category:"Engine", severity:"caution", desc:"Same as P0171 but affecting Bank 2 (V6/V8 engines). Both P0171 and P0174 together usually means a large vacuum leak or MAF issue.", causes:["Vacuum leak","Dirty MAF sensor","Low fuel pressure","Failing O2 sensor (Bank 2)"], drive:"Driveable. If both P0171 and P0174 appear, prioritize diagnosis.", repairKey:"Mass Air Flow Sensor" },
+  { code:"P0175", name:"System Too Rich (Bank 2)", category:"Engine", severity:"caution", desc:"Too much fuel on Bank 2. Paired with P0172 usually points to a fuel delivery issue.", causes:["Failing O2 sensor Bank 2","Leaking injector","Faulty coolant sensor","High fuel pressure"], drive:"Driveable short-term. Fix to avoid converter damage.", repairKey:"Oxygen Sensor" },
+
+  // ── P0 IGNITION / MISFIRE ────────────────────────────────────────────────
+  { code:"P0300", name:"Random/Multiple Cylinder Misfire Detected", category:"Engine", severity:"stop", desc:"Multiple cylinders are misfiring — not isolated to one. Can cause serious engine and catalytic converter damage quickly.", causes:["Worn spark plugs (most common)","Bad ignition coils","Low fuel pressure","Vacuum leak","Failing fuel injectors","Low compression (serious)"], drive:"Stop driving if misfire is severe or check engine light is flashing. A flashing CEL means active converter damage.", repairKey:"Spark Plugs" },
+  { code:"P0301", name:"Cylinder 1 Misfire Detected", category:"Engine", severity:"caution", desc:"Cylinder 1 is misfiring. Rough idle, hesitation, or reduced power.", causes:["Bad spark plug cylinder 1","Failed ignition coil cylinder 1","Bad fuel injector cylinder 1","Low compression cylinder 1"], drive:"Caution. If CEL is flashing, stop driving. Fix promptly.", repairKey:"Spark Plugs" },
+  { code:"P0302", name:"Cylinder 2 Misfire Detected", category:"Engine", severity:"caution", desc:"Cylinder 2 misfire. Same causes as P0301 but on cylinder 2.", causes:["Bad spark plug","Failed coil","Bad injector","Low compression"], drive:"Caution. Flashing CEL = stop driving.", repairKey:"Spark Plugs" },
+  { code:"P0303", name:"Cylinder 3 Misfire Detected", category:"Engine", severity:"caution", desc:"Cylinder 3 misfire.", causes:["Bad spark plug","Failed coil","Bad injector","Low compression"], drive:"Caution. Flashing CEL = stop driving.", repairKey:"Spark Plugs" },
+  { code:"P0304", name:"Cylinder 4 Misfire Detected", category:"Engine", severity:"caution", desc:"Cylinder 4 misfire.", causes:["Bad spark plug","Failed coil","Bad injector","Low compression"], drive:"Caution. Flashing CEL = stop driving.", repairKey:"Spark Plugs" },
+  { code:"P0305", name:"Cylinder 5 Misfire Detected", category:"Engine", severity:"caution", desc:"Cylinder 5 misfire (V6/V8).", causes:["Bad spark plug","Failed coil","Bad injector","Low compression"], drive:"Caution. Flashing CEL = stop driving.", repairKey:"Spark Plugs" },
+  { code:"P0306", name:"Cylinder 6 Misfire Detected", category:"Engine", severity:"caution", desc:"Cylinder 6 misfire (V6/V8).", causes:["Bad spark plug","Failed coil","Bad injector","Low compression"], drive:"Caution. Flashing CEL = stop driving.", repairKey:"Spark Plugs" },
+
+  // ── P0 OXYGEN / EMISSIONS ────────────────────────────────────────────────
+  { code:"P0130", name:"O2 Sensor Circuit Malfunction (Bank 1, Sensor 1)", category:"Engine", severity:"caution", desc:"Upstream O2 sensor on Bank 1 isn't responding correctly. This sensor controls fuel trim.", causes:["Failed upstream O2 sensor","Exhaust leak near sensor","Wiring damage","Bad ECU (rare)"], drive:"Driveable. Poor fuel economy and possible engine damage over time.", repairKey:"Oxygen Sensor" },
+  { code:"P0136", name:"O2 Sensor Circuit Malfunction (Bank 1, Sensor 2)", category:"Engine", severity:"caution", desc:"Downstream O2 sensor malfunction. This sensor monitors catalytic converter efficiency.", causes:["Failed downstream O2 sensor","Damaged wiring","Exhaust leak"], drive:"Driveable. Won't pass emissions. May indicate converter issues.", repairKey:"Oxygen Sensor" },
+  { code:"P0141", name:"O2 Sensor Heater Circuit Malfunction (Bank 1, Sensor 2)", category:"Engine", severity:"caution", desc:"The heater element inside the downstream O2 sensor has failed.", causes:["Failed O2 sensor heater element","Blown fuse","Wiring fault"], drive:"Driveable. Won't pass emissions.", repairKey:"Oxygen Sensor" },
+  { code:"P0420", name:"Catalyst System Efficiency Below Threshold (Bank 1)", category:"Emissions", severity:"caution", desc:"The catalytic converter on Bank 1 isn't cleaning exhaust gases efficiently enough. One of the most common OBD codes.", causes:["Worn or failing catalytic converter (most common)","Failed downstream O2 sensor","Exhaust leak before converter","Engine running rich (fouled converter)","Oil or coolant burning"], drive:"Driveable. Won't pass emissions. Catalytic converter damage is expensive — don't delay.", repairKey:"Catalytic Converter" },
+  { code:"P0430", name:"Catalyst System Efficiency Below Threshold (Bank 2)", category:"Emissions", severity:"caution", desc:"Same as P0420 but on Bank 2 (V6/V8 engines). Both P0420 and P0430 together usually means widespread converter failure.", causes:["Worn catalytic converter Bank 2","Failed O2 sensor","Exhaust leak","Running rich on Bank 2"], drive:"Driveable. Won't pass emissions. Budget for both converters if paired codes.", repairKey:"Catalytic Converter" },
+
+  // ── P0 EVAP SYSTEM ───────────────────────────────────────────────────────
+  { code:"P0440", name:"Evaporative Emission Control System Malfunction", category:"Emissions", severity:"safe", desc:"A leak has been detected in the fuel vapor evaporative system. Often just a loose gas cap.", causes:["Loose or missing gas cap (check first)","Cracked EVAP hose","Failed purge valve","Failed vent valve","Leaking fuel tank"], drive:"Safe to drive. Tighten gas cap and see if code clears after 3 drive cycles.", repairKey:"EVAP System Repair" },
+  { code:"P0441", name:"EVAP System Incorrect Purge Flow", category:"Emissions", severity:"safe", desc:"EVAP purge valve isn't flowing correctly. Fuel vapors aren't being properly routed to the engine.", causes:["Failed purge solenoid valve","Blocked or kinked EVAP hose","Failed vent valve"], drive:"Safe to drive. Won't pass emissions.", repairKey:"EVAP System Repair" },
+  { code:"P0442", name:"EVAP System Small Leak Detected", category:"Emissions", severity:"safe", desc:"A small leak (0.040 inch or smaller) in the EVAP system. Often the gas cap.", causes:["Loose gas cap (tighten and retest)","Cracked EVAP hose","Leaking purge or vent valve","Small fuel tank crack"], drive:"Safe to drive. Tighten the gas cap first.", repairKey:"EVAP System Repair" },
+  { code:"P0455", name:"EVAP System Large Leak Detected", category:"Emissions", severity:"safe", desc:"A large leak in the EVAP system. More significant than P0442.", causes:["Missing or broken gas cap","Disconnected EVAP hose","Failed purge valve stuck open","Fuel tank damage"], drive:"Safe to drive. Check gas cap first.", repairKey:"EVAP System Repair" },
+  { code:"P0456", name:"EVAP System Very Small Leak", category:"Emissions", severity:"safe", desc:"Very small EVAP leak. Hardest to find — can be a hairline crack in a hose.", causes:["Hairline crack in EVAP hose","Micro-leak at gas cap seal","Leaking canister vent valve"], drive:"Safe to drive.", repairKey:"EVAP System Repair" },
+
+  // ── P0 FUEL SYSTEM ───────────────────────────────────────────────────────
+  { code:"P0087", name:"Fuel Rail/System Pressure Too Low", category:"Engine", severity:"stop", desc:"Fuel pressure is below specification. Engine may stall, hesitate, or not start. Can cause serious damage.", causes:["Failing fuel pump (most common)","Clogged fuel filter","Fuel pressure regulator failure","Clogged fuel injectors","Leak in fuel line"], drive:"Stop or drive minimally. Risk of stalling in traffic. Tow if stalling occurs.", repairKey:"Fuel Pump Replacement" },
+  { code:"P0088", name:"Fuel Rail/System Pressure Too High", category:"Engine", severity:"stop", desc:"Fuel pressure is above specification. Can cause rich running and injector damage.", causes:["Failing fuel pressure regulator","Clogged fuel return line","Stuck-closed injector"], drive:"Stop driving. Fire risk if pressure is extreme.", repairKey:"Fuel Pump Replacement" },
+  { code:"P0093", name:"Fuel System Large Leak Detected", category:"Engine", severity:"stop", desc:"Major fuel system leak. Fire hazard.", causes:["Ruptured fuel line","Failed fuel injector seal","Damaged fuel rail"], drive:"Stop immediately. Fire risk.", repairKey:"Fuel Pump Replacement" },
+
+  // ── P0 EGR ───────────────────────────────────────────────────────────────
+  { code:"P0400", name:"Exhaust Gas Recirculation Flow Malfunction", category:"Emissions", severity:"caution", desc:"EGR system isn't flowing as expected. Can cause rough idle and increased NOx emissions.", causes:["Clogged EGR valve (carbon buildup)","Failed EGR valve","Blocked EGR passages","Failed EGR position sensor"], drive:"Driveable. Performance may suffer. Won't pass emissions.", repairKey:"EGR Valve" },
+  { code:"P0401", name:"EGR Flow Insufficient", category:"Emissions", severity:"caution", desc:"Not enough EGR flow. Usually carbon-clogged EGR valve.", causes:["Clogged EGR valve","Clogged EGR passages","Failed EGR solenoid","Vacuum line issue"], drive:"Driveable. Clean or replace EGR valve.", repairKey:"EGR Valve" },
+  { code:"P0402", name:"EGR Flow Excessive", category:"Emissions", severity:"caution", desc:"Too much EGR flow. Causes rough idle and performance issues.", causes:["EGR valve stuck open","Failed EGR position sensor","Leaking EGR diaphragm"], drive:"Driveable but rough. Fix soon.", repairKey:"EGR Valve" },
+
+  // ── P0 TRANSMISSION ──────────────────────────────────────────────────────
+  { code:"P0700", name:"Transmission Control System Malfunction", category:"Transmission", severity:"caution", desc:"General transmission fault code — usually accompanies other transmission codes. Check for additional codes.", causes:["Multiple transmission codes present","TCM failure","Wiring harness issue","Low transmission fluid"], drive:"Caution. May shift erratically. Check fluid level.", repairKey:"Transmission Fluid" },
+  { code:"P0715", name:"Input/Turbine Speed Sensor Circuit", category:"Transmission", severity:"caution", desc:"Transmission input speed sensor malfunction. Erratic shifting or no shifting.", causes:["Failed speed sensor","Damaged tone ring","Wiring fault","Metal debris on sensor"], drive:"Caution. May shift hard or not shift. Don't drive far.", repairKey:"Transmission Fluid" },
+  { code:"P0720", name:"Output Speed Sensor Circuit Malfunction", category:"Transmission", severity:"caution", desc:"Transmission output speed sensor fault. Speedometer may stop working.", causes:["Failed output speed sensor","Damaged reluctor ring","Wiring damage"], drive:"Caution. Speedometer may be inaccurate.", repairKey:"Transmission Fluid" },
+  { code:"P0730", name:"Incorrect Gear Ratio", category:"Transmission", severity:"caution", desc:"Transmission is not achieving the expected gear ratio. Can indicate serious internal transmission wear.", causes:["Worn clutch packs","Solenoid failure","Low/contaminated fluid","Internal wear"], drive:"Caution. Transmission may slip. Have inspected soon.", repairKey:"Transmission Fluid" },
+  { code:"P0740", name:"Torque Converter Clutch Circuit Malfunction", category:"Transmission", severity:"caution", desc:"Torque converter lockup clutch circuit fault. Poor fuel economy, shudder at highway speeds.", causes:["Failed TCC solenoid","Worn torque converter","Low fluid","Wiring fault"], drive:"Driveable but poor economy. Have inspected.", repairKey:"Transmission Fluid" },
+
+  // ── P0 ABS / BRAKES ──────────────────────────────────────────────────────
+  { code:"C0031", name:"Left Front Wheel Speed Sensor Circuit", category:"Brakes", severity:"caution", desc:"Left front wheel speed sensor signal fault. ABS and traction control may be disabled.", causes:["Failed wheel speed sensor","Damaged sensor ring","Wiring damage","Wheel bearing failure causing sensor gap"], drive:"Brakes still work. ABS/traction control disabled. Drive cautiously.", repairKey:"Wheel Speed Sensor" },
+  { code:"C0034", name:"Right Front Wheel Speed Sensor Circuit", category:"Brakes", severity:"caution", desc:"Right front wheel speed sensor fault. ABS and traction control disabled.", causes:["Failed wheel speed sensor","Damaged tone ring","Wiring damage","Wheel bearing play"], drive:"Brakes work. ABS disabled. Drive cautiously.", repairKey:"Wheel Speed Sensor" },
+  { code:"C0037", name:"Left Rear Wheel Speed Sensor Circuit", category:"Brakes", severity:"caution", desc:"Left rear wheel speed sensor fault.", causes:["Failed sensor","Damaged ring","Wiring issue","Wheel bearing failure"], drive:"Brakes work. ABS disabled.", repairKey:"Wheel Speed Sensor" },
+  { code:"C0040", name:"Right Rear Wheel Speed Sensor Circuit", category:"Brakes", severity:"caution", desc:"Right rear wheel speed sensor fault.", causes:["Failed sensor","Damaged tone ring","Wiring issue"], drive:"Brakes work. ABS disabled.", repairKey:"Wheel Speed Sensor" },
+
+  // ── P0 VARIABLE VALVE TIMING ─────────────────────────────────────────────
+  { code:"P0010", name:"Intake Camshaft Position Actuator Circuit (Bank 1)", category:"Engine", severity:"caution", desc:"VVT/VCT actuator circuit fault on Bank 1 intake cam. Engine may run rough or have reduced power.", causes:["Dirty or failed VVT solenoid (common)","Low oil level or pressure","Sludge in oil passages","Failed cam actuator"], drive:"Driveable. Fix soon — low oil or sludge can cause serious engine damage.", repairKey:"VVT Solenoid" },
+  { code:"P0011", name:"Intake Camshaft Position Over-Advanced (Bank 1)", category:"Engine", severity:"caution", desc:"Intake cam is more advanced than commanded. Rough idle, rattle on startup, poor performance.", causes:["Stuck-open VVT solenoid","Sludge in cam phaser","Worn timing chain (advanced position indicates chain stretch)","Low oil pressure"], drive:"Driveable but fix soon. May indicate timing chain wear.", repairKey:"VVT Solenoid" },
+  { code:"P0013", name:"Exhaust Camshaft Position Actuator Circuit (Bank 1)", category:"Engine", severity:"caution", desc:"Exhaust cam VVT actuator circuit fault.", causes:["Failed VVT solenoid","Low oil","Sludge","Wiring issue"], drive:"Driveable. Fix soon.", repairKey:"VVT Solenoid" },
+  { code:"P0014", name:"Exhaust Camshaft Position Over-Advanced (Bank 1)", category:"Engine", severity:"caution", desc:"Exhaust cam over-advanced. Can cause rough running and timing chain concerns.", causes:["Stuck VVT solenoid","Sludge","Worn timing chain","Low oil pressure"], drive:"Driveable. Fix soon.", repairKey:"VVT Solenoid" },
+
+  // ── P0 THROTTLE BODY ─────────────────────────────────────────────────────
+  { code:"P0120", name:"Throttle Position Sensor Circuit Malfunction", category:"Engine", severity:"caution", desc:"TPS circuit fault. Erratic acceleration, rough idle, or limp mode.", causes:["Failed TPS sensor","Dirty throttle body","Wiring fault","Failed accelerator pedal sensor"], drive:"Caution. May enter limp mode limiting speed.", repairKey:"Throttle Body Service" },
+  { code:"P0121", name:"TPS Range/Performance", category:"Engine", severity:"caution", desc:"TPS signal out of expected range. Usually dirty throttle body or failing sensor.", causes:["Dirty throttle body","Failing TPS","Wiring issue"], drive:"Caution. Hesitation and rough idle likely.", repairKey:"Throttle Body Service" },
+
+  // ── P0 KNOCK / SENSOR ────────────────────────────────────────────────────
+  { code:"P0325", name:"Knock Sensor 1 Circuit Malfunction (Bank 1)", category:"Engine", severity:"caution", desc:"Knock sensor isn't detecting engine knock correctly. ECU may retard timing, reducing performance.", causes:["Failed knock sensor","Loose knock sensor","Wiring damage","Actual engine knock (serious)"], drive:"Driveable. But if you hear actual knocking, stop immediately.", repairKey:null },
+  { code:"P0332", name:"Knock Sensor 2 Circuit Low (Bank 2)", category:"Engine", severity:"caution", desc:"Knock sensor 2 circuit fault on Bank 2.", causes:["Failed knock sensor","Loose sensor","Wiring fault"], drive:"Driveable. Monitor for actual knocking sounds.", repairKey:null },
+
+  // ── P0 CRANKSHAFT / CAMSHAFT ────────────────────────────────────────────
+  { code:"P0335", name:"Crankshaft Position Sensor Circuit Malfunction", category:"Engine", severity:"stop", desc:"CKP sensor circuit fault. Engine may stall, fail to start, or run very rough. Critical sensor for ignition timing.", causes:["Failed crankshaft position sensor","Damaged tone ring","Wiring damage","Loose connector"], drive:"May stall unpredictably. Don't drive far. Tow if it stalls.", repairKey:"Crankshaft Position Sensor" },
+  { code:"P0340", name:"Camshaft Position Sensor Circuit Malfunction (Bank 1)", category:"Engine", severity:"caution", desc:"Cam sensor circuit fault. Affects ignition timing and fuel injection.", causes:["Failed cam sensor","Damaged reluctor wheel","Wiring fault","Timing chain out of position"], drive:"May stall. Drive minimally.", repairKey:null },
+  { code:"P0345", name:"Camshaft Position Sensor Circuit Malfunction (Bank 2)", category:"Engine", severity:"caution", desc:"Cam sensor fault on Bank 2.", causes:["Failed cam sensor","Wiring fault","Timing chain issue"], drive:"Caution. May cause stalling.", repairKey:null },
+
+  // ── P0 COOLANT / TEMPERATURE ────────────────────────────────────────────
+  { code:"P0217", name:"Engine Coolant Over Temperature Condition", category:"Engine", severity:"stop", desc:"Engine is overheating. Immediate risk of serious engine damage.", causes:["Low coolant level","Stuck closed thermostat","Blown head gasket","Failed water pump","Clogged radiator","Broken cooling fan"], drive:"Stop immediately. Overheating causes catastrophic engine damage within minutes.", repairKey:"Coolant Flush" },
+
+  // ── P0 BATTERY / CHARGING ────────────────────────────────────────────────
+  { code:"P0560", name:"System Voltage Malfunction", category:"Electrical", severity:"caution", desc:"Battery/charging system voltage out of range. Car may die while driving.", causes:["Failing alternator","Weak battery","Corroded battery terminals","Loose alternator belt"], drive:"Caution. May stall. Have charging system tested immediately.", repairKey:"Alternator" },
+  { code:"P0562", name:"System Voltage Low", category:"Electrical", severity:"caution", desc:"System voltage below 10V while running. Alternator likely failing.", causes:["Failing alternator","Bad battery","Corroded cables","Broken belt"], drive:"Caution. May die while driving. Test alternator soon.", repairKey:"Alternator" },
+  { code:"P0563", name:"System Voltage High", category:"Electrical", severity:"caution", desc:"Charging voltage too high (above ~15.5V). Can damage battery and electronics.", causes:["Faulty voltage regulator","Failed alternator","Wiring issue"], drive:"Caution. Fix soon to avoid electrical damage.", repairKey:"Alternator" },
+
+  // ── P1 MANUFACTURER-SPECIFIC (most common cross-brand) ──────────────────
+  { code:"P1000", name:"OBD Systems Readiness Test Not Complete", category:"Emissions", severity:"safe", desc:"Not a fault — monitors haven't completed their self-tests yet after a battery disconnect or code clear.", causes:["Recent battery disconnect","Codes recently cleared","Not enough drive cycles completed"], drive:"Safe to drive. Complete a few drive cycles to clear.", repairKey:null },
+  { code:"P1101", name:"MAF Sensor Out of Self-Test Range", category:"Engine", severity:"caution", desc:"Manufacturer-specific MAF code. Common on Ford/GM. MAF reading outside self-test limits.", causes:["Dirty MAF sensor","Vacuum leak","Air filter issue","Failing MAF"], drive:"Driveable. Clean MAF sensor first.", repairKey:"Mass Air Flow Sensor" },
+
+  // ── B CODES — BODY ───────────────────────────────────────────────────────
+  { code:"B0001", name:"Driver Frontal Stage 1 Deployment Control", category:"Safety", severity:"stop", desc:"Airbag system fault. SRS (airbag) system may not deploy in a crash.", causes:["Failed clockspring","Faulty airbag module","Impact sensor issue","Wiring fault"], drive:"Safe to drive mechanically but airbags may not deploy. Fix before driving regularly.", repairKey:null },
+  { code:"B0051", name:"Passenger Frontal Stage 1 Deployment Control", category:"Safety", severity:"stop", desc:"Passenger airbag circuit fault.", causes:["Faulty airbag module","Wiring fault","Seat occupant sensor failure"], drive:"Airbag system compromised. Fix promptly.", repairKey:null },
+
+  // ── U CODES — NETWORK ───────────────────────────────────────────────────
+  { code:"U0100", name:"Lost Communication with ECM/PCM", category:"Electrical", severity:"stop", desc:"The main engine/transmission control module is not communicating on the CAN bus. Can cause no-start.", causes:["Failed ECM/PCM","CAN bus wiring fault","Corroded connector","Battery/power issue to ECM"], drive:"May not start or run. Requires diagnosis.", repairKey:null },
+  { code:"U0101", name:"Lost Communication with TCM", category:"Electrical", severity:"caution", desc:"Transmission control module communication lost. Transmission may default to limp mode.", causes:["Failed TCM","CAN bus wiring fault","Power supply issue to TCM"], drive:"May be stuck in one gear (limp mode). Drive minimally.", repairKey:null },
+  { code:"U0155", name:"Lost Communication with Instrument Panel Cluster", category:"Electrical", severity:"caution", desc:"Gauge cluster not communicating. Gauges may be inaccurate or dead.", causes:["Failed cluster module","CAN bus fault","Wiring issue"], drive:"Driveable but gauges unreliable.", repairKey:null },
+];
+
+function OBDLookup({ obdSearch, setObdSearch, repairData, adj }) {
+  const query = obdSearch.trim().toUpperCase();
+  const results = query.length < 2 ? [] : obdCodes.filter(c =>
+    c.code.includes(query) ||
+    c.name.toUpperCase().includes(query) ||
+    c.desc.toUpperCase().includes(query) ||
+    c.causes.some(ca => ca.toUpperCase().includes(query)) ||
+    c.category.toUpperCase().includes(query)
+  );
+
+  const severityConfig = {
+    safe:    { label:"Safe to Drive",  color:"#22c55e", bg:"#22c55e18", icon:"✓" },
+    caution: { label:"Drive with Caution", color:"#f59e0b", bg:"#f59e0b18", icon:"⚠" },
+    stop:    { label:"Stop Driving",   color:"#ef4444", bg:"#ef444418", icon:"✕" },
+  };
+
+  return (
+    <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)", marginTop:"20px", marginBottom:"40px" }}>
+      {/* Header */}
+      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 36px)", marginBottom:"16px" }}>
+        <div style={{ fontSize:"clamp(11px, 1vw, 14px)", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"10px" }}>OBD-II Code Lookup</div>
+        <div style={{ fontSize:"clamp(22px, 2.5vw, 36px)", fontWeight:"300", letterSpacing:"-0.02em", marginBottom:"8px" }}>What does my check engine light mean?</div>
+        <div style={{ fontSize:"clamp(13px, 1.1vw, 16px)", color:"#555", marginBottom:"20px" }}>Enter a code (P0420) or keyword (misfire, oxygen sensor) to look it up.</div>
+        <input
+          type="text"
+          placeholder="Enter code or keyword — e.g. P0420 or 'misfire'"
+          value={obdSearch}
+          onChange={e => setObdSearch(e.target.value)}
+          style={{ ...{background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 18px) clamp(16px, 1.5vw, 24px)", color:"#f0ede6", fontSize:"clamp(14px, 1.3vw, 18px)", outline:"none", fontFamily:"inherit", width:"100%", boxSizing:"border-box", letterSpacing:"0.04em"} }}
+          autoFocus
+        />
+        {query.length > 0 && query.length < 2 && (
+          <div style={{ fontSize:"12px", color:"#555", marginTop:"8px" }}>Type at least 2 characters to search</div>
+        )}
+      </div>
+
+      {/* Results */}
+      {results.length > 0 && (
+        <div style={{ display:"grid", gap:"12px" }}>
+          {results.map(c => {
+            const sv = severityConfig[c.severity];
+            const repData = c.repairKey ? repairData[c.repairKey] : null;
+            const costLow  = repData ? adj(Math.min(...Object.values(repData.costs).map(v => v.low)),  repData, c.repairKey) : null;
+            const costHigh = repData ? adj(Math.max(...Object.values(repData.costs).map(v => v.high)), repData, c.repairKey) : null;
+
+            return (
+              <div key={c.code} style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(18px, 2vw, 32px)", borderLeft:`3px solid ${sv.color}` }}>
+                {/* Top row */}
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:"10px", marginBottom:"12px" }}>
+                  <div>
+                    <div style={{ display:"flex", alignItems:"center", gap:"10px", flexWrap:"wrap" }}>
+                      <span style={{ fontSize:"clamp(20px, 2vw, 28px)", fontWeight:"600", letterSpacing:"0.04em", color:"#f0ede6" }}>{c.code}</span>
+                      <span style={{ fontSize:"clamp(10px, 0.9vw, 13px)", padding:"3px 10px", borderRadius:"20px", background:sv.bg, color:sv.color, fontWeight:"500", letterSpacing:"0.04em" }}>{sv.icon} {sv.label}</span>
+                      <span style={{ fontSize:"clamp(10px, 0.9vw, 13px)", padding:"3px 10px", borderRadius:"20px", background:"#1e1e1e", color:"#666", letterSpacing:"0.06em", textTransform:"uppercase" }}>{c.category}</span>
+                    </div>
+                    <div style={{ fontSize:"clamp(14px, 1.3vw, 18px)", fontWeight:"500", color:"#ccc", marginTop:"6px" }}>{c.name}</div>
+                  </div>
+                  {costLow && (
+                    <div style={{ textAlign:"right", flexShrink:0 }}>
+                      <div style={{ fontSize:"clamp(10px, 0.9vw, 13px)", color:"#555", marginBottom:"2px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Est. Repair</div>
+                      <div style={{ fontSize:"clamp(16px, 1.5vw, 22px)", color:"#c9a84c", fontWeight:"300" }}>${costLow.toLocaleString()} – ${costHigh.toLocaleString()}</div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Description */}
+                <div style={{ fontSize:"clamp(13px, 1.1vw, 16px)", color:"#bbb", lineHeight:"1.6", marginBottom:"14px" }}>{c.desc}</div>
+
+                {/* Drive advice */}
+                <div style={{ background:sv.bg, border:`1px solid ${sv.color}22`, borderRadius:"8px", padding:"10px 14px", fontSize:"clamp(12px, 1.1vw, 15px)", color:sv.color, marginBottom:"14px" }}>
+                  🚗 <strong>Can I drive?</strong> {c.drive}
+                </div>
+
+                {/* Causes */}
+                <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px" }}>Common Causes</div>
+                <div style={{ display:"flex", flexDirection:"column", gap:"5px" }}>
+                  {c.causes.map((cause, i) => (
+                    <div key={i} style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"clamp(12px, 1.1vw, 15px)", color:"#888" }}>
+                      <span style={{ color:"#333", flexShrink:0, fontSize:"14px" }}>{i === 0 ? "●" : "○"}</span>
+                      {cause}
+                      {i === 0 && <span style={{ fontSize:"10px", color:"#555", background:"#1a1a1a", padding:"1px 6px", borderRadius:"10px", letterSpacing:"0.04em" }}>most likely</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Empty state */}
+      {query.length >= 2 && results.length === 0 && (
+        <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"48px 24px", textAlign:"center" }}>
+          <div style={{ fontSize:"40px", marginBottom:"12px" }}>🔌</div>
+          <div style={{ fontSize:"18px", color:"#ccc", marginBottom:"8px" }}>No results for "{obdSearch}"</div>
+          <div style={{ fontSize:"13px", color:"#555" }}>Try a code format like P0420, or a keyword like "misfire" or "oxygen"</div>
+        </div>
+      )}
+
+      {/* Browse hint when empty */}
+      {query.length < 2 && (
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(200px, 1fr))", gap:"10px" }}>
+          {[
+            { label:"🔥 Misfire codes", q:"P030" },
+            { label:"💧 Lean/Rich codes", q:"P017" },
+            { label:"🌿 Catalytic converter", q:"P042" },
+            { label:"⛽ EVAP / gas cap", q:"P044" },
+            { label:"⚙️ Transmission", q:"P07" },
+            { label:"🔋 Charging system", q:"P056" },
+            { label:"🌡️ Overheating", q:"P0217" },
+            { label:"⛽ Fuel pressure", q:"P0087" },
+          ].map(hint => (
+            <button key={hint.q} onClick={() => setObdSearch(hint.q)}
+              style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"14px 16px", fontSize:"clamp(12px, 1.1vw, 15px)", color:"#888", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"border-color 0.15s" }}
+              onMouseEnter={e => e.currentTarget.style.borderColor="#2a2a2a"}
+              onMouseLeave={e => e.currentTarget.style.borderColor="#1e1e1e"}>
+              {hint.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   const tiers = Object.entries(data.costs);
   const popoverStyle = tierPicker.centered
@@ -7180,7 +7408,8 @@ export default function RepairIQ() {
   const [basket, setBasket]               = useState(new Map()); // name → tierName
   const [showBasket, setShowBasket]       = useState(false);
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
-  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance"
+  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd"
+  const [obdSearch, setObdSearch]         = useState("");
   const [mileageInput, setMileageInput]   = useState("");
   const [mileage, setMileage]             = useState(null);
   const [maintDone, setMaintDone]         = useState({});
@@ -8082,6 +8311,9 @@ const modelYears = {
             <button onClick={() => setAppMode("maintenance")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "maintenance" ? "#c9a84c" : "transparent", color: appMode === "maintenance" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               🔧 Maintenance
             </button>
+            <button onClick={() => setAppMode("obd")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "obd" ? "#c9a84c" : "transparent", color: appMode === "obd" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+              🔌 OBD Codes
+            </button>
           </div>
         </div>
         </div>
@@ -8454,6 +8686,10 @@ const modelYears = {
           repairData={repairData} adj={adj}
         />
       )}
+      {appMode === "obd" && (
+        <OBDLookup obdSearch={obdSearch} setObdSearch={setObdSearch} repairData={repairData} adj={adj} />
+      )}
+
       {appMode === "costs" && (
       <div style={{ width:"100%", boxSizing:"border-box", marginBottom:"40px", padding:"0 clamp(20px, 5vw, 100px)" }}>
         <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"28px" }}>
