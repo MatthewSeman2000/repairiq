@@ -6960,13 +6960,13 @@ const obdCodes = [
 
 function OBDLookup({ obdSearch, setObdSearch, repairData, adj }) {
   const query = obdSearch.trim().toUpperCase();
-  const results = query.length < 2 ? [] : obdCodes.filter(c =>
-    c.code.includes(query) ||
-    c.name.toUpperCase().includes(query) ||
-    c.desc.toUpperCase().includes(query) ||
-    c.causes.some(ca => ca.toUpperCase().includes(query)) ||
-    c.category.toUpperCase().includes(query)
-  );
+  const aliases = { "OXYGEN":"O2", "O2":"OXYGEN", "CATALYST":"CATALYTIC", "CATALYTIC":"CATALYST", "TRANSMISSION":"TRANS", "TRANS":"TRANSMISSION", "EVAP":"EVAPORATIVE", "EVAPORATIVE":"EVAP", "COOLANT":"TEMPERATURE", "GAS CAP":"EVAP", "CHECK ENGINE":"P0", "MAF":"MASS AIR FLOW", "MASS AIR FLOW":"MAF", "TPS":"THROTTLE", "THROTTLE":"TPS", "VVT":"CAMSHAFT", "CAMSHAFT":"VVT", "ABS":"WHEEL SPEED", "WHEEL SPEED":"ABS", "KNOCK":"SENSOR", "ALTERNATOR":"CHARGING", "CHARGING":"ALTERNATOR" };
+  const altQuery = aliases[query] || "";
+  const matchesCode = (c) => {
+    const hay = [c.code, c.name, c.desc, c.category, ...c.causes, c.repairKey||""].join(" ").toUpperCase();
+    return hay.includes(query) || (altQuery && hay.includes(altQuery));
+  };
+  const results = query.length < 2 ? [] : obdCodes.filter(matchesCode);
 
   const severityConfig = {
     safe:    { label:"Safe to Drive",  color:"#22c55e", bg:"#22c55e18", icon:"✓" },
