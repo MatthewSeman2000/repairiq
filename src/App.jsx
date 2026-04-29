@@ -6980,6 +6980,243 @@ const obdCodes = [
   { code:"U0155", name:"Lost Communication with Instrument Panel Cluster", category:"Electrical", severity:"caution", desc:"Gauge cluster not communicating. Gauges may be inaccurate or dead.", causes:["Failed cluster module","CAN bus fault","Wiring issue"], drive:"Driveable but gauges unreliable.", repairKey:null },
 ];
 
+
+function FixOrSell({ make, model, year }) {
+  const [repairCost, setRepairCost]     = useState("");
+  const [carValue, setCarValue]         = useState("");
+  const [mileage, setMileage]           = useState("");
+  const [monthlyPayment, setMonthlyPayment] = useState("500");
+  const [monthsToKeep, setMonthsToKeep] = useState("24");
+  const [additionalRepairs, setAdditionalRepairs] = useState("");
+  const [result, setResult]             = useState(null);
+
+  const vehicleLabel = make !== "Any Make"
+    ? `${year !== "Any Year" ? year + " " : ""}${make}${model !== "Any Model" ? " " + model : ""}`
+    : "your vehicle";
+
+  const calculate = () => {
+    const repair    = parseFloat(repairCost.replace(/,/g,"")) || 0;
+    const value     = parseFloat(carValue.replace(/,/g,"")) || 0;
+    const miles     = parseFloat(mileage.replace(/,/g,"")) || 0;
+    const payment   = parseFloat(monthlyPayment.replace(/,/g,"")) || 500;
+    const months    = parseInt(monthsToKeep) || 24;
+    const addlRepairs = parseFloat(additionalRepairs.replace(/,/g,"")) || 0;
+
+    if (!repair || !value) return;
+
+    const totalRepairBurden = repair + addlRepairs;
+    const repairToCostRatio = value > 0 ? totalRepairBurden / value : 0;
+
+    // Cost of replacing: down payment + payments over keep period
+    const replacementCost = payment * months;
+    // Cost of fixing: repair + opportunity cost of money spent
+    const fixCost = totalRepairBurden;
+    // Monthly savings by fixing vs replacing
+    const monthlySavings = payment - (totalRepairBurden / months);
+    // Break-even months: how long until repair pays for itself vs car payments
+    const breakEvenMonths = payment > 0 ? Math.ceil(totalRepairBurden / payment) : 0;
+
+    // Mileage risk factor
+    let mileageRisk = "low";
+    if (miles > 150000) mileageRisk = "high";
+    else if (miles > 100000) mileageRisk = "medium";
+
+    // Determine recommendation
+    let verdict, verdictColor, reasoning;
+
+    if (repairToCostRatio > 0.8) {
+      verdict = "Sell";
+      verdictColor = "#ef4444";
+      reasoning = `The repair cost is ${Math.round(repairToCostRatio * 100)}% of the vehicle's value — you'd be putting significant money into a depreciating asset. At this ratio, most financial advisors recommend selling or trading in.`;
+    } else if (repairToCostRatio > 0.5) {
+      verdict = "It Depends";
+      verdictColor = "#f59e0b";
+      reasoning = `The repair cost is ${Math.round(repairToCostRatio * 100)}% of the vehicle's value — in the gray zone. Whether to fix or sell depends on the vehicle's reliability history, your financial situation, and how long you plan to keep it.`;
+    } else if (mileageRisk === "high" && repairToCostRatio > 0.3) {
+      verdict = "It Depends";
+      verdictColor = "#f59e0b";
+      reasoning = `The repair cost alone looks manageable, but at ${miles.toLocaleString()} miles there's elevated risk of additional repairs soon. Factor in likely future repairs before committing.`;
+    } else if (breakEvenMonths > months) {
+      verdict = "It Depends";
+      verdictColor = "#f59e0b";
+      reasoning = `The repair would take ${breakEvenMonths} months to pay for itself vs. car payments, but you only plan to keep the car ${months} months. The math is marginal.`;
+    } else {
+      verdict = "Fix It";
+      verdictColor = "#22c55e";
+      reasoning = `At ${Math.round(repairToCostRatio * 100)}% of vehicle value, fixing is almost certainly cheaper than replacing. You'd break even on the repair cost in about ${breakEvenMonths} month${breakEvenMonths !== 1 ? "s" : ""} compared to car payments.`;
+    }
+
+    setResult({ verdict, verdictColor, reasoning, repairToCostRatio, replacementCost, fixCost, monthlySavings, breakEvenMonths, mileageRisk, repair, value, addlRepairs, payment, months });
+  };
+
+  const IS2 = { background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"clamp(10px, 1vw, 14px) clamp(12px, 1.2vw, 18px)", color:"#f0ede6", fontSize:"clamp(13px, 1.1vw, 16px)", outline:"none", fontFamily:"inherit", width:"100%", boxSizing:"border-box" };
+
+  return (
+    <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)", marginTop:"20px", marginBottom:"40px" }}>
+
+      {/* Header */}
+      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 36px)", marginBottom:"16px" }}>
+        <div style={{ fontSize:"clamp(11px, 1vw, 14px)", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"10px" }}>Fix or Sell Calculator</div>
+        <div style={{ fontSize:"clamp(22px, 2.5vw, 36px)", fontWeight:"300", letterSpacing:"-0.02em", marginBottom:"6px" }}>Should I fix it or sell it?</div>
+        <div style={{ fontSize:"clamp(13px, 1.1vw, 16px)", color:"#555" }}>
+          Enter your numbers to get a data-driven recommendation for {vehicleLabel}.
+        </div>
+      </div>
+
+      {/* Input form */}
+      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 36px)", marginBottom:"16px" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px, 1fr))", gap:"clamp(14px, 1.5vw, 24px)" }}>
+
+          {/* Repair cost */}
+          <div>
+            <label style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"8px" }}>Repair Cost *</label>
+            <div style={{ position:"relative" }}>
+              <span style={{ position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", color:"#555", fontSize:"clamp(13px, 1.1vw, 16px)" }}>$</span>
+              <input type="number" placeholder="e.g. 1200" value={repairCost} onChange={e => setRepairCost(e.target.value)} style={{ ...IS2, paddingLeft:"28px" }} />
+            </div>
+            <div style={{ fontSize:"11px", color:"#444", marginTop:"4px" }}>The quote you received</div>
+          </div>
+
+          {/* Vehicle value */}
+          <div>
+            <label style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"8px" }}>Vehicle Value *</label>
+            <div style={{ position:"relative" }}>
+              <span style={{ position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", color:"#555", fontSize:"clamp(13px, 1.1vw, 16px)" }}>$</span>
+              <input type="number" placeholder="e.g. 8000" value={carValue} onChange={e => setCarValue(e.target.value)} style={{ ...IS2, paddingLeft:"28px" }} />
+            </div>
+            <div style={{ fontSize:"11px", color:"#444", marginTop:"4px" }}>Check KBB or Carmax for your ZIP</div>
+          </div>
+
+          {/* Current mileage */}
+          <div>
+            <label style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"8px" }}>Current Mileage</label>
+            <input type="number" placeholder="e.g. 112000" value={mileage} onChange={e => setMileage(e.target.value)} style={IS2} />
+            <div style={{ fontSize:"11px", color:"#444", marginTop:"4px" }}>Affects long-term risk assessment</div>
+          </div>
+
+          {/* Expected monthly payment on replacement */}
+          <div>
+            <label style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"8px" }}>Replacement Monthly Payment</label>
+            <div style={{ position:"relative" }}>
+              <span style={{ position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", color:"#555", fontSize:"clamp(13px, 1.1vw, 16px)" }}>$</span>
+              <input type="number" placeholder="500" value={monthlyPayment} onChange={e => setMonthlyPayment(e.target.value)} style={{ ...IS2, paddingLeft:"28px" }} />
+            </div>
+            <div style={{ fontSize:"11px", color:"#444", marginTop:"4px" }}>Expected payment if you buy another car</div>
+          </div>
+
+          {/* How long to keep */}
+          <div>
+            <label style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"8px" }}>Months You Plan to Keep It</label>
+            <input type="number" placeholder="24" value={monthsToKeep} onChange={e => setMonthsToKeep(e.target.value)} style={IS2} />
+            <div style={{ fontSize:"11px", color:"#444", marginTop:"4px" }}>How long before your next vehicle</div>
+          </div>
+
+          {/* Additional known repairs */}
+          <div>
+            <label style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"8px" }}>Other Known Repairs Needed</label>
+            <div style={{ position:"relative" }}>
+              <span style={{ position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", color:"#555", fontSize:"clamp(13px, 1.1vw, 16px)" }}>$</span>
+              <input type="number" placeholder="0" value={additionalRepairs} onChange={e => setAdditionalRepairs(e.target.value)} style={{ ...IS2, paddingLeft:"28px" }} />
+            </div>
+            <div style={{ fontSize:"11px", color:"#444", marginTop:"4px" }}>Other repairs you know are coming</div>
+          </div>
+
+        </div>
+
+        <button onClick={calculate}
+          style={{ marginTop:"clamp(20px, 2vw, 32px)", width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 18px)", fontSize:"clamp(13px, 1.2vw, 17px)", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.06em", textTransform:"uppercase" }}>
+          Calculate →
+        </button>
+      </div>
+
+      {/* Result */}
+      {result && (
+        <div style={{ display:"grid", gap:"12px" }}>
+
+          {/* Verdict */}
+          <div style={{ background:"#161616", border:`1px solid ${result.verdictColor}44`, borderLeft:`4px solid ${result.verdictColor}`, borderRadius:"10px", padding:"clamp(20px, 2.5vw, 36px)" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:"12px", marginBottom:"16px" }}>
+              <div>
+                <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:"6px" }}>Recommendation</div>
+                <div style={{ fontSize:"clamp(36px, 4vw, 60px)", fontWeight:"600", color:result.verdictColor, letterSpacing:"-0.02em", lineHeight:1 }}>{result.verdict}</div>
+              </div>
+              <div style={{ textAlign:"right" }}>
+                <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"4px" }}>Repair-to-Value Ratio</div>
+                <div style={{ fontSize:"clamp(28px, 3vw, 44px)", fontWeight:"300", color:result.verdictColor }}>
+                  {Math.round(result.repairToCostRatio * 100)}%
+                </div>
+              </div>
+            </div>
+            <div style={{ fontSize:"clamp(14px, 1.3vw, 18px)", color:"#bbb", lineHeight:"1.6" }}>{result.reasoning}</div>
+          </div>
+
+          {/* Numbers breakdown */}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(220px, 1fr))", gap:"12px" }}>
+            {[
+              { label:"Cost to Fix", value:`$${(result.repair + result.addlRepairs).toLocaleString()}`, sub:"Total repair burden", color:"#f59e0b" },
+              { label:"Cost to Replace", value:`$${result.replacementCost.toLocaleString()}`, sub:`${result.months} months of payments`, color:"#ef4444" },
+              { label:"Monthly Savings", value: result.monthlySavings > 0 ? `$${Math.round(result.monthlySavings).toLocaleString()}/mo` : "—", sub:"Fixing vs. car payments", color:"#22c55e" },
+              { label:"Break-Even", value:`${result.breakEvenMonths} months`, sub:"Until repair pays for itself", color:"#c9a84c" },
+            ].map(m => (
+              <div key={m.label} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"clamp(14px, 1.5vw, 22px)" }}>
+                <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"6px" }}>{m.label}</div>
+                <div style={{ fontSize:"clamp(20px, 2vw, 30px)", fontWeight:"300", color:m.color, letterSpacing:"-0.02em" }}>{m.value}</div>
+                <div style={{ fontSize:"clamp(11px, 1vw, 13px)", color:"#444", marginTop:"4px" }}>{m.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mileage risk */}
+          {result.mileageRisk !== "low" && (
+            <div style={{ background:"#161616", border:`1px solid ${result.mileageRisk === "high" ? "#ef444433" : "#f59e0b33"}`, borderRadius:"10px", padding:"clamp(16px, 2vw, 28px)" }}>
+              <div style={{ fontSize:"clamp(13px, 1.2vw, 17px)", fontWeight:"500", color: result.mileageRisk === "high" ? "#ef4444" : "#f59e0b", marginBottom:"8px" }}>
+                {result.mileageRisk === "high" ? "⚠️ High Mileage Risk" : "⚠️ Elevated Mileage Risk"}
+              </div>
+              <div style={{ fontSize:"clamp(13px, 1.1vw, 16px)", color:"#888", lineHeight:"1.6" }}>
+                {result.mileageRisk === "high"
+                  ? "At over 150,000 miles, this vehicle is statistically more likely to need additional significant repairs in the next 12–24 months. Factor in a contingency budget of $1,000–$2,500/year for high-mileage ownership."
+                  : "At over 100,000 miles, the vehicle is entering higher-wear territory. Consider having a mechanic inspect other wear items (timing belt/chain, water pump, suspension, brakes) before committing to the repair."}
+              </div>
+            </div>
+          )}
+
+          {/* Rule of thumb */}
+          <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(16px, 2vw, 28px)" }}>
+            <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"12px" }}>How to Interpret This</div>
+            <div style={{ display:"grid", gap:"8px" }}>
+              {[
+                { range:"Under 33%", label:"Fix It", desc:"Almost always worth repairing — much cheaper than replacing", color:"#22c55e" },
+                { range:"33% – 50%", label:"Probably Fix", desc:"Lean toward fixing unless the car has other major issues or high mileage", color:"#22c55e" },
+                { range:"50% – 80%", label:"Gray Zone", desc:"Weigh reliability history, mileage, and how long you need the car", color:"#f59e0b" },
+                { range:"Over 80%", label:"Consider Selling", desc:"Putting this much into a car this age/value is often not financially sound", color:"#ef4444" },
+              ].map(r => (
+                <div key={r.range} style={{ display:"flex", gap:"12px", alignItems:"flex-start", padding:"10px 0", borderBottom:"1px solid #1a1a1a" }}>
+                  <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:r.color, fontWeight:"500", minWidth:"80px", flexShrink:0 }}>{r.range}</span>
+                  <div>
+                    <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:r.color, fontWeight:"500" }}>{r.label}</span>
+                    <span style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:"#555" }}> — {r.desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!result && (
+        <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"48px 24px", textAlign:"center" }}>
+          <div style={{ fontSize:"clamp(36px, 4vw, 56px)", marginBottom:"16px" }}>🤔</div>
+          <div style={{ fontSize:"clamp(16px, 1.6vw, 24px)", color:"#ccc", marginBottom:"8px" }}>Enter your numbers above</div>
+          <div style={{ fontSize:"clamp(13px, 1.1vw, 16px)", color:"#555" }}>Fill in the repair cost and vehicle value at minimum — the rest helps refine the recommendation.</div>
+        </div>
+      )}
+
+    </section>
+  );
+}
+
 function OBDLookup({ obdSearch, setObdSearch, repairData, adj }) {
   const query = obdSearch.trim().toUpperCase();
   const aliases = { "OXYGEN":"O2", "O2":"OXYGEN", "CATALYST":"CATALYTIC", "CATALYTIC":"CATALYST", "TRANSMISSION":"TRANS", "TRANS":"TRANSMISSION", "EVAP":"EVAPORATIVE", "EVAPORATIVE":"EVAP", "COOLANT":"TEMPERATURE", "GAS CAP":"EVAP", "CHECK ENGINE":"P0", "MAF":"MASS AIR FLOW", "MASS AIR FLOW":"MAF", "TPS":"THROTTLE", "THROTTLE":"TPS", "VVT":"CAMSHAFT", "CAMSHAFT":"VVT", "ABS":"WHEEL SPEED", "WHEEL SPEED":"ABS", "KNOCK":"SENSOR", "ALTERNATOR":"CHARGING", "CHARGING":"ALTERNATOR", "SMOG":"EMISSION", "EMISSIONS":"EMISSION", "PING":"KNOCK", "DETONATION":"KNOCK", "POWER LOSS":"MISFIRE", "NO START":"CRANKSHAFT", "WONT START":"CRANKSHAFT", "STALLING":"CRANKSHAFT", "TURBO":"TURBOCHARGER", "TURBOCHARGER":"TURBO", "BOOST":"TURBOCHARGER", "INTERCOOLER":"TURBOCHARGER", "SUPERCHARGER":"TURBOCHARGER", "COOLANT LEAK":"COOLANT", "OVERHEATING":"OVER TEMPERATURE", "OVERHEAT":"OVER TEMPERATURE", "FAN":"COOLANT", "WIDEBAND":"O2", "LAMBDA":"O2", "AMPERE":"VOLTAGE", "HUB":"WHEEL SPEED", "SUSPENSION":"POWER STEERING", "CRUISE CONTROL":"CRUISE", "CRUISE":"CRUISE CONTROL", "STABILITY":"WHEEL SPEED", "ESP":"WHEEL SPEED", "TRACTION":"WHEEL SPEED", "MUFFLER":"EXHAUST", "CLOCKSPRING":"DEPLOYMENT", "WASTEGATE":"TURBOCHARGER", "POWER STEERING":"STEERING" };
@@ -7430,7 +7667,7 @@ export default function RepairIQ() {
   const [basket, setBasket]               = useState(new Map()); // name → tierName
   const [showBasket, setShowBasket]       = useState(false);
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
-  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd"
+  const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd" | "fixorsell"
   const [obdSearch, setObdSearch]         = useState("");
   const [mileageInput, setMileageInput]   = useState("");
   const [mileage, setMileage]             = useState(null);
@@ -8336,6 +8573,9 @@ const modelYears = {
             <button onClick={() => setAppMode("obd")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "obd" ? "#c9a84c" : "transparent", color: appMode === "obd" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               🔌 OBD Codes
             </button>
+            <button onClick={() => setAppMode("fixorsell")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "fixorsell" ? "#c9a84c" : "transparent", color: appMode === "fixorsell" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
+              🤔 Fix or Sell?
+            </button>
           </div>
         </div>
         </div>
@@ -8484,7 +8724,7 @@ const modelYears = {
           const isSel     = selectedRepair === name;
 
           return (
-            <div key={name} onClick={() => handleCard(name)} style={{ background:"#161616", border:`1px solid ${isSel?"#c9a84c44":"#1e1e1e"}`, borderRadius:"10px", padding:"20px", cursor:"pointer", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
+            <div key={name} onClick={e => { if (e.target.closest('button')) return; handleCard(name); }} style={{ background:"#161616", border:`1px solid ${isSel?"#c9a84c44":"#1e1e1e"}`, borderRadius:"10px", padding:"20px", cursor:"pointer", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
               <div style={{ position:"absolute", top:0, left:0, right:0, height:"3px", background:cc, opacity:0.7 }} />
 
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"12px" }}>
@@ -8710,6 +8950,10 @@ const modelYears = {
       )}
       {appMode === "obd" && (
         <OBDLookup obdSearch={obdSearch} setObdSearch={setObdSearch} repairData={repairData} adj={adj} />
+      )}
+
+      {appMode === "fixorsell" && (
+        <FixOrSell make={make} model={model} year={year} />
       )}
 
       {appMode === "costs" && (
