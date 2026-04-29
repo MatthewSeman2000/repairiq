@@ -7346,7 +7346,7 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   const tiers = Object.entries(data.costs);
   const popoverStyle = tierPicker.centered
     ? { position:"fixed", top:"50%", left:"50%", transform:"translate(-50%,-50%)", zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"16px", minWidth:"260px", width:"85vw", maxWidth:"340px", boxShadow:"0 12px 40px rgba(0,0,0,0.8)" }
-    : { position:"fixed", top: tierPicker.top, right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" };
+    : { position:"fixed", top: tierPicker.top ?? "auto", bottom: tierPicker.bottom ?? "auto", right: tierPicker.right, zIndex:999, background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"10px", padding:"12px", minWidth:"220px", boxShadow:"0 12px 40px rgba(0,0,0,0.6)" };
   return (
     <>
       <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:998, background: tierPicker.centered ? "rgba(0,0,0,0.5)" : "transparent" }} />
@@ -8331,12 +8331,17 @@ const modelYears = {
     const rect = e.currentTarget.getBoundingClientRect();
     const isMobile = window.innerWidth < 640;
     if (isMobile) {
-      // Center in viewport on mobile
       setTierPicker({ name, centered: true });
     } else {
-      const rightOffset = window.innerWidth - rect.right;
-      const safeRight = Math.max(8, Math.min(rightOffset, window.innerWidth - 240));
-      setTierPicker({ name, top: rect.bottom + window.scrollY + 6, right: safeRight });
+      const popoverHeight = 220;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const rightOffset = Math.max(8, Math.min(window.innerWidth - rect.right, window.innerWidth - 240));
+      if (spaceBelow < popoverHeight) {
+        // Flip upward
+        setTierPicker({ name, bottom: window.innerHeight - rect.top + 6, right: rightOffset });
+      } else {
+        setTierPicker({ name, top: rect.bottom + window.scrollY + 6, right: rightOffset });
+      }
     }
   };
 
