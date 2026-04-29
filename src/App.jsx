@@ -8337,10 +8337,11 @@ const modelYears = {
       const spaceBelow = window.innerHeight - rect.bottom;
       const rightOffset = Math.max(8, Math.min(window.innerWidth - rect.right, window.innerWidth - 240));
       if (spaceBelow < popoverHeight) {
-        // Flip upward
-        setTierPicker({ name, bottom: window.innerHeight - rect.top + 6, right: rightOffset });
+        // Flip up — anchor to top of button, grow upward
+        setTierPicker({ name, bottom: window.innerHeight - rect.top + 6, right: rightOffset, top: null });
       } else {
-        setTierPicker({ name, top: rect.bottom + window.scrollY + 6, right: rightOffset });
+        // Normal — anchor to bottom of button, grow downward
+        setTierPicker({ name, top: rect.bottom + 6, right: rightOffset, bottom: null });
       }
     }
   };
