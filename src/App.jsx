@@ -259,9 +259,11 @@ const repairData = {
     costs: {
       "Single coil": { low: 100, high: 250 },
       "Full set (4-cyl)": { low: 280, high: 500 },
+      "Full set (6-cyl)": { low: 380, high: 700 },
+      "Full set (V8)": { low: 480, high: 900 },
     },
-    labor: "0.5–1.5 hrs",
-    notes: "RepairPal average $231–$333 per coil. Misfires and rough idle are the main symptoms.",
+    labor: "0.5–2 hrs",
+    notes: "RepairPal average $231–$333 per coil. Misfires and rough idle are the main symptoms. Replacing all coils at once is smart if one fails at high mileage — they age together.",
   },
 
   // ── SUSPENSION & STEERING ─────────────────────────────────────────────────
@@ -3376,7 +3378,7 @@ const trimYears = {
       "SE": [2006, 2020],
       "SEL": [2006, 2020],
       "Titanium": [2013, 2020],
-      "Sport": [2017, 2020],
+      "Sport": [2010, 2020],
       "V6 Sport": [2017, 2018],
     
       "Platinum": [2017, 2020],
