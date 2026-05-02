@@ -107,12 +107,12 @@ const repairData = {
   "Brake Rotors (pair)": {
     icon: "⭕", category: "Brakes", trimSensitive: true,
     costs: {
-      "Economy": { low: 100, high: 175 },
-      "OEM": { low: 150, high: 270 },
-      "Slotted/Drilled": { low: 220, high: 390 },
+      "Economy": { low: 180, high: 320 },
+      "OEM": { low: 280, high: 500 },
+      "Slotted/Drilled": { low: 380, high: 700 },
     },
     labor: "1–2 hrs",
-    notes: "KBB: pads + rotors average $250–$400 per axle. Usually replaced in pairs per axle.",
+    notes: "RepairPal national average $577–$719 per axle pair including labor. Usually replaced per axle, often with brake pads at same service.",
   },
   "Brake Fluid Flush": {
     icon: "💧", category: "Brakes", trimSensitive: false,
@@ -123,11 +123,11 @@ const repairData = {
   "Brake Caliper": {
     icon: "🗜️", category: "Brakes", trimSensitive: true,
     costs: {
-      "Remanufactured (each)": { low: 150, high: 280 },
-      "OEM New (each)": { low: 250, high: 450 },
+      "Remanufactured (each)": { low: 300, high: 700 },
+      "OEM New (each)": { low: 500, high: 1500 },
     },
     labor: "1–2 hrs",
-    notes: "Seized calipers cause uneven wear or pulling. Often diagnosed during pad inspection.",
+    notes: "RepairPal average $500–$1,500 per single caliper including labor. Seized calipers cause pulling and uneven wear. Pads and rotors typically replaced at same time.",
   },
 
   // ── ENGINE ────────────────────────────────────────────────────────────────
@@ -218,11 +218,11 @@ const repairData = {
   "Alternator": {
     icon: "⚡", category: "Electrical", trimSensitive: true, iceOnly: true,
     costs: {
-      "Remanufactured": { low: 400, high: 650 },
-      "OEM New": { low: 600, high: 1000 },
+      "Remanufactured": { low: 500, high: 800 },
+      "OEM New": { low: 750, high: 1200 },
     },
-    labor: "2–4 hrs",
-    notes: "RepairPal $563–$767; KBB $747–$842. Luxury/performance vehicles can exceed $1,200.",
+    labor: "1–3 hrs",
+    notes: "RepairPal average $630–$820; KBB $747–$842. Mercedes/BMW/Audi can exceed $1,200. Remanufactured units are reliable and commonly used.",
   },
   "Starter Motor": {
     icon: "🔑", category: "Electrical", trimSensitive: true, iceOnly: true,
@@ -279,20 +279,20 @@ const repairData = {
   "Shock Absorbers (pair)": {
     icon: "🌀", category: "Suspension", trimSensitive: true,
     costs: {
-      "Economy": { low: 250, high: 450 },
-      "OEM/Performance": { low: 400, high: 700 },
+      "Economy": { low: 300, high: 500 },
+      "OEM/Performance": { low: 450, high: 800 },
     },
     labor: "1–3 hrs",
-    notes: "RepairPal average $1,057–$1,260 for all four. Per-axle pair shown here.",
+    notes: "RepairPal: traditional shock pair ~$394–$466. Trucks and SUVs with heavier shocks run higher. Replace in axle pairs. Alignment recommended after.",
   },
   "Strut Assembly (pair)": {
     icon: "🌀", category: "Suspension", trimSensitive: true,
     costs: {
-      "Economy": { low: 350, high: 600 },
-      "OEM": { low: 550, high: 950 },
+      "Economy (pair)": { low: 600, high: 1000 },
+      "OEM (pair)": { low: 900, high: 1600 },
     },
     labor: "2–4 hrs",
-    notes: "Quick-strut assemblies cost more but save labor. Alignment required after replacement.",
+    notes: "RepairPal average $742–$826 per single strut; pair typically $1,400–$1,600. Quick-strut assemblies cost more in parts but save labor. Wheel alignment required after replacement.",
   },
   "Sway Bar Links": {
     icon: "🔗", category: "Suspension", trimSensitive: false,
@@ -382,17 +382,20 @@ const repairData = {
   "AC Compressor": {
     icon: "❄️", category: "HVAC", trimSensitive: true,
     costs: {
-      "Remanufactured": { low: 500, high: 900 },
-      "OEM New": { low: 800, high: 1500 },
+      "Remanufactured": { low: 800, high: 1200 },
+      "OEM New": { low: 1100, high: 1800 },
     },
     labor: "2–4 hrs",
-    notes: "System must be evacuated and recharged after replacement. Often includes receiver/dryer.",
+    notes: "RepairPal average $1,004–$1,356. System must be evacuated and recharged after replacement. Receiver/dryer and expansion valve typically replaced at same time. R-1234yf refrigerant vehicles cost more.",
   },
   "Heater Core": {
     icon: "🔥", category: "HVAC", trimSensitive: true,
-    costs: { "Standard": { low: 600, high: 1200 } },
+    costs: {
+      "Standard": { low: 1000, high: 1600 },
+      "Luxury/Truck": { low: 1400, high: 2200 },
+    },
     labor: "5–10 hrs",
-    notes: "Labor-intensive — requires dashboard removal on most vehicles. Foggy windshield or sweet smell are signs.",
+    notes: "RepairPal average $1,322–$1,858. Dashboard removal required on most vehicles — very labor intensive. Foggy windshield, sweet coolant smell, or wet passenger carpet are main symptoms.",
   },
 
   // ── BODY / GLASS ─────────────────────────────────────────────────────────
@@ -430,11 +433,11 @@ const repairData = {
   "Fuel Pump Replacement": {
     icon: "⛽", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
-      "In-tank (most vehicles)":  { low: 900,  high: 1500 },
-      "High-pressure (truck/V8)": { low: 1200, high: 1800 },
+      "In-tank (most vehicles)":  { low: 1000, high: 1600 },
+      "High-pressure (truck/V8)": { low: 1300, high: 2000 },
     },
     labor: "2–4 hrs",
-    notes: "RepairPal average $1,247–$1,506. Symptoms: hard starts, sputtering at speed, sudden stall. Replace fuel filter at same time. Diagnosis is important — similar symptoms can come from a fuel relay or clogged filter.",
+    notes: "RepairPal average $1,247–$1,506. Symptoms: hard starts, sputtering at speed, sudden stall. Replace fuel filter at same time. Diagnosis first — fuel relay and clogged filter show identical symptoms for much less money.",
   },
   "Catalytic Converter": {
     icon: "🏭", category: "Engine", trimSensitive: true, iceOnly: true,
@@ -650,32 +653,32 @@ const repairData = {
   "Axle-Back Exhaust": {
     icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
-      "Aftermarket (e.g. Borla, Magnaflow)": { low: 300,  high: 700  },
-      "OEM replacement":                      { low: 500,  high: 1000 },
-      "Performance (Corsa, MBRP)":            { low: 600,  high: 1200 },
+      "Budget aftermarket":              { low: 150, high: 400  },
+      "Mid-range (Magnaflow, Flowmaster)": { low: 350, high: 700  },
+      "Premium (Borla, Corsa, AWE)":     { low: 550, high: 1100 },
     },
-    labor: "1–2 hrs",
-    notes: "Axle-back replaces everything from the rear axle back — muffler and tips only. Easiest exhaust upgrade, no tuning required. Popular for sound improvement. Most bolt-on and emissions legal in all 50 states.",
+    labor: "0.5–1.5 hrs",
+    notes: "Labor typically $75–$200 at a muffler shop. Axle-back replaces muffler and tips only — easiest exhaust upgrade, bolt-on on most vehicles, no tuning required, emissions legal in all 50 states. Parts cost varies widely by vehicle and brand.",
   },
   "Cat-Back Exhaust": {
     icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
-      "Aftermarket (e.g. Borla, Magnaflow)": { low: 600,  high: 1400 },
-      "OEM replacement":                      { low: 800,  high: 1800 },
-      "Performance (Corsa, MBRP, AWE)":       { low: 1000, high: 2200 },
+      "Budget aftermarket":              { low: 300,  high: 700  },
+      "Mid-range (Magnaflow, Flowmaster)": { low: 600,  high: 1100 },
+      "Premium (Borla, Corsa, AWE)":     { low: 900,  high: 1800 },
     },
-    labor: "2–4 hrs",
-    notes: "Cat-back replaces everything from the catalytic converter back — mid-pipe, resonator, muffler, and tips. Larger job than axle-back but more sound and performance gain. Generally emissions legal since it keeps the catalytic converter. Alignment of hangers is critical to avoid rattles.",
+    labor: "1–3 hrs",
+    notes: "Labor typically $100–$300. Cat-back covers catalytic converter to tips — mid-pipe, resonator, muffler, and tips. Generally emissions legal since catalytic converter stays. Ensure hangers align properly to avoid rattles. Some rusted OEM systems require cutting.",
   },
   "Full Exhaust System Replacement": {
     icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
     costs: {
-      "Aftermarket full system": { low: 900,  high: 2200 },
-      "OEM replacement":         { low: 1200, high: 3000 },
-      "Performance header-back": { low: 1500, high: 4000 },
+      "OEM replacement (rust/damage repair)": { low: 800,  high: 2000 },
+      "Aftermarket performance system":        { low: 1200, high: 3000 },
+      "Custom fabrication":                    { low: 1500, high: 4000 },
     },
     labor: "4–8 hrs",
-    notes: "Full replacement includes headers/downpipe, catalytic converter(s), mid-pipe, muffler, and tips. Most common when extensive rust has affected the entire system. Performance header-back systems may require tuning and could affect emissions compliance — check local laws.",
+    notes: "Full system includes headers/downpipe, catalytic converter(s), mid-pipe, muffler, and tips. Most common when rust has compromised the entire system. Performance header-back systems may require ECU tuning and can affect emissions compliance — check local regulations before purchasing.",
   },
 
   // ── DRIVETRAIN ────────────────────────────────────────────────────────────
