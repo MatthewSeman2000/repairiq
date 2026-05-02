@@ -8662,11 +8662,11 @@ const modelYears = {
         <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
           <input placeholder="Search repairs…" value={search} onChange={e => setSearch(e.target.value)} style={IS} />
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(clamp(140px, 12vw, 200px), 1fr))", gap:"clamp(8px, 0.8vw, 14px)" }}>
-          <select value={make} onChange={e => { setMake(e.target.value); setModel("Any Model"); setTrim("Any Trim"); setYear("Any Year"); }} style={IS}>
+          <select value={make} onChange={e => { setMake(e.target.value); setModel("Any Model"); setTrim("Any Trim"); }} style={IS}>
             {makes.map(m => <option key={m}>{m}</option>)}
           </select>
           {make !== "Any Make" && modelTiers[make] && (
-            <select value={model} onChange={e => { setModel(e.target.value); setTrim("Any Trim"); setYear("Any Year"); }} style={IS}>
+            <select value={model} onChange={e => { setModel(e.target.value); setTrim("Any Trim"); }} style={IS}>
               {modelTiers[make].map(([m]) => <option key={m}>{m}</option>)}
             </select>
           )}
