@@ -647,6 +647,36 @@ const repairData = {
     labor: "1–2 hrs",
     notes: "RepairPal average $1,077–$1,143 for full OEM system. Loud drone, visible rust holes, dragging exhaust are main symptoms. Aftermarket weld-on mufflers are cheaper but may have shorter lifespan. Replace hangers at same time.",
   },
+  "Axle-Back Exhaust": {
+    icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Aftermarket (e.g. Borla, Magnaflow)": { low: 300,  high: 700  },
+      "OEM replacement":                      { low: 500,  high: 1000 },
+      "Performance (Corsa, MBRP)":            { low: 600,  high: 1200 },
+    },
+    labor: "1–2 hrs",
+    notes: "Axle-back replaces everything from the rear axle back — muffler and tips only. Easiest exhaust upgrade, no tuning required. Popular for sound improvement. Most bolt-on and emissions legal in all 50 states.",
+  },
+  "Cat-Back Exhaust": {
+    icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Aftermarket (e.g. Borla, Magnaflow)": { low: 600,  high: 1400 },
+      "OEM replacement":                      { low: 800,  high: 1800 },
+      "Performance (Corsa, MBRP, AWE)":       { low: 1000, high: 2200 },
+    },
+    labor: "2–4 hrs",
+    notes: "Cat-back replaces everything from the catalytic converter back — mid-pipe, resonator, muffler, and tips. Larger job than axle-back but more sound and performance gain. Generally emissions legal since it keeps the catalytic converter. Alignment of hangers is critical to avoid rattles.",
+  },
+  "Full Exhaust System Replacement": {
+    icon: "💨", category: "Engine", trimSensitive: true, iceOnly: true,
+    costs: {
+      "Aftermarket full system": { low: 900,  high: 2200 },
+      "OEM replacement":         { low: 1200, high: 3000 },
+      "Performance header-back": { low: 1500, high: 4000 },
+    },
+    labor: "4–8 hrs",
+    notes: "Full replacement includes headers/downpipe, catalytic converter(s), mid-pipe, muffler, and tips. Most common when extensive rust has affected the entire system. Performance header-back systems may require tuning and could affect emissions compliance — check local laws.",
+  },
 
   // ── DRIVETRAIN ────────────────────────────────────────────────────────────
   "Driveshaft Replacement": {
@@ -8568,7 +8598,7 @@ const modelYears = {
             </h1>
             <p style={{ color:"#555", fontSize:"14px", margin:0, fontStyle:"italic" }}>Real-world cost ranges — adjusted for your location &amp; vehicle.</p>
           </div>
-          <div style={{ display:"flex", gap:"4px", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"4px", flexWrap:"wrap" }}>
+          <div style={{ display:"flex", gap:"4px", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"4px", overflowX:"auto", flexWrap:"nowrap", WebkitOverflowScrolling:"touch" }}>
             <button onClick={() => setAppMode("costs")} style={{ padding:"9px 20px", borderRadius:"6px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:"500", background: appMode === "costs" ? "#c9a84c" : "transparent", color: appMode === "costs" ? "#0f0f0f" : "#666", transition:"all 0.15s" }}>
               💰 Repair Costs
             </button>
