@@ -6552,12 +6552,12 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
   return (
     <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)" }}>
       {/* Mileage input */}
-      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)", marginBottom:"16px" }}>
-        <div style={{ fontSize:"11px", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"12px" }}>
+      <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px)", marginBottom:"16px" }}>
+        <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.25em", textTransform:"uppercase", color:"#c9a84c", marginBottom:"clamp(10px, 1vw, 16px)" }}>
           Maintenance Schedule{hasVehicle ? ` — ${make}${model !== "Any Model" ? " " + model : ""}${year !== "Any Year" ? " " + year : ""}` : ""}
         </div>
         {!hasVehicle && (
-          <div style={{ fontSize:"13px", color:"#555", fontStyle:"italic", marginBottom:"12px" }}>Select a make above to see manufacturer-specific intervals.</div>
+          <div style={{ fontSize:"clamp(13px, 1.2vw, 17px)", color:"#555", fontStyle:"italic", marginBottom:"14px" }}>Select a make above to see manufacturer-specific intervals.</div>
         )}
         <div style={{ display:"flex", gap:"10px", alignItems:"center", flexWrap:"wrap" }}>
           <input
@@ -6565,21 +6565,21 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
             placeholder="Enter current mileage (e.g. 47500)"
             value={mileageInput}
             onChange={e => setMileageInput(e.target.value)}
-            style={{ flex:1, minWidth:"200px", background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"10px 14px", color:"#f0ede6", fontSize:"13px", outline:"none", fontFamily:"inherit" }}
+            style={{ flex:1, minWidth:"200px", background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"clamp(10px, 1vw, 16px) clamp(14px, 1.2vw, 20px)", color:"#f0ede6", fontSize:"clamp(13px, 1.2vw, 17px)", outline:"none", fontFamily:"inherit" }}
           />
           <button onClick={() => { const v = parseInt(mileageInput.replace(/,/g,"")); if (!isNaN(v) && v > 0) setMileage(v); }}
-            style={{ background:"#c9a84c", border:"none", borderRadius:"6px", padding:"10px 20px", fontSize:"13px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+            style={{ background:"#c9a84c", border:"none", borderRadius:"8px", padding:"clamp(10px, 1vw, 16px) clamp(20px, 2vw, 32px)", fontSize:"clamp(13px, 1.2vw, 17px)", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
             Show Schedule
           </button>
           {hasMileage && (
             <button onClick={() => { setMileage(null); setMileageInput(""); }}
-              style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"6px", padding:"10px 14px", fontSize:"13px", color:"#555", cursor:"pointer", fontFamily:"inherit" }}>
+              style={{ background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"clamp(10px, 1vw, 16px) clamp(14px, 1.2vw, 20px)", fontSize:"clamp(13px, 1.2vw, 17px)", color:"#555", cursor:"pointer", fontFamily:"inherit" }}>
               Clear
             </button>
           )}
         </div>
         {hasMileage && (
-          <div style={{ fontSize:"12px", color:"#555", marginTop:"8px" }}>
+          <div style={{ fontSize:"clamp(12px, 1.1vw, 16px)", color:"#555", marginTop:"10px" }}>
             Showing intervals for <strong style={{ color:"#c9a84c" }}>{mileage.toLocaleString()} miles</strong>
             {make !== "Any Make" ? ` · ${make} factory schedule` : " · General schedule"}
           </div>
@@ -6591,46 +6591,46 @@ function MaintenanceSchedule({ make, model, year, mileage, mileageInput, setMile
 
           {/* Overdue */}
           {overdue.length > 0 && (
-            <div style={{ background:"#161616", border:"1px solid #ef444433", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
-              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#ef4444", marginBottom:"12px" }}>⚠️ Overdue</div>
+            <div style={{ background:"#161616", border:"1px solid #ef444433", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px)" }}>
+              <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.2em", textTransform:"uppercase", color:"#ef4444", marginBottom:"clamp(10px, 1vw, 16px)" }}>⚠️ Overdue</div>
               {overdue.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
           )}
 
           {/* Due Soon */}
           {dueSoon.length > 0 && (
-            <div style={{ background:"#161616", border:"1px solid #f59e0b33", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
-              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#f59e0b", marginBottom:"12px" }}>⏰ Due Soon</div>
+            <div style={{ background:"#161616", border:"1px solid #f59e0b33", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px)" }}>
+              <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.2em", textTransform:"uppercase", color:"#f59e0b", marginBottom:"clamp(10px, 1vw, 16px)" }}>⏰ Due Soon</div>
               {dueSoon.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
           )}
 
           {/* Upcoming */}
           {(upcoming.length > 0 || timeBased.length > 0) && (
-            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
-              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"12px" }}>✓ Good For Now</div>
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px)" }}>
+              <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"clamp(10px, 1vw, 16px)" }}>✓ Good For Now</div>
               {[...upcoming, ...timeBased].map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
           )}
 
           {/* Done */}
           {done.length > 0 && (
-            <div style={{ background:"#0a120a", border:"1px solid #22c55e22", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
-              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"12px" }}>✅ Marked Complete</div>
+            <div style={{ background:"#0a120a", border:"1px solid #22c55e22", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px)" }}>
+              <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.2em", textTransform:"uppercase", color:"#22c55e", marginBottom:"clamp(10px, 1vw, 16px)" }}>✅ Marked Complete</div>
               {done.map(item => <MaintenanceItem key={item.id} item={item} onToggle={toggleDone} repairData={repairData} adj={adj} />)}
             </div>
           )}
 
           {!hasMileage && (
-            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"20px clamp(24px, 4vw, 80px)" }}>
-              <div style={{ fontSize:"11px", letterSpacing:"0.2em", textTransform:"uppercase", color:"#555", marginBottom:"12px" }}>Full Schedule</div>
+            <div style={{ background:"#161616", border:"1px solid #1e1e1e", borderRadius:"10px", padding:"clamp(20px, 2.5vw, 40px) clamp(24px, 3vw, 48px)" }}>
+              <div style={{ fontSize:"clamp(11px, 1vw, 15px)", letterSpacing:"0.2em", textTransform:"uppercase", color:"#555", marginBottom:"clamp(10px, 1vw, 16px)" }}>Full Schedule</div>
               {schedule.map(item => (
                 <MaintenanceItem key={item.id} item={{ ...item, status:null, done:!!maintDone[item.id] }} onToggle={toggleDone} repairData={repairData} adj={adj} />
               ))}
             </div>
           )}
 
-          <div style={{ fontSize:"11px", color:"#333", textAlign:"center", fontStyle:"italic" }}>
+          <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#333", textAlign:"center", fontStyle:"italic" }}>
             Intervals based on {make !== "Any Make" ? `${make} owner's manual and factory service documentation` : "general manufacturer guidelines"}. Always check your owner's manual for model-specific requirements.
           </div>
         </div>
@@ -6654,24 +6654,24 @@ function MaintenanceItem({ item, onToggle, repairData, adj }) {
     `✓ Next: ${item.status.nextDue.toLocaleString()} mi`;
 
   return (
-    <div onClick={() => onToggle(item.id)} style={{ display:"flex", gap:"12px", alignItems:"flex-start", padding:"12px 0", borderBottom:"1px solid #1a1a1a", cursor:"pointer" }}>
-      <span style={{ fontSize:"18px", flexShrink:0, marginTop:"1px" }}>{item.icon}</span>
+    <div onClick={() => onToggle(item.id)} style={{ display:"flex", gap:"clamp(12px, 1.2vw, 20px)", alignItems:"flex-start", padding:"clamp(12px, 1.2vw, 20px) 0", borderBottom:"1px solid #1a1a1a", cursor:"pointer" }}>
+      <span style={{ fontSize:"clamp(18px, 1.6vw, 26px)", flexShrink:0, marginTop:"1px" }}>{item.icon}</span>
       <div style={{ flex:1 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:"8px", flexWrap:"wrap" }}>
           <div style={{ display:"flex", alignItems:"center", gap:"6px", flexWrap:"wrap" }}>
-            <span style={{ fontSize:"14px", fontWeight:"500", color: item.done ? "#555" : "#f0ede6", textDecoration: item.done ? "line-through" : "none" }}>{item.task}</span>
-            {severityColor && !item.done && <span style={{ fontSize:"10px", padding:"1px 6px", borderRadius:"10px", background:`${severityColor}18`, color:severityColor, letterSpacing:"0.04em" }}>{item.severity}</span>}
+            <span style={{ fontSize:"clamp(14px, 1.3vw, 19px)", fontWeight:"500", color: item.done ? "#555" : "#f0ede6", textDecoration: item.done ? "line-through" : "none" }}>{item.task}</span>
+            {severityColor && !item.done && <span style={{ fontSize:"clamp(10px, 0.9vw, 13px)", padding:"2px 8px", borderRadius:"10px", background:`${severityColor}18`, color:severityColor, letterSpacing:"0.04em" }}>{item.severity}</span>}
           </div>
           <div style={{ display:"flex", gap:"8px", alignItems:"center", flexShrink:0 }}>
-            {costLow && <span style={{ fontSize:"12px", color:"#c9a84c" }}>${costLow.toLocaleString()}–${costHigh.toLocaleString()}</span>}
-            <span style={{ fontSize:"11px", color:statusColor, whiteSpace:"nowrap" }}>{statusLabel}</span>
+            {costLow && <span style={{ fontSize:"clamp(12px, 1.1vw, 16px)", color:"#c9a84c" }}>${costLow.toLocaleString()}–${costHigh.toLocaleString()}</span>}
+            <span style={{ fontSize:"clamp(11px, 1vw, 15px)", color:statusColor, whiteSpace:"nowrap" }}>{statusLabel}</span>
           </div>
         </div>
-        <div style={{ fontSize:"11px", color:"#444", marginTop:"3px", lineHeight:"1.5" }}>
+        <div style={{ fontSize:"clamp(11px, 1vw, 14px)", color:"#444", marginTop:"clamp(3px, 0.4vw, 6px)", lineHeight:"1.6" }}>
           {item.intervalMiles ? `Every ${item.intervalMiles.toLocaleString()} miles` : ""}{item.intervalMiles && item.intervalMonths ? " or " : ""}{item.intervalMonths ? `every ${item.intervalMonths} months` : ""} · {item.notes}
         </div>
       </div>
-      <span style={{ fontSize:"16px", flexShrink:0, color: item.done ? "#22c55e" : "#333" }}>{item.done ? "✅" : "☐"}</span>
+      <span style={{ fontSize:"clamp(16px, 1.5vw, 24px)", flexShrink:0, color: item.done ? "#22c55e" : "#333" }}>{item.done ? "✅" : "☐"}</span>
     </div>
   );
 }
