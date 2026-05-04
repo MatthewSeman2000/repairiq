@@ -204,6 +204,16 @@ const repairData = {
     labor: "0.25–0.5 hr",
     notes: "Cheap and often overlooked. A clogged PCV can cause rough idle and oil leaks.",
   },
+  "Fuel & Air Induction Cleaning": {
+    icon: "🧹", category: "Engine", trimSensitive: false, iceOnly: true,
+    costs: {
+      "DIY (fuel system cleaner additive)": { low: 10,  high: 30  },
+      "Shop service (throttle body + intake)": { low: 100, high: 250 },
+      "Full induction service (walnut blasting etc.)": { low: 200, high: 500 },
+    },
+    labor: "0.5–2 hrs",
+    notes: "⚠️ Common dealer upsell — often quoted at $300–$500+ on service invoices. The $10 DIY bottle of Techron or BG 44K added to your gas tank handles fuel system cleaning adequately for most vehicles. A full shop induction service is only genuinely needed on direct-injection (GDI) engines prone to intake valve carbon buildup (BMW N54/N55, VW/Audi TSI, GM LTG, Subaru FA/FB) — typically after 60,000–80,000 miles. If your engine is port-injected, skip the shop service entirely.",
+  },
 
   // ── ELECTRICAL ────────────────────────────────────────────────────────────
   "Battery Replacement": {
