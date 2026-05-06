@@ -7387,6 +7387,95 @@ function OBDLookup({ obdSearch, setObdSearch, repairData, adj }) {
   );
 }
 
+function LeadForm({ repairName, make, model, year, zip, adj, repairData, onClose, supabase }) {
+  const [name, setName]       = useState("");
+  const [contact, setContact] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted]   = useState(false);
+  const [error, setError]           = useState("");
+
+  const repData = repairData[repairName];
+  const costLow  = repData ? adj(Math.min(...Object.values(repData.costs).map(v => v.low)), repData, repairName) : null;
+  const costHigh = repData ? adj(Math.max(...Object.values(repData.costs).map(v => v.high)), repData, repairName) : null;
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !contact.trim()) { setError("Please enter your name and contact info."); return; }
+    setSubmitting(true);
+    setError("");
+    const { error: dbError } = await supabase.from("submissions").insert({
+      repair_name:   repairName,
+      vehicle_make:  make !== "Any Make" ? `${make}${model !== "Any Model" ? " " + model : ""}` : null,
+      vehicle_year:  year !== "Any Year" ? parseInt(year) : null,
+      zip_code:      zip || null,
+      amount_paid:   costLow || null,
+      shop_type:     null,
+      notes:         null,
+      contact_name:  name.trim(),
+      contact_info:  contact.trim(),
+    });
+    setSubmitting(false);
+    if (dbError) { setError("Something went wrong. Please try again."); return; }
+    setSubmitted(true);
+  };
+
+  const IS3 = { background:"#1a1a1a", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"clamp(10px, 1vw, 14px) clamp(12px, 1.2vw, 18px)", color:"#f0ede6", fontSize:"clamp(13px, 1.1vw, 16px)", outline:"none", fontFamily:"inherit", width:"100%", boxSizing:"border-box" };
+
+  return (
+    <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.8)", zIndex:1100, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background:"#161616", border:"1px solid #2a2a2a", borderRadius:"14px", width:"clamp(320px, 90vw, 520px)", boxShadow:"0 24px 80px rgba(0,0,0,0.7)", padding:"clamp(24px, 3vw, 40px)" }}>
+
+        {!submitted ? (
+          <>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"20px" }}>
+              <div>
+                <div style={{ fontSize:"clamp(16px, 1.5vw, 22px)", fontWeight:"600", marginBottom:"4px" }}>Get Free Shop Quotes</div>
+                <div style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:"#555" }}>
+                  {repairName}{costLow ? ` · $${costLow.toLocaleString()}–$${costHigh.toLocaleString()} est.` : ""}
+                </div>
+              </div>
+              <button onClick={onClose} style={{ background:"#222", border:"1px solid #2a2a2a", borderRadius:"6px", width:"30px", height:"30px", cursor:"pointer", color:"#888", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit", flexShrink:0 }}>✕</button>
+            </div>
+
+            <div style={{ display:"grid", gap:"10px", marginBottom:"16px" }}>
+              <div>
+                <label style={{ fontSize:"clamp(11px, 1vw, 13px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"6px" }}>Your Name *</label>
+                <input placeholder="First and last name" value={name} onChange={e => setName(e.target.value)} style={IS3} />
+              </div>
+              <div>
+                <label style={{ fontSize:"clamp(11px, 1vw, 13px)", color:"#555", textTransform:"uppercase", letterSpacing:"0.08em", display:"block", marginBottom:"6px" }}>Phone or Email *</label>
+                <input placeholder="So shops can contact you" value={contact} onChange={e => setContact(e.target.value)} style={IS3} />
+              </div>
+              <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px", fontSize:"clamp(12px, 1.1vw, 15px)", color:"#555" }}>
+                <div style={{ marginBottom:"4px" }}>🔧 {repairName}</div>
+                {make !== "Any Make" && <div>🚗 {year !== "Any Year" ? year + " " : ""}{make}{model !== "Any Model" ? " " + model : ""}</div>}
+                {zip && <div>📍 {zip}</div>}
+              </div>
+            </div>
+
+            {error && <div style={{ fontSize:"12px", color:"#ef4444", marginBottom:"10px" }}>{error}</div>}
+
+            <button onClick={handleSubmit} disabled={submitting}
+              style={{ width:"100%", background: submitting ? "#555" : "#c9a84c", border:"none", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 16px)", fontSize:"clamp(13px, 1.2vw, 16px)", fontWeight:"700", color:"#0f0f0f", cursor: submitting ? "not-allowed" : "pointer", fontFamily:"inherit", letterSpacing:"0.06em", textTransform:"uppercase" }}>
+              {submitting ? "Submitting…" : "Request Quotes →"}
+            </button>
+            <div style={{ fontSize:"clamp(10px, 0.9vw, 12px)", color:"#333", textAlign:"center", marginTop:"10px" }}>
+              We'll match you with local shops. No spam, no obligations.
+            </div>
+          </>
+        ) : (
+          <div style={{ textAlign:"center", padding:"20px 0" }}>
+            <div style={{ fontSize:"40px", marginBottom:"16px" }}>✅</div>
+            <div style={{ fontSize:"clamp(18px, 1.8vw, 24px)", fontWeight:"500", marginBottom:"8px" }}>Request Submitted!</div>
+            <div style={{ fontSize:"clamp(13px, 1.2vw, 16px)", color:"#666", marginBottom:"24px" }}>We've received your quote request for {repairName}. Local shops in your area will be in touch shortly.</div>
+            <button onClick={onClose} style={{ background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px 32px", fontSize:"14px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit" }}>Done</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
 function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   const tiers = Object.entries(data.costs);
   const popoverStyle = tierPicker.centered
@@ -7415,7 +7504,7 @@ function TierPickerPopover({ tierPicker, data, adj, onClose, onPick }) {
   );
 }
 
-function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare, handlePrint, buildPrintHTML }) {
+function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip, onClose, onRemove, onClear, RepairIcon, shareURL, handleShare, handlePrint, buildPrintHTML, onGetQuotes }) {
   const [shopType, setShopType] = useState("both");
   const shopMult = shopType === "dealer" ? 1.18 : shopType === "independent" ? 0.80 : 1.0;
 
@@ -7502,7 +7591,7 @@ function BasketModal({ basket, repairData, adj, catColor, make, model, year, zip
           </div>
           <div style={{ fontSize:"11px", color:"#444", marginBottom:"20px" }}>Parts + labor · Adjusted for {zip || "national average"} · Actual quotes may vary</div>
 
-          <button style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+          <button onClick={onGetQuotes} style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"8px", padding:"12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.08em", textTransform:"uppercase" }}>
             Get Shop Quotes →
           </button>
           <div className="no-print" style={{ display:"flex", gap:"8px", marginTop:"8px" }}>
@@ -7543,7 +7632,7 @@ function RepairIcon({ icon, size = 20 }) {
 }
 
 
-function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML }) {
+function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML, onGetQuotes }) {
   const [shopType, setShopType] = useState("both"); // "both" | "dealer" | "independent"
   const shopMult = shopType === "dealer" ? 1.18 : shopType === "independent" ? 0.80 : 1.0;
   const sadj = (v, d, n) => Math.round(adj(v, d, n) * shopMult);
@@ -7664,7 +7753,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             </button>
           </div>
 
-          <button style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 18px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+          <button onClick={onGetQuotes} style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 18px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
             Get Free Quotes →
           </button>
           <div className="no-print" style={{ display:"flex", gap:"8px", marginTop:"8px" }}>
@@ -7712,6 +7801,7 @@ export default function RepairIQ() {
   const [basket, setBasket]               = useState(new Map()); // name → tierName
   const [showBasket, setShowBasket]       = useState(false);
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
+  const [showLeadForm, setShowLeadForm]   = useState(false);
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd" | "fixorsell"
   const [obdSearch, setObdSearch]         = useState("");
   const [mileageInput, setMileageInput]   = useState("");
@@ -8825,6 +8915,17 @@ const modelYears = {
         />
       )}
 
+      {/* ── LEAD FORM ────────────────────────────────────────────────────────── */}
+      {showLeadForm && (
+        <LeadForm
+          repairName={selectedRepair || (basket.size > 0 ? Array.from(basket.keys()).join(", ") : "Repair")}
+          make={make} model={model} year={year} zip={zip}
+          adj={adj} repairData={repairData}
+          onClose={() => setShowLeadForm(false)}
+          supabase={supabase}
+        />
+      )}
+
       {/* ── BASKET BAR ────────────────────────────────────────────────────── */}
       {basket.size > 0 && (() => {
         const { low, high } = basketTotal();
@@ -8870,6 +8971,7 @@ const modelYears = {
           handleShare={handleShare}
           handlePrint={handlePrint}
           buildPrintHTML={buildPrintHTML}
+          onGetQuotes={() => setShowLeadForm(true)}
         />
       )}
 
