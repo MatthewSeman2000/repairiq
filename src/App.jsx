@@ -8971,7 +8971,7 @@ const modelYears = {
           handleShare={handleShare}
           handlePrint={handlePrint}
           buildPrintHTML={buildPrintHTML}
-          onGetQuotes={() => setShowLeadForm(true)}
+          onGetQuotes={() => { setShowBasket(false); setShowLeadForm(true); }}
         />
       )}
 
@@ -8993,10 +8993,9 @@ const modelYears = {
           handleShare={handleShare}
           handlePrint={handlePrint}
           buildPrintHTML={buildPrintHTML}
+          onGetQuotes={() => { setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
         />
       )}
-
-      {/* ── BEFORE YOU BUY MODE ───────────────────────────────────────────── */}
       {appMode === "buyside" && (
         <section style={{ width:"100%", boxSizing:"border-box", padding:"0 clamp(20px, 5vw, 100px)" }}>
           {make === "Any Make" || model === "Any Model" ? (
