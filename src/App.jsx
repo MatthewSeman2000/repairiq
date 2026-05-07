@@ -7387,7 +7387,7 @@ function OBDLookup({ obdSearch, setObdSearch, repairData, adj }) {
   );
 }
 
-function LeadForm({ repairName, make, model, year, zip, adj, repairData, onClose, supabase }) {
+function LeadForm({ repairName, shopName, make, model, year, zip, adj, repairData, onClose, supabase }) {
   const [name, setName]           = useState("");
   const [contact, setContact]     = useState("");
   const [localZip, setLocalZip]   = useState(zip || "");
@@ -7412,7 +7412,7 @@ function LeadForm({ repairName, make, model, year, zip, adj, repairData, onClose
       zip_code:      localZip,
       amount_paid:   costLow || null,
       shop_type:     null,
-      notes:         null,
+      notes:         shopName ? `Requested from: ${shopName}` : null,
       contact_name:  name.trim(),
       contact_info:  contact.trim(),
     });
@@ -7431,7 +7431,7 @@ function LeadForm({ repairName, make, model, year, zip, adj, repairData, onClose
           <>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"20px" }}>
               <div>
-                <div style={{ fontSize:"clamp(16px, 1.5vw, 22px)", fontWeight:"600", marginBottom:"4px" }}>Get Free Shop Quotes</div>
+                <div style={{ fontSize:"clamp(16px, 1.5vw, 22px)", fontWeight:"600", marginBottom:"4px" }}>{shopName ? `Get a Quote from ${shopName}` : "Get Free Shop Quotes"}</div>
                 <div style={{ fontSize:"clamp(12px, 1.1vw, 15px)", color:"#555" }}>
                   {repairName}{costLow ? ` · $${costLow.toLocaleString()}–$${costHigh.toLocaleString()} est.` : ""}
                 </div>
@@ -7457,6 +7457,7 @@ function LeadForm({ repairName, make, model, year, zip, adj, repairData, onClose
               <div style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px", fontSize:"clamp(12px, 1.1vw, 15px)", color:"#555" }}>
                 <div style={{ marginBottom:"4px" }}>🔧 {repairName}</div>
                 {make !== "Any Make" && <div>🚗 {year !== "Any Year" ? year + " " : ""}{make}{model !== "Any Model" ? " " + model : ""}</div>}
+                {shopName && <div>🏪 {shopName}</div>}
                 <div>📍 {localZip || "ZIP not set"}</div>
               </div>
             </div>
@@ -7641,7 +7642,7 @@ function RepairIcon({ icon, size = 20 }) {
 }
 
 
-function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML, onGetQuotes }) {
+function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, shops, votes, handleVote, Stars, shareURL, handleShare, handlePrint, buildPrintHTML, onGetQuotes, onGetQuoteForShop }) {
   const [shopType, setShopType] = useState("both"); // "both" | "dealer" | "independent"
   const shopMult = shopType === "dealer" ? 1.18 : shopType === "independent" ? 0.80 : 1.0;
   const sadj = (v, d, n) => Math.round(adj(v, d, n) * shopMult);
@@ -7728,9 +7729,8 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             ) : (
               <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
                 {shops.map(shop => (
-                  <a key={shop.place_id} href={shop.affiliate_url} onClick={e => e.stopPropagation()}
-                    style={{ display:"block", background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px", textDecoration:"none", color:"inherit" }}>
-                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                  <div key={shop.place_id} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"10px" }}>
                       <div>
                         <div style={{ fontSize:"13px", fontWeight:"600", color:"#f0ede6", marginBottom:"2px" }}>{shop.name}</div>
                         <div style={{ fontSize:"11px", color:"#444", marginBottom:"5px" }}>{shop.vicinity}</div>
@@ -7738,13 +7738,16 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
                         <span style={{ fontSize:"11px", color:"#444", marginLeft:"6px" }}>({shop.user_ratings_total})</span>
                       </div>
                       <div style={{ textAlign:"right", flexShrink:0, marginLeft:"12px" }}>
-                        <div style={{ fontSize:"10px", padding:"3px 8px", borderRadius:"20px", marginBottom:"6px", background:shop.open_now?"#22c55e18":"#ef444418", color:shop.open_now?"#22c55e":"#ef4444" }}>
+                        <div style={{ fontSize:"10px", padding:"3px 8px", borderRadius:"20px", background:shop.open_now?"#22c55e18":"#ef444418", color:shop.open_now?"#22c55e":"#ef4444" }}>
                           {shop.open_now ? "Open Now" : "Closed"}
                         </div>
-                        <div style={{ fontSize:"11px", color:"#c9a84c" }}>Get Quote →</div>
                       </div>
                     </div>
-                  </a>
+                    <button onClick={e => { e.stopPropagation(); onGetQuoteForShop(shop.name); }}
+                      style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"6px", padding:"8px 12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.06em", textTransform:"uppercase" }}>
+                      Get Quote from {shop.name} →
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
@@ -7762,9 +7765,7 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
             </button>
           </div>
 
-          <button onClick={onGetQuotes} style={{ marginTop:"16px", width:"100%", background:"#c9a84c", color:"#0f0f0f", border:"none", borderRadius:"8px", padding:"clamp(12px, 1.2vw, 18px)", fontSize:"clamp(12px, 1.1vw, 16px)", fontWeight:"700", fontFamily:"inherit", cursor:"pointer", letterSpacing:"0.08em", textTransform:"uppercase" }}>
-            Get Free Quotes →
-          </button>
+
           <div className="no-print" style={{ display:"flex", gap:"8px", marginTop:"8px" }}>
             <button onClick={() => handleShare(shareURL, `${name} — RepairIQ Estimate`)} style={{ flex:1, background:"transparent", border:"1px solid #2a2a2a", borderRadius:"8px", padding:"10px", fontSize:"12px", color:"#888", cursor:"pointer", fontFamily:"inherit" }}>
               🔗 Share
@@ -7811,6 +7812,7 @@ export default function RepairIQ() {
   const [showBasket, setShowBasket]       = useState(false);
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
   const [showLeadForm, setShowLeadForm]   = useState(false);
+  const [selectedShop, setSelectedShop]   = useState(null);
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd" | "fixorsell"
   const [obdSearch, setObdSearch]         = useState("");
   const [mileageInput, setMileageInput]   = useState("");
@@ -8928,9 +8930,10 @@ const modelYears = {
       {showLeadForm && (
         <LeadForm
           repairName={selectedRepair || (basket.size > 0 ? Array.from(basket.keys()).join(", ") : "Repair")}
+          shopName={selectedShop}
           make={make} model={model} year={year} zip={zip}
           adj={adj} repairData={repairData}
-          onClose={() => setShowLeadForm(false)}
+          onClose={() => { setShowLeadForm(false); setSelectedShop(null); }}
           supabase={supabase}
         />
       )}
@@ -9003,6 +9006,7 @@ const modelYears = {
           handlePrint={handlePrint}
           buildPrintHTML={buildPrintHTML}
           onGetQuotes={() => { setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
+          onGetQuoteForShop={(shopName) => { setSelectedShop(shopName); setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
         />
       )}
       {appMode === "buyside" && (
