@@ -7813,6 +7813,7 @@ export default function RepairIQ() {
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
   const [showLeadForm, setShowLeadForm]   = useState(false);
   const [selectedShop, setSelectedShop]   = useState(null);
+  const [leadRepairName, setLeadRepairName] = useState(null);
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd" | "fixorsell"
   const [obdSearch, setObdSearch]         = useState("");
   const [mileageInput, setMileageInput]   = useState("");
@@ -8929,11 +8930,11 @@ const modelYears = {
       {/* ── LEAD FORM ────────────────────────────────────────────────────────── */}
       {showLeadForm && (
         <LeadForm
-          repairName={selectedRepair || (basket.size > 0 ? Array.from(basket.keys()).join(", ") : "Repair")}
+          repairName={leadRepairName || selectedRepair || (basket.size > 0 ? Array.from(basket.keys()).join(", ") : "Repair")}
           shopName={selectedShop}
           make={make} model={model} year={year} zip={zip}
           adj={adj} repairData={repairData}
-          onClose={() => { setShowLeadForm(false); setSelectedShop(null); }}
+          onClose={() => { setShowLeadForm(false); setSelectedShop(null); setLeadRepairName(null); }}
           supabase={supabase}
         />
       )}
@@ -9006,7 +9007,7 @@ const modelYears = {
           handlePrint={handlePrint}
           buildPrintHTML={buildPrintHTML}
           onGetQuotes={() => { setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
-          onGetQuoteForShop={(shopName) => { setSelectedShop(shopName); setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
+          onGetQuoteForShop={(shopName) => { setLeadRepairName(selectedRepair); setSelectedShop(shopName); setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
         />
       )}
       {appMode === "buyside" && (
