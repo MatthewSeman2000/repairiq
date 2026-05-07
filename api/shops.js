@@ -2,7 +2,6 @@
 // Proxies Google Places API so the key stays server-side
 
 module.exports = async function handler(req, res) {
-  // CORS headers so the frontend can call this
   res.setHeader("Access-Control-Allow-Origin", "https://repairiqhq.com");
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
@@ -37,15 +36,32 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: "Places API error" });
     }
 
-    // Step 3: shape the response to match our existing shop card format
-    const shops = placesData.results.slice(0, 5).map(p => ({
-      place_id:           p.place_id,
-      name:               p.name,
-      vicinity:           p.vicinity,
-      rating:             p.rating || null,
-      user_ratings_total: p.user_ratings_total || 0,
-      open_now:           p.opening_hours ? p.opening_hours.open_now : null,
-      affiliate_url:      `https://www.google.com/maps/place/?q=place_id:${p.place_id}`,
+    const topPlaces = placesData.results.slice(0, 5);
+
+    // Step 3: fetch details (phone, website) for each shop in parallel
+    const shops = await Promise.all(topPlaces.map(async (p) => {
+      let phone = null;
+      let website = null;
+      try {
+        const detailRes = await fetch(
+          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${p.place_id}&fields=formatted_phone_number,website&key=${GOOGLE_KEY}`
+        );
+        const detailData = await detailRes.json();
+        phone   = detailData.result?.formatted_phone_number || null;
+        website = detailData.result?.website || null;
+      } catch {}
+
+      return {
+        place_id:           p.place_id,
+        name:               p.name,
+        vicinity:           p.vicinity,
+        rating:             p.rating || null,
+        user_ratings_total: p.user_ratings_total || 0,
+        open_now:           p.opening_hours ? p.opening_hours.open_now : null,
+        phone,
+        website,
+        affiliate_url:      `https://www.google.com/maps/place/?q=place_id:${p.place_id}`,
+      };
     }));
 
     return res.status(200).json(shops);

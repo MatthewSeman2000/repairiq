@@ -7387,7 +7387,7 @@ function OBDLookup({ obdSearch, setObdSearch, repairData, adj }) {
   );
 }
 
-function LeadForm({ repairName, shopName, make, model, year, zip, adj, repairData, onClose, supabase }) {
+function LeadForm({ repairName, shopName, shopDetails, make, model, year, zip, adj, repairData, onClose, supabase }) {
   const [name, setName]           = useState("");
   const [contact, setContact]     = useState("");
   const [localZip, setLocalZip]   = useState(zip || "");
@@ -7412,7 +7412,7 @@ function LeadForm({ repairName, shopName, make, model, year, zip, adj, repairDat
       zip_code:      localZip,
       amount_paid:   costLow || null,
       shop_type:     null,
-      notes:         shopName ? `Requested from: ${shopName}` : null,
+      notes:         shopName ? [`Requested from: ${shopName}`, shopDetails?.phone ? `Phone: ${shopDetails.phone}` : null, shopDetails?.website ? `Website: ${shopDetails.website}` : null, shopDetails?.address ? `Address: ${shopDetails.address}` : null].filter(Boolean).join(' | ') : null,
       contact_name:  name.trim(),
       contact_info:  contact.trim(),
     });
@@ -7458,6 +7458,8 @@ function LeadForm({ repairName, shopName, make, model, year, zip, adj, repairDat
                 <div style={{ marginBottom:"4px" }}>🔧 {repairName}</div>
                 {make !== "Any Make" && <div>🚗 {year !== "Any Year" ? year + " " : ""}{make}{model !== "Any Model" ? " " + model : ""}</div>}
                 {shopName && <div>🏪 {shopName}</div>}
+                {shopDetails?.phone && <div>📞 {shopDetails.phone}</div>}
+                {shopDetails?.address && <div>📍 {shopDetails.address}</div>}
                 <div>📍 {localZip || "ZIP not set"}</div>
               </div>
             </div>
@@ -7730,20 +7732,25 @@ function ModalContent({ name, data, onClose, adj, catColor, zip, loadingShops, s
               <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
                 {shops.map(shop => (
                   <div key={shop.place_id} style={{ background:"#111", border:"1px solid #1e1e1e", borderRadius:"8px", padding:"12px 14px" }}>
-                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"10px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"8px" }}>
                       <div>
                         <div style={{ fontSize:"13px", fontWeight:"600", color:"#f0ede6", marginBottom:"2px" }}>{shop.name}</div>
-                        <div style={{ fontSize:"11px", color:"#444", marginBottom:"5px" }}>{shop.vicinity}</div>
-                        <Stars rating={shop.rating} />
-                        <span style={{ fontSize:"11px", color:"#444", marginLeft:"6px" }}>({shop.user_ratings_total})</span>
+                        <div style={{ fontSize:"11px", color:"#444", marginBottom:"4px" }}>{shop.vicinity}</div>
+                        {shop.phone && <div style={{ fontSize:"11px", color:"#c9a84c" }}>{shop.phone}</div>}
+                        {shop.website && <a href={shop.website} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ fontSize:"11px", color:"#555", display:"block", marginTop:"2px", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", maxWidth:"180px" }}>{shop.website.replace(/^https?:\/\/(www\.)?/,"")}</a>}
+                        <div style={{ marginTop:"4px", display:"flex", alignItems:"center" }}>
+                          <Stars rating={shop.rating} />
+                          <span style={{ fontSize:"11px", color:"#444", marginLeft:"6px" }}>({shop.user_ratings_total})</span>
+                        </div>
                       </div>
                       <div style={{ textAlign:"right", flexShrink:0, marginLeft:"12px" }}>
                         <div style={{ fontSize:"10px", padding:"3px 8px", borderRadius:"20px", background:shop.open_now?"#22c55e18":"#ef444418", color:shop.open_now?"#22c55e":"#ef4444" }}>
                           {shop.open_now ? "Open Now" : "Closed"}
                         </div>
+                        <a href={shop.affiliate_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ fontSize:"10px", color:"#555", display:"block", marginTop:"4px" }}>View on Maps ↗</a>
                       </div>
                     </div>
-                    <button onClick={e => { e.stopPropagation(); onGetQuoteForShop(shop.name); }}
+                    <button onClick={e => { e.stopPropagation(); onGetQuoteForShop(shop.name, shop.phone, shop.website, shop.vicinity); }}
                       style={{ width:"100%", background:"#c9a84c", border:"none", borderRadius:"6px", padding:"8px 12px", fontSize:"12px", fontWeight:"700", color:"#0f0f0f", cursor:"pointer", fontFamily:"inherit", letterSpacing:"0.06em", textTransform:"uppercase" }}>
                       Get Quote from {shop.name} →
                     </button>
@@ -7813,6 +7820,7 @@ export default function RepairIQ() {
   const [tierPicker, setTierPicker]       = useState(null); // { name, x, y } or null
   const [showLeadForm, setShowLeadForm]   = useState(false);
   const [selectedShop, setSelectedShop]   = useState(null);
+  const [selectedShopDetails, setSelectedShopDetails] = useState(null);
   const [leadRepairName, setLeadRepairName] = useState(null);
   const [appMode, setAppMode]             = useState("costs"); // "costs" | "buyside" | "maintenance" | "obd" | "fixorsell"
   const [obdSearch, setObdSearch]         = useState("");
@@ -8932,9 +8940,10 @@ const modelYears = {
         <LeadForm
           repairName={leadRepairName || selectedRepair || (basket.size > 0 ? Array.from(basket.keys()).join(", ") : "Repair")}
           shopName={selectedShop}
+          shopDetails={selectedShopDetails}
           make={make} model={model} year={year} zip={zip}
           adj={adj} repairData={repairData}
-          onClose={() => { setShowLeadForm(false); setSelectedShop(null); setLeadRepairName(null); }}
+          onClose={() => { setShowLeadForm(false); setSelectedShop(null); setSelectedShopDetails(null); setLeadRepairName(null); }}
           supabase={supabase}
         />
       )}
@@ -9007,7 +9016,7 @@ const modelYears = {
           handlePrint={handlePrint}
           buildPrintHTML={buildPrintHTML}
           onGetQuotes={() => { setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
-          onGetQuoteForShop={(shopName) => { setLeadRepairName(selectedRepair); setSelectedShop(shopName); setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
+          onGetQuoteForShop={(shopName, phone, website, address) => { setLeadRepairName(selectedRepair); setSelectedShop(shopName); setSelectedShopDetails({ phone, website, address }); setSelectedRepair(null); setShops([]); setShowLeadForm(true); }}
         />
       )}
       {appMode === "buyside" && (
