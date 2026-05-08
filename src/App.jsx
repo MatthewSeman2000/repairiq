@@ -2368,6 +2368,10 @@ const knownIssues = {
     ],
     "ILX": [
       { issue: "Transmission hesitation and rough shifts on 8-speed DCT", years: "2016–2019", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Dual-clutch transmission issues — 8-speed DCT jerky at low speeds and in stop-and-go traffic", years: "2013–2022", severity: "Medium", source: "CarComplaints/owner reports" },
+      { issue: "Understeer — stock suspension tuning criticized for excessive understeer", years: "2013–2022", severity: "Low", source: "Road test consensus" },
+      { issue: "Rust — older ILX models prone to underbody rust in northern states", years: "2013–2016", severity: "Medium", source: "Owner reports" },
     ],
   },
   "Audi": {
@@ -2407,6 +2411,10 @@ const knownIssues = {
     ],
     "X1": [
       { issue: "Timing chain guide failure — N20 engine, same issue as 3 Series", years: "2013–2015", severity: "High", source: "RepairPal", trims: ["xDrive28i", "sDrive28i"] },
+    
+      { issue: "Transfer case failure — xDrive transfer case bearings fail at high mileage", years: "2013–2019", severity: "High", source: "CarComplaints/owner reports" },
+      { issue: "Water pump failure — electric water pump fails prematurely", years: "2012–2020", severity: "High", source: "Owner forums" },
+      { issue: "DSG/8-speed transmission shudder — torque converter shudder under light throttle", years: "2016–2022", severity: "Medium", source: "Owner reports" },
     ],
   },
   "Chevrolet": {
@@ -2485,12 +2493,24 @@ const knownIssues = {
     ],
     "Mustang GT": [
       { issue: "Independent rear suspension (IRS) subframe noise and bushing wear", years: "2015–2020", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Independent Rear Suspension bushing wear — rear suspension compliance bushings wear prematurely", years: "2015–2023", severity: "Medium", source: "Owner forums/CarComplaints" },
+      { issue: "Differential fluid breakdown — Torsen diff fluid degrades quickly; change every 30k for longevity", years: "2015–2023", severity: "Medium", source: "Ford TSB" },
+      { issue: "Clutch master cylinder failure — clutch pedal goes to floor; common on manual trans cars", years: "2015–2020", severity: "High", source: "CarComplaints/NHTSA" },
     ],
     "Mustang EcoBoost": [
       { issue: "Oil pan gasket leak on 2.3L EcoBoost", years: "2015–2017", severity: "Medium", source: "RepairPal", trims: ["Base", "Premium"] },
+    
+      { issue: "Carbon buildup on intake valves — direct injection engine requires walnut blasting around 60k miles", years: "2015–2023", severity: "Medium", source: "Ford TSB/owner reports" },
+      { issue: "Coolant loss — intercooler coolant reservoir and hoses prone to leaks", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
+      { issue: "Clutch master cylinder failure — same as GT; common on manual trans cars", years: "2015–2020", severity: "High", source: "CarComplaints/NHTSA" },
     ],
     "Transit": [
       { issue: "Transmission overheating and shudder on SelectShift 6-speed", years: "2015–2019", severity: "Medium", source: "NHTSA" },
+    
+      { issue: "Turbocharger failure — 3.5L EcoBoost turbo failures at high mileage", years: "2015–2022", severity: "High", source: "NHTSA/owner reports" },
+      { issue: "Transmission shudder — 6-speed automatic shudder on light throttle", years: "2015–2019", severity: "Medium", source: "CarComplaints" },
+      { issue: "Sliding door mechanism failure — cargo van sliding door rollers and latches wear out", years: "2014–2023", severity: "Medium", source: "Owner reports" },
     ],
   },
   "GMC": {
@@ -2504,6 +2524,10 @@ const knownIssues = {
     ],
     "Terrain": [
       { issue: "Timing chain and excessive oil consumption on 2.4L Ecotec", years: "2010–2017", severity: "High", source: "RepairPal" },
+    
+      { issue: "Piston ring failure — 2.4L engine burning oil; NHTSA investigation opened", years: "2010–2012", severity: "High", source: "NHTSA/class action" },
+      { issue: "Transmission shudder — 6T40/6T45 transmission shudder under light acceleration", years: "2010–2017", severity: "Medium", source: "CarComplaints/GM TSB" },
+      { issue: "Power steering failure — electric power steering module failures", years: "2010–2015", severity: "Medium", source: "NHTSA complaints" },
     ],
   },
   "Honda": {
@@ -2529,6 +2553,10 @@ const knownIssues = {
     ],
     "Civic Type R": [
       { issue: "Infotainment display cracking — Honda issued extended warranty", years: "2017–2019", severity: "Low", source: "CarComplaints" },
+    
+      { issue: "Clutch wear — aggressive driving causes premature clutch failure", years: "2017–2023", severity: "Medium", source: "FK8/FL5 owner forums" },
+      { issue: "Limited-slip differential wear — track use accelerates LSD degradation", years: "2017–2023", severity: "Medium", source: "Owner reports" },
+      { issue: "Oil consumption — high-rev use on track increases consumption between changes", years: "2017–2023", severity: "Low", source: "Owner reports" },
     ],
   },
   "Hyundai": {
@@ -2560,6 +2588,10 @@ const knownIssues = {
     ],
     "QX80": [
       { issue: "Timing chain stretch on 5.6L V8 at high mileage", years: "2011–2019", severity: "Medium", source: "RepairPal" },
+    
+      { issue: "Timing chain stretch — VK56 V8 engine timing chain stretch with deferred oil changes", years: "2011–2023", severity: "High", source: "CarComplaints/owner reports" },
+      { issue: "Fuel pump failure — in-tank fuel pump failures", years: "2011–2019", severity: "Medium", source: "NHTSA complaints" },
+      { issue: "Infotainment system failure — navigation/entertainment system failures", years: "2011–2017", severity: "Medium", source: "CarComplaints" },
     ],
   },
   "Jeep": {
@@ -2575,6 +2607,10 @@ const knownIssues = {
     ],
     "Wrangler Rubicon": [
       { issue: "Dana 44 front axle seal leak — differential fluid loss", years: "2007–2018", severity: "Medium", source: "RepairPal" },
+    
+      { issue: "Axle shaft failure — Dana 44 front axle shafts break under extreme off-road use", years: "2007–2023", severity: "Medium", source: "Owner forums" },
+      { issue: "Locker actuator failure — electric locker actuators fail with water intrusion", years: "2007–2023", severity: "Medium", source: "Owner reports" },
+      { issue: "Sway bar disconnect failure — electronic front sway bar disconnect system fails", years: "2007–2023", severity: "Medium", source: "CarComplaints/NHTSA" },
     ],
   },
   "Kia": {
@@ -2584,26 +2620,50 @@ const knownIssues = {
     ],
     "Optima": [
       { issue: "Theta II engine failure — rod bearing failure on 2.4L and 2.0T", years: "2011–2018", severity: "High", source: "NHTSA recall/class action" },
+    
+      { issue: "Theta II engine failure — same engine seizure issues as Sonata and Stinger", years: "2011–2019", severity: "High", source: "NHTSA/class action" },
+      { issue: "Transmission shudder — DCT shudder on 2016+ models with dual-clutch", years: "2016–2020", severity: "Medium", source: "CarComplaints" },
     ],
     "Sportage": [
       { issue: "Theta II 2.4L engine failure — rod bearing wear, stall, fire risk; recall and extended warranty to 15yr/150k mi", years: "2011–2016", severity: "High", source: "NHTSA recall/class action" },
+    
+      { issue: "Theta II engine failure — engine seizure on affected models", years: "2011–2014", severity: "High", source: "NHTSA/class action" },
+      { issue: "Turbocharger failure — 1.6T turbo oil seal wear", years: "2017–2021", severity: "Medium", source: "Owner reports" },
+      { issue: "AC compressor failure — premature AC compressor failure in hot climates", years: "2011–2021", severity: "Medium", source: "CarComplaints" },
     ],
     "Soul": [
       { issue: "Piston ring failure on 2.0L — oil consumption, engine knock, stall risk; recall for 2020–2021 models", years: "2020–2021", severity: "High", source: "NHTSA recall" },
+    
+      { issue: "Theta II engine failure — engine seizure on affected 2.0L models", years: "2011–2019", severity: "High", source: "NHTSA/class action" },
+      { issue: "CVT failure — IVT CVT failures on 2020+ models", years: "2020–2022", severity: "High", source: "CarComplaints" },
+      { issue: "Rust — floor pan and underbody rust in salt-belt states", years: "2010–2019", severity: "Medium", source: "Owner reports" },
     ],
     "Forte": [
       { issue: "Theta II / Nu 2.0L GDI engine oil consumption and potential failure — extended warranty issued", years: "2014–2016", severity: "High", source: "NHTSA/class action" },
+    
+      { issue: "Engine bearing failure — 2.0L engine rod bearing wear at high mileage with deferred oil changes", years: "2014–2018", severity: "High", source: "CarComplaints/owner reports" },
+      { issue: "CVT shudder — IVT transmission shudder on 2019+ models", years: "2019–2023", severity: "Medium", source: "CarComplaints" },
+      { issue: "AC compressor failure — premature compressor failure", years: "2014–2020", severity: "Medium", source: "CarComplaints" },
     ],
     "K5": [
       { issue: "Smartstream 1.6T or 2.5T engine oil consumption at higher mileage", years: "2021–2023", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Transmission hesitation — 8-speed DCT hesitation and jerky low-speed behavior", years: "2021–2023", severity: "Medium", source: "CarComplaints/owner forums" },
+      { issue: "Infotainment screen glitching — touchscreen freezes and requires reboot", years: "2021–2023", severity: "Low", source: "CarComplaints" },
     ],
     "Stinger": [
       { issue: "Excessive oil consumption on 2.0T engine — some owners report 1 qt per 2,000 miles", years: "2018–2020", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Engine oil consumption — 3.3T twin-turbo V6 burns oil between changes", years: "2018–2023", severity: "Medium", source: "Owner reports" },
+      { issue: "Differential noise — rear differential whine at highway speeds", years: "2018–2022", severity: "Medium", source: "Owner forums" },
     ],
   },
   "Lexus": {
     "IS": [
       { issue: "Valve spring fracture risk on 2GR-FSE engine — recall issued in some markets", years: "2006–2012", severity: "High", source: "NHTSA" },
+    
+      { issue: "Oil consumption — 2.5L 4-cylinder models prone to mild oil consumption", years: "2014–2020", severity: "Medium", source: "Owner reports" },
+      { issue: "Multimedia system aging — early Gen3 IS infotainment dates poorly and lacks Apple CarPlay", years: "2014–2020", severity: "Low", source: "Owner consensus" },
     ],
     "GX": [
       { issue: "Frame rust perforation — rusted frames on vehicles in salt-belt states", years: "2003–2009", severity: "High", source: "NHTSA" },
@@ -2611,9 +2671,16 @@ const knownIssues = {
     ],
     "RX": [
       { issue: "Brake actuator noise — grinding during initial brake engagement", years: "2010–2015", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Oil consumption — V6 models can consume oil; check level between changes", years: "2004–2015", severity: "Medium", source: "CarComplaints/owner reports" },
+      { issue: "Infotainment touchpad lag — Remote Touch interface criticized for poor responsiveness", years: "2016–2022", severity: "Low", source: "Road test consensus" },
+      { issue: "Rust — underbody corrosion on older models in salt-belt states", years: "2004–2012", severity: "Medium", source: "Owner reports" },
     ],
     "ES": [
       { issue: "Floor mat entrapping accelerator — Lexus recall", years: "2007–2010", severity: "High", source: "NHTSA recall" },
+    
+      { issue: "Mild oil consumption — 3.5L V6 can consume up to 1 quart per 1,200 miles", years: "2007–2018", severity: "Medium", source: "CarComplaints/owner reports" },
+      { issue: "Remote Touch infotainment lag — touchpad interface is slow and unintuitive", years: "2013–2021", severity: "Low", source: "Road test consensus" },
     ],
   },
   "Lincoln": {
@@ -2633,12 +2700,23 @@ const knownIssues = {
     ],
     "Mazda3": [
       { issue: "Engine mount wear — vibration felt through steering wheel and seat", years: "2010–2013", severity: "Medium", source: "RepairPal" },
+    
+      { issue: "Skyactiv-G engine carbon deposits — direct injection causes intake valve buildup around 60–80k miles", years: "2014–2023", severity: "Medium", source: "Owner reports/TSB" },
+      { issue: "Rust — underbody rust in northern states, particularly rear wheel wells", years: "2010–2016", severity: "Medium", source: "CarComplaints/owner reports" },
+      { issue: "Transmission issues — automatic transmission hesitation and hunting for gears", years: "2014–2018", severity: "Medium", source: "CarComplaints" },
     ],
     "Mazda6": [
       { issue: "Spider nesting in fuel vent tube — causes fuel leak and fire risk", years: "2009–2012", severity: "High", source: "NHTSA recall" },
+    
+      { issue: "Timing chain noise — 2.5L engine timing chain rattle on startup when oil is low or old", years: "2014–2021", severity: "Medium", source: "Owner reports" },
+      { issue: "Rust — rear suspension and underbody rust in high-salt environments", years: "2003–2013", severity: "High", source: "NHTSA/CarComplaints" },
     ],
     "MX-5 Miata": [
       { issue: "Soft top wear and window separation — window separates from canvas", years: "2006–2015", severity: "Low", source: "CarComplaints" },
+    
+      { issue: "Convertible top seal wear — cloth top seals dry out and allow water intrusion", years: "2006–2023", severity: "Low", source: "Owner reports" },
+      { issue: "Rust — frame and sills rust in salt-belt states; inspect carefully", years: "1990–2015", severity: "High", source: "Owner reports/Miata forums" },
+      { issue: "Power steering rack leak — hydraulic rack develops leaks at high mileage (older models)", years: "1990–2005", severity: "Medium", source: "Owner reports" },
     ],
   },
   "Mercedes-Benz": {
@@ -2649,26 +2727,54 @@ const knownIssues = {
     ],
     "S-Class": [
       { issue: "Airmatic air suspension failure — all four corners require expensive repair", years: "2000–2013", severity: "High", source: "RepairPal" },
+    
+      { issue: "Airmatic suspension failure — air struts and compressor fail; expensive to repair", years: "2000–2022", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "ABC hydraulic suspension leak — Active Body Control fluid leaks on older models", years: "2000–2013", severity: "High", source: "Owner reports" },
+      { issue: "Electrical system complexity — S-Class has extensive electrical systems with high repair costs when modules fail", years: "2000–2022", severity: "Medium", source: "Mechanic consensus" },
     ],
     "GLE": [
       { issue: "7G-Tronic transmission shudder and delayed shifts", years: "2016–2019", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Airmatic air suspension failure — air struts fail; compressor overworks and burns out", years: "2016–2022", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "9G-Tronic transmission hesitation — jerky low-speed shifts and hesitation from stop", years: "2016–2019", severity: "Medium", source: "CarComplaints/owner forums" },
+      { issue: "Panoramic roof rattle — sunroof rattles and leaks at high mileage", years: "2016–2022", severity: "Low", source: "CarComplaints" },
     ],
     "GLC": [
       { issue: "Panoramic sunroof rattling and potential shattering", years: "2016–2020", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "9G-Tronic transmission hesitation — jerky low-speed shifts, especially when cold", years: "2016–2022", severity: "Medium", source: "Owner reports/CarComplaints" },
+      { issue: "Brake dust shield corrosion — rear brake dust shields rust and contact rotors", years: "2016–2022", severity: "Medium", source: "CarComplaints" },
+      { issue: "HVAC blend door failure — temperature control fails due to blend door actuator", years: "2016–2021", severity: "Medium", source: "Owner reports" },
     ],
     "AMG C 63": [
       { issue: "Carbon buildup on intake valves — direct injection M156/M177 V8 engines", years: "2008–2021", severity: "Medium", source: "RepairPal", trims: ["AMG C 63", "AMG C 63 S"] },
+    
+      { issue: "Engine mount failure — aggressive driving accelerates engine mount wear", years: "2015–2023", severity: "Medium", source: "Owner forums" },
+      { issue: "MCT transmission maintenance — multi-clutch transmission requires frequent fluid changes for longevity", years: "2015–2021", severity: "Medium", source: "AMG specialist consensus" },
+      { issue: "Carbon ceramic brake wear — optional CCBs wear unevenly if used on street only", years: "2015–2023", severity: "Low", source: "Owner reports" },
     ],
   },
   "Mitsubishi": {
     "Outlander": [
       { issue: "CVT transmission shudder — hesitation and judder under load", years: "2014–2020", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "CVT failure — Jatco CVT failures common beyond 100k miles", years: "2014–2021", severity: "High", source: "CarComplaints/NHTSA" },
+      { issue: "Rust — frame and underbody corrosion in northern states", years: "2003–2013", severity: "Medium", source: "Owner reports" },
+      { issue: "Super All Wheel Control failure — S-AWC system electronic failures", years: "2017–2021", severity: "Medium", source: "CarComplaints" },
     ],
     "Lancer Evolution": [
       { issue: "Rear differential limited slip wear — chattering on tight turns", years: "2003–2015", severity: "Medium", source: "RepairPal" },
+    
+      { issue: "Clutch wear — aggressive driving significantly reduces clutch lifespan; expect replacement every 30–50k miles depending on use", years: "2003–2015", severity: "Medium", source: "Owner consensus" },
+      { issue: "Turbocharger failure — EVO IX and X turbos fail with deferred oil changes or boost abuse", years: "2003–2015", severity: "High", source: "Owner forums" },
+      { issue: "ACD/AYC differential maintenance — active differentials require specific fluid changes every 15–20k miles or internal damage occurs", years: "2003–2015", severity: "High", source: "Mitsubishi service manual/community" },
     ],
     "Galant": [
       { issue: "Transmission failure — slipping and harsh shifts on automatic", years: "2004–2009", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Automatic transmission failure — 4-speed auto prone to failure at high mileage", years: "1999–2012", severity: "High", source: "CarComplaints" },
+      { issue: "Engine oil consumption — 2.4L 4G69 engine known to burn oil", years: "2004–2012", severity: "Medium", source: "CarComplaints" },
+      { issue: "Rust — body and frame rust common in northern states on older examples", years: "1999–2006", severity: "Medium", source: "Owner reports" },
     ],
   },
   "Nissan": {
@@ -2695,6 +2801,9 @@ const knownIssues = {
     ],
     "Ariya EV": [
       { issue: "Software update issues causing charging errors and connectivity problems", years: "2023–2024", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Software glitches — early software caused charging issues and display freezing", years: "2023–2024", severity: "Medium", source: "NHTSA/owner reports" },
+      { issue: "Range below EPA estimate — real-world range significantly below EPA in cold weather", years: "2023–2024", severity: "Medium", source: "Owner reports/testing" },
     ],
   },
   "Chevrolet": {
@@ -2744,6 +2853,9 @@ const knownIssues = {
     ],
     "3500": [
       { issue: "Rear axle bearing failure on SRW (single rear wheel) models — grinding noise", years: "2014–2018", severity: "Medium", source: "RepairPal" },
+      { issue: "EGR cooler failure — 6.7L Cummins EGR cooler cracking causes coolant loss", years: "2013–2019", severity: "High", source: "CarComplaints/owner reports" },
+      { issue: "DEF system failure — diesel exhaust fluid injector freezes in cold weather causing engine derate", years: "2013–2023", severity: "Medium", source: "NHTSA/owner reports" },
+      { issue: "Aisin AS69RC transmission — fluid neglect causes premature failure; change every 30k miles", years: "2013–2023", severity: "Medium", source: "RAM service documentation" },
     ],
   },
 
@@ -2782,6 +2894,10 @@ const knownIssues = {
     ],
     "BRZ": [
       { issue: "Infotainment display delamination — touchscreen layer separates", years: "2013–2020", severity: "Low", source: "CarComplaints" },
+    
+      { issue: "Headliner rattles — common interior rattle at highway speeds", years: "2013–2023", severity: "Low", source: "CarComplaints/forums" },
+      { issue: "Water ingestion — air intake can ingest water in heavy rain, causing hydrolocking", years: "2013–2016", severity: "High", source: "NHTSA/owner reports" },
+      { issue: "Torque dip — known flat spot in power delivery around 4,000 RPM on FA20 engine", years: "2013–2021", severity: "Low", source: "Factory acknowledged, addressed in 2022+ GR86" },
     ],
     "Ascent": [
       { issue: "Transmission shifting problems — hesitation, lurching reported to NHTSA", years: "2019–2020", severity: "Medium", source: "NHTSA" },
@@ -2804,6 +2920,10 @@ const knownIssues = {
     ],
     "Cybertruck": [
       { issue: "Accelerator pedal pad delamination — stainless steel cover dislodges, jamming pedal; recall", years: "2024–2024", severity: "High", source: "NHTSA recall" },
+    
+      { issue: "Stainless steel exterior rust spots — surface rust forming on exterior panels in humid environments", years: "2024", severity: "Medium", source: "NHTSA/owner reports" },
+      { issue: "Accelerator pedal entrapment recall — accelerator pad can become dislodged and trap pedal", years: "2024", severity: "High", source: "NHTSA recall 24V-228" },
+      { issue: "Wiper system failure — single wiper design has software and mechanical issues", years: "2024", severity: "Medium", source: "NHTSA/owner reports" },
     ],
   },
   "Toyota": {
@@ -2814,6 +2934,10 @@ const knownIssues = {
     ],
     "Corolla": [
       { issue: "Oil consumption on 1.8L 2ZR-FE — burns oil, deposits on plugs", years: "2009–2014", severity: "Medium", source: "NHTSA/RepairPal" },
+    
+      { issue: "Oil consumption — 1.8L 2ZR-FE engine burns oil on higher mileage examples", years: "2009–2019", severity: "Medium", source: "CarComplaints/NHTSA" },
+      { issue: "CVT shudder — 2020+ Corolla CVT shudder under light acceleration", years: "2020–2023", severity: "Medium", source: "CarComplaints/owner reports" },
+      { issue: "Rust — underbody and rear wheel arch rust in northern states", years: "2009–2016", severity: "Medium", source: "Owner reports" },
     ],
     "RAV4": [
       { issue: "EVAP canister releasing charcoal pellets into vent valve — check engine light", years: "2006–2015", severity: "Medium", source: "RepairPal" },
@@ -2839,6 +2963,10 @@ const knownIssues = {
     ],
     "GR Supra": [
       { issue: "Fuel injector coding mismatch — rough idle, codes from BMW B58 engine", years: "2020–2022", severity: "Medium", source: "RepairPal" },
+    
+      { issue: "Wheel bearing failure — rear wheel bearings fail prematurely, especially on track cars", years: "2020–2023", severity: "Medium", source: "Owner forums/NHTSA" },
+      { issue: "Infotainment glitches — BMW-sourced iDrive system has known software bugs", years: "2020–2023", severity: "Low", source: "Owner reports" },
+      { issue: "Differential noise — limited-slip differential whine at low speeds when cold", years: "2020–2023", severity: "Low", source: "Owner forums" },
     ],
     "Prius": [
       { issue: "Inverter failure — total vehicle shutdown; Toyota issued extended warranty", years: "2004–2009", severity: "High", source: "NHTSA/Toyota extended warranty" },
@@ -2857,6 +2985,10 @@ const knownIssues = {
     ],
     "Golf R": [
       { issue: "DQ381 DSG transmission software shudder at low speed", years: "2015–2020", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "DSG clutch pack wear — aggressive driving wears DSG clutch packs prematurely", years: "2015–2023", severity: "Medium", source: "Owner forums" },
+      { issue: "Haldex AWD maintenance — Haldex pump and filter must be serviced every 20k miles or AWD engagement fails", years: "2015–2023", severity: "High", source: "VW specialist consensus" },
+      { issue: "Carbon buildup — direct injection causes intake valve deposits around 60k miles", years: "2015–2023", severity: "Medium", source: "TSB/owner reports" },
     ],
     "Passat": [
       { issue: "Timing chain tensioner failure on 2.0T TSI engine", years: "2008–2012", severity: "High", source: "RepairPal" },
@@ -2878,6 +3010,10 @@ const knownIssues = {
     ],
     "S60": [
       { issue: "Throttle body failure — stalling, sudden loss of power", years: "2001–2009", severity: "High", source: "RepairPal" },
+    
+      { issue: "Timing belt failure — older S60 uses timing belt; must be changed at interval", years: "2001–2010", severity: "High", source: "Volvo service documentation" },
+      { issue: "Throttle body failure — electronic throttle body fails, causing limp mode", years: "2001–2010", severity: "Medium", source: "CarComplaints" },
+      { issue: "Oil leaks — PCV system and valve cover gasket leaks common at high mileage", years: "2001–2018", severity: "Medium", source: "Owner reports" },
     ],
   },
   "Buick": {
@@ -2892,9 +3028,17 @@ const knownIssues = {
     ],
     "Encore": [
       { issue: "Turbocharger failure on 1.4L Ecotec — loss of power, oil leak from turbo seals", years: "2013–2017", severity: "Medium", source: "RepairPal/CarComplaints" },
+    
+      { issue: "Turbocharger failure — 1.4L turbo oil seal failures; smoke on startup", years: "2013–2019", severity: "High", source: "NHTSA/CarComplaints" },
+      { issue: "Excessive oil consumption — 1.4L Ecotec engine known to burn oil", years: "2013–2016", severity: "High", source: "CarComplaints/class action" },
+      { issue: "Transmission failure — 6-speed automatic harsh shifts and premature failure", years: "2013–2018", severity: "Medium", source: "CarComplaints" },
     ],
     "Verano": [
       { issue: "Timing chain stretch on 2.0T Ecotec — same as Chevy Malibu/Cruze; rattling on cold start", years: "2012–2017", severity: "High", source: "RepairPal" },
+    
+      { issue: "Electrical gremlins — intermittent power loss, stalling, instrument cluster issues", years: "2012–2017", severity: "Medium", source: "NHTSA/CarComplaints" },
+      { issue: "Timing chain stretch — 2.4L engine timing chain wear at high mileage", years: "2012–2017", severity: "Medium", source: "Owner reports" },
+      { issue: "AC compressor failure — premature AC compressor failure", years: "2013–2017", severity: "Medium", source: "CarComplaints" },
     ],
   },
   "Cadillac": {
@@ -2915,12 +3059,24 @@ const knownIssues = {
     ],
     "CT4": [
       { issue: "2.0T engine oil consumption — some owners report 1 qt per 3,000 miles", years: "2020–2022", severity: "Medium", source: "CarComplaints" },
+    
+      { issue: "Turbocharger lag — 2.0T has noticeable turbo lag; not a defect but a characteristic complaint", years: "2020–2024", severity: "Low", source: "Owner reviews" },
+      { issue: "Electronic parking brake failure — EPB can seize in cold weather", years: "2020–2023", severity: "Medium", source: "NHTSA complaints" },
+      { issue: "Transmission calibration — 10-speed automatic has hesitation issues addressed via software update", years: "2020–2022", severity: "Low", source: "GM TSB" },
     ],
     "XT5": [
       { issue: "8-speed transmission shudder at 40–55 mph — torque converter; updated fluid resolves most cases", years: "2017–2021", severity: "Medium", source: "CarComplaints/TSB 18-NA-355" },
+    
+      { issue: "Timing chain stretch — 3.6L V6 timing chain wear with deferred oil changes", years: "2017–2023", severity: "High", source: "CarComplaints/owner reports" },
+      { issue: "Infotainment system freezing — CUE system lags and freezes", years: "2017–2020", severity: "Low", source: "CarComplaints" },
+      { issue: "Transfer case shudder — AWD transfer case shudder on light turns", years: "2017–2022", severity: "Medium", source: "GM TSB" },
     ],
     "Lyriq": [
       { issue: "Charging and software update failures — ICCU and over-the-air update issues causing car to not charge", years: "2023–2024", severity: "Medium", source: "CarComplaints/NHTSA" },
+    
+      { issue: "Software-related range anxiety — early software overestimated range leading to unexpected low battery", years: "2023–2024", severity: "Medium", source: "NHTSA/owner reports" },
+      { issue: "Charging port issues — DC fast charge port malfunctions in cold weather", years: "2023–2024", severity: "Medium", source: "Owner reports" },
+      { issue: "Rear glass delamination — rear windshield adhesive failure in extreme temperatures", years: "2023–2024", severity: "High", source: "NHTSA recall 23V-553" },
     ],
   },
 };
