@@ -21,6 +21,36 @@ const repairData = {
       "Synthetic Blend": { low: 55, high: 100 },
       "Full Synthetic": { low: 75, high: 130 },
     },
+    makeCosts: {
+      "Toyota":       { low: 130, high: 164, source: "RepairPal" },
+      "Honda":        { low: 118, high: 156, source: "RepairPal" },
+      "Ford":         { low: 169, high: 199, source: "RepairPal" },
+      "Chevrolet":    { low: 82,  high: 130, source: "RepairPal" },
+      "GMC":          { low: 85,  high: 135, source: "RepairPal est." },
+      "BMW":          { low: 150, high: 227, source: "RepairPal/KBB" },
+      "Mercedes-Benz":{ low: 140, high: 210, source: "RepairPal est." },
+      "Audi":         { low: 130, high: 200, source: "RepairPal est." },
+      "Nissan":       { low: 123, high: 146, source: "RepairPal" },
+      "Subaru":       { low: 110, high: 155, source: "RepairPal est." },
+      "Jeep":         { low: 120, high: 160, source: "RepairPal est." },
+      "Hyundai":      { low: 100, high: 145, source: "RepairPal est." },
+      "Kia":          { low: 100, high: 145, source: "RepairPal est." },
+      "Volkswagen":   { low: 115, high: 170, source: "RepairPal est." },
+      "Mazda":        { low: 110, high: 150, source: "RepairPal est." },
+      "Dodge":        { low: 90,  high: 140, source: "RepairPal est." },
+      "RAM":          { low: 100, high: 160, source: "RepairPal est." },
+      "Lexus":        { low: 140, high: 185, source: "RepairPal est." },
+      "Acura":        { low: 120, high: 165, source: "RepairPal est." },
+      "Infiniti":     { low: 130, high: 175, source: "RepairPal est." },
+      "Cadillac":     { low: 115, high: 160, source: "RepairPal est." },
+      "Buick":        { low: 90,  high: 135, source: "RepairPal est." },
+      "Lincoln":      { low: 140, high: 185, source: "RepairPal est." },
+      "Porsche":      { low: 180, high: 280, source: "RepairPal est." },
+      "Land Rover":   { low: 160, high: 250, source: "RepairPal est." },
+      "Volvo":        { low: 140, high: 210, source: "RepairPal est." },
+      "Mitsubishi":   { low: 90,  high: 140, source: "RepairPal est." },
+      "Chrysler":     { low: 85,  high: 135, source: "RepairPal est." },
+    },
     labor: "0.5–1 hr",
     notes: "KBB: conventional $35–$75, full synthetic $65–$125. Dealerships typically charge $100–$130 for synthetic.",
   },
@@ -91,6 +121,37 @@ const repairData = {
       "OEM": { low: 150, high: 300 },
       "Performance": { low: 250, high: 400 },
     },
+    makeCosts: {
+      "Toyota":       { low: 253, high: 372, source: "RepairPal" },
+      "Honda":        { low: 241, high: 349, source: "RepairPal" },
+      "Ford":         { low: 225, high: 295, source: "RepairPal" },
+      "Chevrolet":    { low: 306, high: 473, source: "RepairPal" },
+      "GMC":          { low: 306, high: 473, source: "RepairPal" },
+      "BMW":          { low: 365, high: 446, source: "RepairPal" },
+      "Mercedes-Benz":{ low: 252, high: 348, source: "RepairPal" },
+      "Audi":         { low: 366, high: 461, source: "RepairPal" },
+      "Nissan":       { low: 318, high: 369, source: "RepairPal" },
+      "Jeep":         { low: 245, high: 279, source: "RepairPal" },
+      "Hyundai":      { low: 329, high: 378, source: "RepairPal" },
+      "Kia":          { low: 294, high: 370, source: "RepairPal" },
+      "Volkswagen":   { low: 238, high: 302, source: "RepairPal" },
+      "Subaru":       { low: 216, high: 320, source: "YourMechanic/RepairPal" },
+      "Mazda":        { low: 230, high: 300, source: "RepairPal est." },
+      "Dodge":        { low: 245, high: 320, source: "RepairPal est." },
+      "RAM":          { low: 260, high: 380, source: "RepairPal est." },
+      "Chrysler":     { low: 245, high: 330, source: "RepairPal est." },
+      "Lincoln":      { low: 280, high: 380, source: "RepairPal est." },
+      "Cadillac":     { low: 350, high: 480, source: "RepairPal est." },
+      "Buick":        { low: 280, high: 380, source: "RepairPal est." },
+      "Lexus":        { low: 280, high: 380, source: "RepairPal est." },
+      "Acura":        { low: 255, high: 340, source: "RepairPal est." },
+      "Infiniti":     { low: 310, high: 390, source: "RepairPal est." },
+      "Porsche":      { low: 420, high: 650, source: "RepairPal est." },
+      "Land Rover":   { low: 380, high: 560, source: "RepairPal est." },
+      "Volvo":        { low: 310, high: 420, source: "RepairPal est." },
+      "Mitsubishi":   { low: 235, high: 310, source: "RepairPal est." },
+      "Tesla":        { low: 250, high: 380, source: "RepairPal est." },
+    },
     labor: "1–2 hrs",
     notes: "KBB average ~$150/axle, up to $300 for premium pads. RepairPal: $320–$379 per axle avg.",
   },
@@ -138,6 +199,36 @@ const repairData = {
       "Iridium (4-cyl)": { low: 140, high: 250 },
       "V6/V8 Upcharge": { low: 200, high: 440 },
     },
+    makeCosts: {
+      "Toyota":       { low: 142, high: 477, source: "RepairPal" },
+      "Honda":        { low: 154, high: 450, source: "RepairPal" },
+      "Ford":         { low: 328, high: 438, source: "RepairPal" },
+      "Chevrolet":    { low: 335, high: 452, source: "RepairPal" },
+      "GMC":          { low: 335, high: 452, source: "RepairPal est." },
+      "BMW":          { low: 280, high: 480, source: "RepairPal est." },
+      "Mercedes-Benz":{ low: 272, high: 354, source: "RepairPal" },
+      "Audi":         { low: 280, high: 420, source: "RepairPal est." },
+      "Nissan":       { low: 212, high: 263, source: "RepairPal" },
+      "Subaru":       { low: 190, high: 300, source: "RepairPal est." },
+      "Jeep":         { low: 200, high: 320, source: "RepairPal est." },
+      "Hyundai":      { low: 180, high: 280, source: "RepairPal est." },
+      "Kia":          { low: 180, high: 280, source: "RepairPal est." },
+      "Volkswagen":   { low: 200, high: 340, source: "RepairPal est." },
+      "Mazda":        { low: 165, high: 260, source: "RepairPal est." },
+      "Dodge":        { low: 200, high: 320, source: "RepairPal est." },
+      "RAM":          { low: 220, high: 380, source: "RepairPal est." },
+      "Lexus":        { low: 200, high: 400, source: "RepairPal est." },
+      "Acura":        { low: 200, high: 350, source: "RepairPal est." },
+      "Infiniti":     { low: 220, high: 380, source: "RepairPal est." },
+      "Cadillac":     { low: 280, high: 460, source: "RepairPal est." },
+      "Buick":        { low: 220, high: 360, source: "RepairPal est." },
+      "Lincoln":      { low: 280, high: 440, source: "RepairPal est." },
+      "Porsche":      { low: 380, high: 650, source: "RepairPal est." },
+      "Land Rover":   { low: 350, high: 600, source: "RepairPal est." },
+      "Volvo":        { low: 260, high: 420, source: "RepairPal est." },
+      "Mitsubishi":   { low: 160, high: 260, source: "RepairPal est." },
+      "Chrysler":     { low: 200, high: 340, source: "RepairPal est." },
+    },
     labor: "1–3 hrs",
     notes: "RepairPal national average $150–$300. V8 trucks like F-150 average $328–$438.",
   },
@@ -146,6 +237,24 @@ const repairData = {
     costs: {
       "Belt Only": { low: 300, high: 500 },
       "With Water Pump": { low: 500, high: 900 },
+    },
+    makeCosts: {
+      "Toyota":       { low: 300, high: 650,  source: "RepairPal est." },
+      "Honda":        { low: 380, high: 700,  source: "RepairPal est." },
+      "Subaru":       { low: 450, high: 800,  source: "RepairPal est." },
+      "Mitsubishi":   { low: 350, high: 650,  source: "RepairPal est." },
+      "Hyundai":      { low: 350, high: 650,  source: "RepairPal est." },
+      "Kia":          { low: 350, high: 650,  source: "RepairPal est." },
+      "Volkswagen":   { low: 500, high: 900,  source: "RepairPal est." },
+      "Audi":         { low: 600, high: 1100, source: "RepairPal est." },
+      "Jeep":         { low: 380, high: 700,  source: "RepairPal est." },
+      "Chrysler":     { low: 380, high: 700,  source: "RepairPal est." },
+      "Mazda":        { low: 350, high: 650,  source: "RepairPal est." },
+      "Volvo":        { low: 550, high: 950,  source: "RepairPal est." },
+      "Acura":        { low: 400, high: 750,  source: "RepairPal est." },
+      "Infiniti":     { low: 400, high: 750,  source: "RepairPal est." },
+      "Land Rover":   { low: 700, high: 1300, source: "RepairPal est." },
+      "Porsche":      { low: 700, high: 1300, source: "RepairPal est." },
     },
     labor: "4–8 hrs",
     notes: "AAA range $400–$900. Many modern vehicles use timing chains instead. Critical safety service.",
@@ -173,6 +282,36 @@ const repairData = {
     costs: {
       "Standard": { low: 300, high: 600 },
       "With Timing Belt": { low: 500, high: 900 },
+    },
+    makeCosts: {
+      "Toyota":       { low: 300, high: 700,  source: "RepairPal est." },
+      "Honda":        { low: 380, high: 750,  source: "RepairPal est." },
+      "Ford":         { low: 350, high: 700,  source: "RepairPal est." },
+      "Chevrolet":    { low: 320, high: 650,  source: "RepairPal est." },
+      "GMC":          { low: 320, high: 650,  source: "RepairPal est." },
+      "BMW":          { low: 600, high: 1100, source: "RepairPal est." },
+      "Mercedes-Benz":{ low: 600, high: 1100, source: "RepairPal est." },
+      "Audi":         { low: 600, high: 1100, source: "RepairPal est." },
+      "Nissan":       { low: 350, high: 700,  source: "RepairPal est." },
+      "Subaru":       { low: 400, high: 800,  source: "RepairPal est." },
+      "Jeep":         { low: 350, high: 700,  source: "RepairPal est." },
+      "Hyundai":      { low: 320, high: 650,  source: "RepairPal est." },
+      "Kia":          { low: 320, high: 650,  source: "RepairPal est." },
+      "Volkswagen":   { low: 500, high: 950,  source: "RepairPal est." },
+      "Mazda":        { low: 320, high: 650,  source: "RepairPal est." },
+      "Dodge":        { low: 320, high: 650,  source: "RepairPal est." },
+      "RAM":          { low: 350, high: 700,  source: "RepairPal est." },
+      "Lexus":        { low: 400, high: 800,  source: "RepairPal est." },
+      "Acura":        { low: 400, high: 800,  source: "RepairPal est." },
+      "Infiniti":     { low: 400, high: 800,  source: "RepairPal est." },
+      "Cadillac":     { low: 400, high: 800,  source: "RepairPal est." },
+      "Buick":        { low: 350, high: 700,  source: "RepairPal est." },
+      "Lincoln":      { low: 400, high: 800,  source: "RepairPal est." },
+      "Porsche":      { low: 800, high: 1600, source: "RepairPal est." },
+      "Land Rover":   { low: 700, high: 1400, source: "RepairPal est." },
+      "Volvo":        { low: 600, high: 1100, source: "RepairPal est." },
+      "Mitsubishi":   { low: 320, high: 650,  source: "RepairPal est." },
+      "Chrysler":     { low: 320, high: 650,  source: "RepairPal est." },
     },
     labor: "2–5 hrs",
     notes: "Often replaced simultaneously with timing belt since access requires similar disassembly.",
@@ -230,6 +369,37 @@ const repairData = {
     costs: {
       "Remanufactured": { low: 500, high: 800 },
       "OEM New": { low: 750, high: 1200 },
+    },
+    makeCosts: {
+      "Toyota":       { low: 516, high: 809,  source: "RepairPal" },
+      "Honda":        { low: 698, high: 935,  source: "RepairPal" },
+      "Ford":         { low: 533, high: 845,  source: "RepairPal" },
+      "Chevrolet":    { low: 645, high: 888,  source: "RepairPal" },
+      "GMC":          { low: 650, high: 900,  source: "RepairPal est." },
+      "BMW":          { low: 700, high: 1050, source: "RepairPal est." },
+      "Mercedes-Benz":{ low: 750, high: 1100, source: "RepairPal est." },
+      "Audi":         { low: 750, high: 1150, source: "RepairPal est." },
+      "Nissan":       { low: 657, high: 986,  source: "RepairPal" },
+      "Subaru":       { low: 580, high: 850,  source: "RepairPal est." },
+      "Jeep":         { low: 550, high: 800,  source: "RepairPal est." },
+      "Hyundai":      { low: 530, high: 780,  source: "RepairPal est." },
+      "Kia":          { low: 530, high: 780,  source: "RepairPal est." },
+      "Volkswagen":   { low: 650, high: 950,  source: "RepairPal est." },
+      "Mazda":        { low: 520, high: 760,  source: "RepairPal est." },
+      "Dodge":        { low: 480, high: 720,  source: "RepairPal est." },
+      "RAM":          { low: 500, high: 760,  source: "RepairPal est." },
+      "Lexus":        { low: 580, high: 860,  source: "RepairPal est." },
+      "Acura":        { low: 680, high: 980,  source: "RepairPal est." },
+      "Infiniti":     { low: 660, high: 980,  source: "RepairPal est." },
+      "Cadillac":     { low: 680, high: 1000, source: "RepairPal est." },
+      "Buick":        { low: 580, high: 860,  source: "RepairPal est." },
+      "Lincoln":      { low: 600, high: 880,  source: "RepairPal est." },
+      "Porsche":      { low: 900, high: 1500, source: "RepairPal est." },
+      "Land Rover":   { low: 850, high: 1400, source: "RepairPal est." },
+      "Volvo":        { low: 700, high: 1100, source: "RepairPal est." },
+      "Mitsubishi":   { low: 480, high: 720,  source: "RepairPal est." },
+      "Chrysler":     { low: 480, high: 720,  source: "RepairPal est." },
+      "Tesla":        { low: 0,   high: 0,    source: "N/A - no alternator" },
     },
     labor: "1–3 hrs",
     notes: "RepairPal average $630–$820; KBB $747–$842. Mercedes/BMW/Audi can exceed $1,200. Remanufactured units are reliable and commonly used.",
@@ -455,6 +625,37 @@ const repairData = {
       "Economy/Direct-fit":   { low: 800,  high: 1800 },
       "V6/V8 or Dual":        { low: 1500, high: 3500 },
       "Luxury/European":      { low: 2500, high: 5500 },
+    },
+    makeCosts: {
+      "Toyota":       { low: 970,  high: 2165, source: "RepairPal/Edmunds" },
+      "Honda":        { low: 1976, high: 3337, source: "RepairPal" },
+      "Ford":         { low: 1655, high: 1737, source: "RepairPal" },
+      "Chevrolet":    { low: 1439, high: 3241, source: "RepairPal" },
+      "GMC":          { low: 3075, high: 3196, source: "RepairPal/Edmunds" },
+      "BMW":          { low: 1800, high: 3000, source: "RepairPal est." },
+      "Mercedes-Benz":{ low: 1500, high: 2800, source: "RepairPal est." },
+      "Audi":         { low: 3150, high: 3350, source: "AutoTechIQ" },
+      "Nissan":       { low: 1498, high: 2169, source: "RepairPal" },
+      "Subaru":       { low: 1200, high: 2000, source: "RepairPal est." },
+      "Jeep":         { low: 1100, high: 1800, source: "RepairPal est." },
+      "Hyundai":      { low: 1000, high: 1800, source: "RepairPal est." },
+      "Kia":          { low: 1000, high: 1800, source: "RepairPal est." },
+      "Volkswagen":   { low: 1200, high: 2200, source: "RepairPal est." },
+      "Mazda":        { low: 900,  high: 1600, source: "RepairPal est." },
+      "Dodge":        { low: 2500, high: 5460, source: "RepairPal/ConsumerAffairs" },
+      "RAM":          { low: 2804, high: 3898, source: "RepairPal/Edmunds" },
+      "Lexus":        { low: 1500, high: 2800, source: "RepairPal est." },
+      "Acura":        { low: 1500, high: 2600, source: "RepairPal est." },
+      "Infiniti":     { low: 1400, high: 2400, source: "RepairPal est." },
+      "Cadillac":     { low: 1400, high: 2600, source: "RepairPal est." },
+      "Buick":        { low: 1100, high: 1900, source: "RepairPal est." },
+      "Lincoln":      { low: 1400, high: 2400, source: "RepairPal est." },
+      "Porsche":      { low: 2500, high: 5000, source: "RepairPal est." },
+      "Land Rover":   { low: 2000, high: 4000, source: "RepairPal est." },
+      "Volvo":        { low: 1500, high: 2800, source: "RepairPal est." },
+      "Mitsubishi":   { low: 900,  high: 1600, source: "RepairPal est." },
+      "Chrysler":     { low: 1000, high: 1800, source: "RepairPal est." },
+      "Tesla":        { low: 0,    high: 0,    source: "N/A - no cat converter" },
     },
     labor: "1–3 hrs",
     notes: "RepairPal range $936–$5,460 depending on make. Toyota/Honda converters are expensive due to higher precious metal content. California CARB-compliant converters cost more. Confirm it's actually failed (O2 sensors can mimic symptoms) before replacing.",
@@ -8721,6 +8922,18 @@ const modelYears = {
     return Math.round(v * mult);
   };
 
+  // Get make-specific cost range if available, otherwise fall back to generic
+  const getMakeCostRange = (data, repairName) => {
+    if (data?.makeCosts && make !== "Any Make" && data.makeCosts[make]) {
+      const mc = data.makeCosts[make];
+      if (mc.low === 0 && mc.high === 0) return null; // e.g. Tesla oil change
+      // Only apply regional multiplier — RepairPal data already accounts for make
+      const mult = zip ? regMult : 1;
+      return { low: Math.round(mc.low * mult), high: Math.round(mc.high * mult), verified: mc.source && !mc.source.includes('est.') };
+    }
+    return null;
+  };
+
   const handleZip = e => {
     e.preventDefault();
     if (/^\d{5}$/.test(zipInput)) { setZip(zipInput); setShops([]); setSelectedRepair(null); }
@@ -9148,8 +9361,9 @@ const modelYears = {
       <main style={{ width:"100%", boxSizing:"border-box", padding:`0 clamp(20px, 5vw, 100px) ${basket.size > 0 ? "100px" : "20px"}`, marginTop:"20px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:"14px", alignItems:"start" }}>
         {filtered.map(([name, data]) => {
           const tiers     = Object.entries(data.costs);
-          const loLow     = adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
-          const hiHigh    = adj(Math.max(...tiers.map(([,v]) => v.high)), data, name);
+          const makeRange = getMakeCostRange(data, name);
+          const loLow     = makeRange ? makeRange.low  : adj(Math.min(...tiers.map(([,v]) => v.low)), data, name);
+          const hiHigh    = makeRange ? makeRange.high : adj(Math.max(...tiers.map(([,v]) => v.high)), data, name);
           const cc        = catColor(data.category);
           const isSel     = selectedRepair === name;
 
@@ -9178,7 +9392,9 @@ const modelYears = {
               </div>
               <div style={{ fontSize:"12px", color:"#444", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
                 <span>⏱ {data.labor}</span>
-                <span style={{ fontSize:"10px", color:"#555", letterSpacing:"0.04em" }}>parts + labor</span>
+                <span style={{ fontSize:"10px", color: makeRange ? (makeRange.verified ? "#22c55e" : "#c9a84c") : "#555", letterSpacing:"0.04em" }}>
+                  {makeRange ? (makeRange.verified ? `✓ ${make} avg` : `~ ${make} est.`) : "parts + labor"}
+                </span>
               </div>
             </div>
           );
@@ -9335,8 +9551,9 @@ const modelYears = {
                       const severityBg    = item.severity === "High" ? "#ef444418" : item.severity === "Medium" ? "#f59e0b18" : "#22c55e18";
                       const linked        = getLinkedRepair(item.issue);
                       const repData       = linked ? repairData[linked] : null;
-                      const costLow       = repData ? adj(Math.min(...Object.values(repData.costs).map(v => v.low)), repData, linked) : null;
-                      const costHigh      = repData ? adj(Math.max(...Object.values(repData.costs).map(v => v.high)), repData, linked) : null;
+                      const makeRange     = repData ? getMakeCostRange(repData, linked) : null;
+                      const costLow       = makeRange ? makeRange.low : (repData ? adj(Math.min(...Object.values(repData.costs).map(v => v.low)), repData, linked) : null);
+                      const costHigh      = makeRange ? makeRange.high : (repData ? adj(Math.max(...Object.values(repData.costs).map(v => v.high)), repData, linked) : null);
                       return (
                         <div key={i} style={{ padding:"16px", background:"#0e0e0e", borderRadius:"8px", border:`1px solid ${severityColor}22` }}>
                           <div style={{ display:"flex", gap:"10px", alignItems:"flex-start" }}>
